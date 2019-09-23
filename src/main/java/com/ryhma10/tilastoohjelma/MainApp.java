@@ -1,5 +1,6 @@
 package com.ryhma10.tilastoohjelma;
 
+import com.ryhma10.tilastoohjelma.view.LoginController;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -10,9 +11,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
-import com.ryhma10.tilastoohjelma.LoginController;
-import com.ryhma10.tilastoohjelma.CreateNewUserController;
+import com.ryhma10.tilastoohjelma.view.LoginController;
+import com.ryhma10.tilastoohjelma.view.CreateNewUserController;
 
 
 public class MainApp extends Application {
@@ -34,7 +34,7 @@ public class MainApp extends Application {
 
     public void showLoginWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/LoginWindow.fxml"));
+        loader.setLocation(MainApp.class.getResource("/view/Login.fxml"));
         loginWindow = (AnchorPane)loader.load();
 
         Scene loginScene = new Scene(loginWindow);
@@ -49,7 +49,7 @@ public class MainApp extends Application {
 
     public void showCreateNewUserWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/CreateNewUserWindow.fxml"));
+        loader.setLocation(MainApp.class.getResource("/view/CreateNewUser.fxml"));
         createNewUserWindow = (AnchorPane)loader.load();
 
         Stage createNewUserStage = new Stage();
