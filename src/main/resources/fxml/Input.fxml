@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="389.0" prefWidth="400.0" stylesheets="@../../../../../resources/styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma10.tilastoohjelma.InputController">
+<AnchorPane prefHeight="389.0" prefWidth="400.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma10.tilastoohjelma.InputController">
     <children>
         <GridPane layoutX="14.0" layoutY="73.0" prefHeight="400.0" prefWidth="571.0" AnchorPane.bottomAnchor="127.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="73.0">
             <columnConstraints>
