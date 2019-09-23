@@ -3,17 +3,17 @@ package com.ryhma10.tilastoohjelma;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import com.ryhma10.tilastoohjelma.view.LoginController;
 import com.ryhma10.tilastoohjelma.view.CreateNewUserController;
-import com.ryhma10.tilastoohjelma.view.InputController;
+import com.ryhma10.tilastoohjelma.model.Database;
 
 
 public class MainApp extends Application {
@@ -31,9 +31,10 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("LoL Tilasto-ohjelma");
         showLoginWindow();
+        connect();
     }
 
-    public void showLoginWindow() throws IOException {
+    public void showLoginWindow() throws IOException, SQLException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/Login.fxml"));
         loginWindow = (AnchorPane)loader.load();
@@ -65,6 +66,10 @@ public class MainApp extends Application {
         createNewUserController.setCreateNewUserStage(createNewUserStage);
 
         createNewUserStage.showAndWait();
+    }
+
+    public void connect() {
+        Database db = new Database();
     }
 
     public Stage getPrimaryStage() {
