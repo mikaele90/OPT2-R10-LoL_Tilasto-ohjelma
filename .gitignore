@@ -22,6 +22,7 @@ target/
 nb-configuration.xml
 nbactions.xml
 Tilastoohjelma.iml
+*.iml
 .project
 .classpath
 settings/

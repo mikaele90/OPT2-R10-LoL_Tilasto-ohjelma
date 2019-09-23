@@ -125,6 +125,7 @@
                         </goals>
                         <configuration>
                             <executable>${java.home}/bin/java</executable>
+                            <!--suppress UnresolvedMavenProperty -->
                             <commandlineArgs>${runfx.args}</commandlineArgs>
                         </configuration>
                     </execution>
@@ -138,6 +139,7 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <compilerArguments>
+                        <!--suppress UnresolvedMavenProperty -->
                         <bootclasspath>${sun.boot.class.path}${path.separator}${java.home}/lib/jfxrt.jar</bootclasspath>
                     </compilerArguments>
                 </configuration>
