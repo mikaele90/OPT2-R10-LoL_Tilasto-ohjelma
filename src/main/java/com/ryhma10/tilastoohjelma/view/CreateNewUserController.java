@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -29,6 +30,12 @@ public class CreateNewUserController {
         //Constructor
     }
 
+    public void initialize() {
+        if (progressIndicator.isVisible()) {
+            progressIndicator.setVisible(false);
+        }
+    }
+
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
@@ -36,6 +43,9 @@ public class CreateNewUserController {
     public void setCreateNewUserStage(Stage createNewUserStage) {
         this.createNewUserStage = createNewUserStage;
     }
+
+    @FXML
+    private ProgressIndicator progressIndicator;
 
     @FXML
     private TextField createProfileNameField, createProfilePasswordField;
@@ -48,6 +58,7 @@ public class CreateNewUserController {
 
     @FXML
     public void handleDone(ActionEvent actionEvent) {
+        progressIndicator.setVisible(true);
         SessionFactory factory = null;
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
         try{
@@ -69,11 +80,12 @@ public class CreateNewUserController {
             newProfileSuccess.setTitle("Success");
             newProfileSuccess.setHeaderText("Profile created");
             newProfileSuccess.setContentText("Profile created successfully.");
-
             factory.close();
+            progressIndicator.setVisible(false);
             newProfileSuccess.showAndWait();
         }
         catch (Exception e) {
+            progressIndicator.setVisible(false);
             Alert newProfileProblem = new Alert(Alert.AlertType.ERROR);
             newProfileProblem.setTitle("Error");
             newProfileProblem.setHeaderText("Profile couldn't be created");
