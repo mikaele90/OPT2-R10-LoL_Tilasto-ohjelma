@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.sql.SQLException;
 
 import com.ryhma10.tilastoohjelma.MainApp;
 
@@ -45,6 +46,7 @@ public class LoginController {
     }
 
     @FXML
-    public void handleLogin(ActionEvent actionEvent) {
+    public void handleLogin(ActionEvent actionEvent) throws IOException {
+    	mainApp.showProfileWindow();
     }
 }

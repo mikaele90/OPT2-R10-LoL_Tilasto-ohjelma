@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import com.ryhma10.tilastoohjelma.view.LoginController;
 import com.ryhma10.tilastoohjelma.view.CreateNewUserController;
 import com.ryhma10.tilastoohjelma.model.Database;
+import com.ryhma10.tilastoohjelma.view.InputController;
+import com.ryhma10.tilastoohjelma.view.FeedBackController;
+import com.ryhma10.tilastoohjelma.view.ProfileController;
 
 
 public class MainApp extends Application {
@@ -21,6 +24,9 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private AnchorPane loginWindow;
     private AnchorPane createNewUserWindow;
+    private AnchorPane inputWindow;
+    private AnchorPane feedBackWindow;
+    private AnchorPane profileWindow;
 
     public MainApp() {
         //Constructor
@@ -66,6 +72,64 @@ public class MainApp extends Application {
         createNewUserController.setCreateNewUserStage(createNewUserStage);
 
         createNewUserStage.showAndWait();
+    }
+    
+    
+    public void showInputWindow() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("/fxml/Input.fxml"));
+        inputWindow = (AnchorPane)loader.load();
+
+        Stage inputStage = new Stage();
+        inputStage.setTitle("Input your in-game statistics");
+        inputStage.initModality(Modality.WINDOW_MODAL);
+        inputStage.initOwner(primaryStage);
+        Scene InputScene = new Scene(inputWindow);
+        inputStage.setScene(InputScene);
+
+        InputController inputController = loader.getController();
+        inputController.setMainApp(this);
+        inputController.setInputStage(inputStage);
+
+        inputStage.showAndWait();
+    }
+    
+    public void showFeedBackWindow() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("/fxml/FeedBack.fxml"));
+        feedBackWindow = (AnchorPane)loader.load();
+
+        Stage feedBackStage = new Stage();
+        feedBackStage.setTitle("Check out your match analysis");
+        feedBackStage.initModality(Modality.WINDOW_MODAL);
+        feedBackStage.initOwner(primaryStage);
+        Scene FeedBackScene = new Scene(feedBackWindow);
+        feedBackStage.setScene(FeedBackScene);
+
+        FeedBackController feedBackController = loader.getController();
+        feedBackController.setMainApp(this);
+        feedBackController.setFeedBackStage(feedBackStage);
+
+        feedBackStage.showAndWait();
+    }
+    
+    public void showProfileWindow() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("/fxml/Profile.fxml"));
+        profileWindow = (AnchorPane)loader.load();
+
+        Stage profileStage = new Stage();
+        profileStage.setTitle("Check out your profile");
+        profileStage.initModality(Modality.WINDOW_MODAL);
+        profileStage.initOwner(primaryStage);
+        Scene ProfileScene = new Scene(profileWindow);
+        profileStage.setScene(ProfileScene);
+
+        ProfileController profileController = loader.getController();
+        profileController.setMainApp(this);
+        profileController.setProfileStage(profileStage);
+
+        profileStage.showAndWait();
     }
 
     public void connect() {

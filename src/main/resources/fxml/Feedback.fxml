@@ -9,15 +9,14 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
-<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1">
+<AnchorPane prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma10.tilastoohjelma.view.FeedBackController">
     <children>
         <Label layoutX="22.0" layoutY="27.0" prefHeight="18.0" prefWidth="138.0" text="Thank you for your input!" />
         <TextArea layoutX="128.0" layoutY="98.0" prefHeight="219.0" prefWidth="355.0" />
         <Label layoutX="74.0" layoutY="74.0" text="We have analyzed your in-game stats and have come up with the following conclusions" />
         <ButtonBar layoutX="372.0" layoutY="437.0" prefHeight="40.0" prefWidth="200.0">
             <buttons>
-                <Button mnemonicParsing="false" text="Back" />
+                <Button mnemonicParsing="false" onAction="#handleBack" text="Back" />
                 <Button mnemonicParsing="false" text="Profile" />
             </buttons>
         </ButtonBar>
