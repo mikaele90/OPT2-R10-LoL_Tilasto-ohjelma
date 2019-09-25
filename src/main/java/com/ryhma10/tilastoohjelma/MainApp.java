@@ -37,7 +37,6 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("LoL Tilasto-ohjelma");
         showLoginWindow();
-        connect();
     }
 
     public void showLoginWindow() throws IOException, SQLException {
