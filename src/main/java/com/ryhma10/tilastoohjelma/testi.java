@@ -1,8 +1,9 @@
-package com.ryhma10.tilastoohjelma.model;
+package com.ryhma10.tilastoohjelma;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import com.ryhma10.tilastoohjelma.model.Profile;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.*;

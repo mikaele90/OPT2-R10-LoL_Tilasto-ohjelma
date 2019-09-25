@@ -7,13 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.sql.SQLException;
 
 import com.ryhma10.tilastoohjelma.view.LoginController;
 import com.ryhma10.tilastoohjelma.view.CreateNewUserController;
-import com.ryhma10.tilastoohjelma.model.Database;
 import com.ryhma10.tilastoohjelma.view.InputController;
 import com.ryhma10.tilastoohjelma.view.FeedBackController;
 import com.ryhma10.tilastoohjelma.view.ProfileController;
@@ -129,10 +127,6 @@ public class MainApp extends Application {
         profileController.setProfileStage(profileStage);
 
         profileStage.showAndWait();
-    }
-
-    public void connect() {
-        Database db = new Database();
     }
 
     public Stage getPrimaryStage() {
