@@ -58,7 +58,6 @@ public class CreateNewUserController {
 
     @FXML
     public void handleDone(ActionEvent actionEvent) {
-        progressIndicator.setVisible(true);
         SessionFactory factory = null;
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
         try{
@@ -69,23 +68,22 @@ public class CreateNewUserController {
             e.printStackTrace();
             System.exit(-1);
         }
-        Profile newProfile = new Profile(0, createProfileNameField.getText(), createProfilePasswordField.getText());
+        Profile newProfile = new Profile(createProfileNameField.getText(), createProfilePasswordField.getText());
         Transaction transaction = null;
         try (Session session = factory.openSession()) {
             transaction = session.beginTransaction();
 
             session.saveOrUpdate(newProfile);
             transaction.commit();
+            transaction = null;
             Alert newProfileSuccess = new Alert(Alert.AlertType.INFORMATION);
             newProfileSuccess.setTitle("Success");
             newProfileSuccess.setHeaderText("Profile created");
             newProfileSuccess.setContentText("Profile created successfully.");
             factory.close();
-            progressIndicator.setVisible(false);
             newProfileSuccess.showAndWait();
         }
         catch (Exception e) {
-            progressIndicator.setVisible(false);
             Alert newProfileProblem = new Alert(Alert.AlertType.ERROR);
             newProfileProblem.setTitle("Error");
             newProfileProblem.setHeaderText("Profile couldn't be created");

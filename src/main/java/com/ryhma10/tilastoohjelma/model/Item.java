@@ -12,22 +12,22 @@ public class Item {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="itemid")
 	private int itemid;
-	@Column(name="solt1")
+	@Column(name="slot1")
 	private String slot1;
 	
-	@Column(name="solt2")
+	@Column(name="slot2")
 	private String slot2;
 	
-	@Column(name="solt3")
+	@Column(name="slot3")
 	private String slot3;
 	
-	@Column(name="solt4")
+	@Column(name="slot4")
 	private String slot4;
 	
-	@Column(name="solt5")
+	@Column(name="slot5")
 	private String slot5;
 	
-	@Column(name="solt6")
+	@Column(name="slot6")
 	private String slot6;
 	
 	@OneToOne

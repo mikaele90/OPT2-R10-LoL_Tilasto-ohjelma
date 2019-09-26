@@ -20,7 +20,7 @@
    <property name="hibernate.connection.password">
       ryhma10
    </property>
-   <property name="hbm2ddl.auto">create</property>
+   <property name="hbm2ddl.auto">validate</property>
    <property name="show_sql">true</property>
    <mapping class="com.ryhma10.tilastoohjelma.model.Profile"/>
    <mapping class="com.ryhma10.tilastoohjelma.model.Gamedata"/>
