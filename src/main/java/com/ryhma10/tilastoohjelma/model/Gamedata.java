@@ -1,6 +1,5 @@
 package com.ryhma10.tilastoohjelma.model;
 
-import java.io.*;
 import javax.persistence.*;
 
 @Entity
@@ -10,6 +9,7 @@ import javax.persistence.*;
 public class Gamedata{
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="gameid")
 	private int gameid;
 	
@@ -22,7 +22,7 @@ public class Gamedata{
 	@Column(name="deaths")
 	private int deaths;
 
-	@Column(name="assits")
+	@Column(name="assist")
 	private int assits;
 	
 	@Column(name="winlose")
@@ -34,22 +34,17 @@ public class Gamedata{
 	@Column(name="gpm")
 	private int gpm;
 	
-	/*@OneToOne
-	@MapsId
-	private Item item;*/
-	
 	@ManyToOne
-	@JoinColumn(name="Id", nullable=false)
+	@JoinColumn(name="Id", referencedColumnName="Id", nullable=false)
 	private Profile profile;
 	
 	
-	public Gamedata(int gameid, String champion, int kills, int deaths, int assits, 
+	public Gamedata(String champion, int kills, int deaths, int assits, 
 			String winlose, String positio, int gpm, Profile profile) {
 		this.champion = champion;
 		this.kills = kills;
 		this.deaths = deaths;
 		this.assits =assits;
-		this.gameid = gameid;
 		this.winlose = winlose;
 		this.positio = positio;
 		this.gpm = gpm;
@@ -127,5 +122,6 @@ public class Gamedata{
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
+	
 
 }

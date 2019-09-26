@@ -1,6 +1,5 @@
 package com.ryhma10.tilastoohjelma.model;
 
-import java.util.*;
 import javax.persistence.*;
 
 
@@ -10,7 +9,7 @@ import javax.persistence.*;
 
 public class Profile {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
 	
@@ -20,15 +19,11 @@ public class Profile {
 	@Column(name="Psw")
 	private String psw;
 	
-//	@OneToMany(mappedBy="profile", cascade = CascadeType.ALL)
-//	private Set<Gamedata> gamedata = new HashSet <Gamedata>;
-
-
+	
 	public Profile() {
 	}
 	
-	public Profile(int id, String name, String psw) {
-		this.id = id;
+	public Profile(String name, String psw) {
 		this.name = name;
 		this.psw = psw;
 	}
@@ -57,12 +52,4 @@ public class Profile {
 		this.psw = psw;
 	}
 
-//	public Set<Gamedata> getGamedata() {
-//		return gamedata;
-//	}
-//
-//	public void setGamedata(Set<Gamedata> gamedata) {
-//		this.gamedata = gamedata;
-//	}
-//	
 }

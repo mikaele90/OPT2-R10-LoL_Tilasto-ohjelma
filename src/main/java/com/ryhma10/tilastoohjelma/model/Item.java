@@ -3,11 +3,16 @@ package com.ryhma10.tilastoohjelma.model;
 
 import javax.persistence.*;
 
-//@Entity
-//@Table(name="item")
+@Entity
+@Table(name="item")
 
 public class Item {
-	/*@Column(name="solt1")
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="itemid")
+	private int itemid;
+	@Column(name="solt1")
 	private String slot1;
 	
 	@Column(name="solt2")
@@ -25,32 +30,23 @@ public class Item {
 	@Column(name="solt6")
 	private String slot6;
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="itemid")
-	private int itemid;
-	
-	@OneToOne(mappedBy="item", cascade=CascadeType.ALL)
+	@OneToOne
+	@JoinColumn(name="Gameid", referencedColumnName="gameid", nullable=false)
 	private Gamedata gamedata;
 	
-	/*@Column(name="gameid")
-	@OneToOne
-	@JoinColumn (name="gameid")
-	private Gamedata gamedata;*/
 	
 	public Item() {
 	}
 	
-	/*public Item(String slot1, String slot2, String slot3, String slot4,
-			String slot5, String slot6, int itemid) {
+	public Item(String slot1, String slot2, String slot3, String slot4,
+			String slot5, String slot6, Gamedata gamedata) {
 		this.slot1 = slot1;
 		this.slot2 = slot2;
 		this.slot3 = slot3;
 		this.slot4 = slot4;
 		this.slot5 = slot5;
 		this.slot6 = slot6;
-		this.itemid = itemid;
-		//this.gamedata = gamedata;
+		this.gamedata = gamedata;
 	}
 
 	public String getSlot1() {
@@ -115,7 +111,7 @@ public class Item {
 
 	public void setGamedata(Gamedata gamedata) {
 		this.gamedata = gamedata;
-	}*/
+	}
 
 
 }
