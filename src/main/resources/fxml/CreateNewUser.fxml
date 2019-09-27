@@ -20,8 +20,8 @@
                 </ButtonBar>
                 <Label layoutX="14.0" layoutY="23.0" text="Profile name" />
                 <Label layoutX="14.0" layoutY="56.0" text="Password" />
-                <TextField fx:id="createProfileNameField" layoutX="91.0" layoutY="19.0" prefHeight="25.0" prefWidth="213.0" />
-                <TextField fx:id="createProfilePasswordField" layoutX="91.0" layoutY="52.0" prefHeight="25.0" prefWidth="213.0" />
+                <TextField fx:id="createProfileNameField" layoutX="91.0" layoutY="19.0" onKeyPressed="#onEnter" prefHeight="25.0" prefWidth="213.0" />
+                <TextField fx:id="createProfilePasswordField" layoutX="91.0" layoutY="52.0" onKeyPressed="#onEnter" prefHeight="25.0" prefWidth="213.0" />
             <ProgressIndicator fx:id="progressIndicator" layoutX="310.0" layoutY="85.0" prefHeight="25.0" prefWidth="25.0" />
             </children>
         </Pane>

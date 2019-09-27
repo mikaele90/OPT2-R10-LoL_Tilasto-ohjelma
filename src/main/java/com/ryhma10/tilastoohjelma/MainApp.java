@@ -48,6 +48,7 @@ public class MainApp extends Application {
 
         LoginController loginController = loader.getController();
         loginController.setMainApp(this);
+        loginController.setLoginStage(primaryStage);
 
         primaryStage.show();
     }
@@ -62,6 +63,7 @@ public class MainApp extends Application {
         createNewUserStage.initModality(Modality.WINDOW_MODAL);
         createNewUserStage.initOwner(primaryStage);
         Scene createNewUserScene = new Scene(createNewUserWindow);
+        createNewUserScene.getStylesheets().add("/styles/Styles.css");
         createNewUserStage.setScene(createNewUserScene);
 
         CreateNewUserController createNewUserController = loader.getController();

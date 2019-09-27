@@ -4,7 +4,6 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -12,13 +11,13 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class CreateNewUser extends Service<String> {
+public class Login extends Service<String> {
 
-    private String usernameToCreate, passwordToCreate;
+    private String profileName, profilePassword;
 
-    public CreateNewUser(String usernameToCreate, String passwordToCreate) {
-        this.usernameToCreate = usernameToCreate;
-        this.passwordToCreate = passwordToCreate;
+    public Login(String profileName, String profilePassword) {
+        this.profileName = profileName;
+        this.profilePassword = profilePassword;
     }
 
     @Override
@@ -36,29 +35,23 @@ public class CreateNewUser extends Service<String> {
                     e.printStackTrace();
                     return result;
                 }
-                Profile newProfile = new Profile(usernameToCreate, passwordToCreate);
-                Transaction transaction = null;
                 try (Session session = factory.openSession()) {
-                    Query query = session.createQuery("FROM Profile WHERE name = :name");
-                    query.setParameter("name", usernameToCreate);
-                    List queryResults = query.list();
-                    if (queryResults.isEmpty()) {
-                        transaction = session.beginTransaction();
+                    Query query = session.createQuery("FROM Profile WHERE name = :name AND Psw = :password");
+                    query.setParameter("name", profileName);
+                    query.setParameter("password", profilePassword);
 
-                        session.saveOrUpdate(newProfile);
-                        transaction.commit();
-                        factory.close();
+                    List queryResults = query.list();
+                    if(queryResults.size() == 1) {
+                        Profile profile = (Profile)queryResults.get(0);
+                        System.out.println(profile);
                         result = "Success";
                     }
-                    else {
-                        result = "Profile already exists";
-                        System.out.println("Profile already exists!");
+                    else if (queryResults.size() > 1) {
+                        result = "Too many records found!";
+                        System.out.println("Too many records found! Clean up database.");
                     }
                 }
                 catch (Exception e) {
-                    if (transaction != null) {
-                        transaction.rollback();
-                    }
                     factory.close();
                 }
                 if (!factory.isClosed()) {
@@ -69,4 +62,5 @@ public class CreateNewUser extends Service<String> {
             }
         };
     }
+
 }

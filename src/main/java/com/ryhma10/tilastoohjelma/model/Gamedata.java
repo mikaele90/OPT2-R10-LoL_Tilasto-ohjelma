@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name="gamedata")
 
 
-public class Gamedata{
+public class Gamedata {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -38,8 +38,10 @@ public class Gamedata{
 	@JoinColumn(name="Id", referencedColumnName="Id", nullable=false)
 	private Profile profile;
 	
+	public Gamedata() {
+	}
 	
-	public Gamedata(String champion, int kills, int deaths, int assits, 
+	public Gamedata(String champion, int kills, int deaths, int assits,
 			String winlose, String positio, int gpm, Profile profile) {
 		this.champion = champion;
 		this.kills = kills;
