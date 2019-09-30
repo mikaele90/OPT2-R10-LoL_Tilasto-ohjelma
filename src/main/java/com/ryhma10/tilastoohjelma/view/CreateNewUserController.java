@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -47,7 +48,10 @@ public class CreateNewUserController {
     private ProgressIndicator progressIndicator;
 
     @FXML
-    private TextField createProfileNameField, createProfilePasswordField;
+    private TextField createProfileNameField;
+
+    @FXML
+    private PasswordField createProfilePasswordField;
 
     @FXML
     public void handleCancel(ActionEvent actionEvent) {

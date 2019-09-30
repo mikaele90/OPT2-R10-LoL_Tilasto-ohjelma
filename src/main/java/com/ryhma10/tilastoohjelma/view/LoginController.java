@@ -1,18 +1,14 @@
 package com.ryhma10.tilastoohjelma.view;
 
-import com.ryhma10.tilastoohjelma.model.Login;
 import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.model.Login;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -44,7 +40,10 @@ public class LoginController {
     }
 
     @FXML
-    private TextField profileNameField, passwordField;
+    private TextField profileNameField;
+
+    @FXML
+    private PasswordField passwordField;
 
     @FXML
     private Button loginButton, createNewProfileButton;
@@ -69,7 +68,6 @@ public class LoginController {
         aboutApplication.showAndWait();
     }
 
-
     @FXML
     public void handleCreateNewProfile(ActionEvent actionEvent) throws IOException {
         mainApp.showCreateNewUserWindow();
@@ -81,19 +79,16 @@ public class LoginController {
     }
 
     @FXML
-    public void handleLoginClick(MouseEvent mouseEvent) {
-        loginButton.setText("Logging in...");
-    }
-
-    @FXML
     public void handleLogin(ActionEvent actionEvent) throws IOException {
         if(profileNameField.getText().length() > 0 && passwordField.getText().length() > 3) {
             Login login = new Login(profileNameField.getText(), passwordField.getText());
             progressIndicator.visibleProperty().bind(login.runningProperty());
+            loginButton.setText("Logging in...");
             login.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                 @Override
                 public void handle(WorkerStateEvent workerStateEvent) {
                     System.out.println("login.getValue(): " + login.getValue());
+                    loginButton.setText("Login");
                     if (login.getValue().equals("Success")) {
                         loginStage.close();
                         try {
@@ -103,7 +98,6 @@ public class LoginController {
                         }
                     }
                     else if (login.getValue().equals("Fail")){
-                        loginButton.setText("Login");
                         Alert profileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
                         profileNotFoundAlert.setTitle("Login Unsuccessful");
                         profileNotFoundAlert.setHeaderText("Profile name or password incorrect");
@@ -133,6 +127,5 @@ public class LoginController {
             emptyFieldError.showAndWait();
         }
     }
-
 
 }
