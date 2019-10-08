@@ -90,9 +90,15 @@ public class LoginController {
                 @Override
                 public void handle(WorkerStateEvent workerStateEvent) {
                     System.out.println("login.getValue(): " + login.getValue());
-                    System.out.println("login.getValue().getName(): " + login.getValue().getName());
                     loginButton.setText("Login");
-                    if (login.getValue().getName().equals(profileNameField.getText())) {
+                    if (login.getValue() == null) {
+                        Alert profileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
+                        profileNotFoundAlert.setTitle("Login Unsuccessful");
+                        profileNotFoundAlert.setHeaderText("Profile name or password incorrect");
+                        profileNotFoundAlert.setContentText("Check profile name and password.");
+                        profileNotFoundAlert.showAndWait();
+                    }
+                    else if (login.getValue().getName().equals(profileNameField.getText())) {
                         login.setProfileName(login.getValue().getName());
                         mainApp.setProfile(login.getValue());
                         loginStage.close();
@@ -102,14 +108,10 @@ public class LoginController {
                             e.printStackTrace();
                         }
                     }
-                    else if (login.getValue().equals(null)){
-                        Alert profileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
-                        profileNotFoundAlert.setTitle("Login Unsuccessful");
-                        profileNotFoundAlert.setHeaderText("Profile name or password incorrect");
-                        profileNotFoundAlert.setContentText("Check profile name and password.");
-                        profileNotFoundAlert.showAndWait();
+                    else {
+
                     }
-                    else System.out.println("Login: Something's wrong. Probably too many records found.");
+
                 }
             });
 

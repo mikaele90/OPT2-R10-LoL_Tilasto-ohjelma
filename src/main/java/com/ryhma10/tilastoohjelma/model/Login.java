@@ -51,7 +51,6 @@ public class Login extends Service<Profile> {
                         result = profile;
                     }
                     else if (queryResults.size() > 1) {
-                        result = null;
                         System.out.println("Too many records found! Clean up database.");
                     }
                 }
