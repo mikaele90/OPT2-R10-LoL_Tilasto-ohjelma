@@ -63,4 +63,12 @@ public class Login extends Service<String> {
         };
     }
 
+    public String getProfileName() {
+        return profileName;
+    }
+
+    public String getProfilePassword() {
+        return profilePassword;
+    }
+
 }

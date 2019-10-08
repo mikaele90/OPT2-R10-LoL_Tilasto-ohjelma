@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+   <session-factory>
+   <property name="hibernate.dialect">
+      org.hibernate.dialect.MariaDB103Dialect
+   </property>
+   <property name="hibernate.connection.driver_class">
+      org.mariadb.jdbc.Driver
+   </property>
+
+   <property name="hibernate.connection.url">
+      jdbc:mariadb://10.114.32.47:3306/loldatabase
+   </property>
+   <property name="hibernate.connection.username">
+      ryhma10
+   </property>
+   <property name="hibernate.connection.password">
+      ryhma10
+   </property>
+   <property name="hbm2ddl.auto">validate</property>
+   <property name="show_sql">true</property>
+   <mapping class="com.ryhma10.tilastoohjelma.model.Profile"/>
+   <mapping class="com.ryhma10.tilastoohjelma.model.Gamedata"/>
+   <mapping class="com.ryhma10.tilastoohjelma.model.Item"/>
+   
+   
+
+</session-factory>
+</hibernate-configuration>
