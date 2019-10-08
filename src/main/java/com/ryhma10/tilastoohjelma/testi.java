@@ -29,19 +29,15 @@ public class testi {
 		Profile p2 = new Profile("jaa", "jaa");
 		
 		Gamedata g1 = new Gamedata("wat", 6, 7, 8, 
-				"lose", "testi", 5, p2);
+				"lose", "testi", 5, "kama", "kama", "kama", "kama","kama","kama","jaa");
 		Gamedata g2 = new Gamedata ("jaha", 7, 2, 3,
-				"win", "mid", 10, p1);
+				"win", "mid", 10, "kama","kama","kama","kama","kama","kama", "testi");
 		Gamedata g3 = new Gamedata("wut", 6, 7, 8, 
-				"lose", "testi", 5, p1);
+				"lose", "testi", 5, "kama","kama","kama","kama","kama","kama", "jaa");
 		Gamedata g4 = new Gamedata ("jaahas", 7, 2, 3,
-				"win", "mid", 10, p1);
+				"win", "mid", 10, "kama","kama","kama","kama","kama","kama","jaa");
 		
 		
-		Item i1 = new Item("testi","testi","testi", "testi", "testi", "testi", g1);
-		Item i2 = new Item("jaa","jaa","jaa", "jaa", "jaa", "jaa", g2);
-		Item i3 = new Item("poo","pau","hau", "hau", "poo", "pp", g3);
-		Item i4 = new Item("aa","aaa","aa", "aa", "aa", "aa", g4);
 		Transaction transaction = null;
 		try (Session session = factory.openSession()) {
 			transaction = session.beginTransaction();
@@ -55,31 +51,11 @@ public class testi {
 			
 			session.saveOrUpdate(g1);
 			session.saveOrUpdate(g2);
-			transaction.commit();
-			
-			transaction = null;
-			transaction = session.beginTransaction();
-			
-			session.saveOrUpdate(i1);
-			session.saveOrUpdate(i2);
-			transaction.commit();
-			
-			transaction = null;
-			transaction = session.beginTransaction();
 			
 			session.saveOrUpdate(g3);
 			session.saveOrUpdate(g4);
 			transaction.commit();
-			
-			transaction = null;
-			transaction = session.beginTransaction();
-			
-			session.saveOrUpdate(i3);
-			session.saveOrUpdate(i4);
-			transaction.commit();
-			
-			
-			
+
 			
 			factory.close();
 			

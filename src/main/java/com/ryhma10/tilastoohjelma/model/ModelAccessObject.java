@@ -6,7 +6,7 @@ import org.hibernate.boot.registry.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.query.Query;
 import java.lang.Math;
-
+ 
 
 public class ModelAccessObject implements IModelDAO {
 	
