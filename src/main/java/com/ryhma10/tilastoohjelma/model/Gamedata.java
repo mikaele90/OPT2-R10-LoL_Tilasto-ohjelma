@@ -32,17 +32,36 @@ public class Gamedata {
 	private String positio;
 	
 	@Column(name="gpm")
-	private int gpm;
+	private double gpm;
 	
-	@ManyToOne
-	@JoinColumn(name="Id", referencedColumnName="Id", nullable=false)
-	private Profile profile;
+	@Column(name="slot1")
+	private String slot1;
+	
+	@Column(name="slot2")
+	private String slot2;
+	
+	@Column(name="slot3")
+	private String slot3;
+	
+	@Column(name="slot4")
+	private String slot4;
+	
+	@Column(name="slot5")
+	private String slot5;
+	
+	@Column(name="slot6")
+	private String slot6;
+	
+	@Column(name="pname")
+	private String pname;
 	
 	public Gamedata() {
+		
 	}
 	
-	public Gamedata(String champion, int kills, int deaths, int assits,
-			String winlose, String positio, int gpm, Profile profile) {
+	public Gamedata(String champion, int kills, int deaths, int assits, 
+			String winlose, String positio, double gpm,
+			String slot1, String slot2, String slot3, String slot4, String slot5, String slot6, String pname) {
 		this.champion = champion;
 		this.kills = kills;
 		this.deaths = deaths;
@@ -50,7 +69,21 @@ public class Gamedata {
 		this.winlose = winlose;
 		this.positio = positio;
 		this.gpm = gpm;
-		this.profile = profile;
+		this.slot1 = slot1;
+		this.slot2 = slot2;
+		this.slot3 = slot3;
+		this.slot4 = slot4;
+		this.slot5 = slot5;
+		this.slot6 = slot6;
+		this.pname = pname;
+	}
+
+	public int getGameid() {
+		return gameid;
+	}
+
+	public void setGameid(int gameid) {
+		this.gameid = gameid;
 	}
 
 	public String getChampion() {
@@ -85,14 +118,6 @@ public class Gamedata {
 		this.assits = assits;
 	}
 
-	public int getGid() {
-		return gameid;
-	}
-
-	public void setGid(int gameid) {
-		this.gameid = gameid;
-	}
-
 	public String getWinlose() {
 		return winlose;
 	}
@@ -109,21 +134,68 @@ public class Gamedata {
 		this.positio = positio;
 	}
 
-	public int getGpm() {
+	public double getGpm() {
 		return gpm;
 	}
 
-	public void setGpm(int gpm) {
+	public void setGpm(double gpm) {
 		this.gpm = gpm;
 	}
 
-	public Profile getProfile() {
-		return profile;
+	public String getSlot1() {
+		return slot1;
 	}
 
-	public void setProfile(Profile profile) {
-		this.profile = profile;
+	public void setSlot1(String slot1) {
+		this.slot1 = slot1;
 	}
-	
+
+	public String getSlot2() {
+		return slot2;
+	}
+
+	public void setSlot2(String slot2) {
+		this.slot2 = slot2;
+	}
+
+	public String getSlot3() {
+		return slot3;
+	}
+
+	public void setSlot3(String slot3) {
+		this.slot3 = slot3;
+	}
+
+	public String getSlot4() {
+		return slot4;
+	}
+
+	public void setSlot4(String slot4) {
+		this.slot4 = slot4;
+	}
+
+	public String getSlot5() {
+		return slot5;
+	}
+
+	public void setSlot5(String slot5) {
+		this.slot5 = slot5;
+	}
+
+	public String getSlot6() {
+		return slot6;
+	}
+
+	public void setSlot6(String slot6) {
+		this.slot6 = slot6;
+	}
+
+	public String getPname() {
+		return pname;
+	}
+
+	public void setPname(String pname) {
+		this.pname = pname;
+	}
 
 }
