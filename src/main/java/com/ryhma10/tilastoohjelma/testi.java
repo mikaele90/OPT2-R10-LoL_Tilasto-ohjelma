@@ -7,7 +7,7 @@ import org.hibernate.boot.registry.*;
 import com.ryhma10.tilastoohjelma.model.Gamedata;
 import com.ryhma10.tilastoohjelma.model.Item;
 import com.ryhma10.tilastoohjelma.model.Profile;
-
+ 
 
 public class testi {
 	
