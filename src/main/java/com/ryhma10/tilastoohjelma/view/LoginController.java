@@ -2,6 +2,7 @@ package com.ryhma10.tilastoohjelma.view;
 
 import com.ryhma10.tilastoohjelma.MainApp;
 import com.ryhma10.tilastoohjelma.model.Login;
+import com.ryhma10.tilastoohjelma.view.MainController;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,6 +17,7 @@ import java.io.IOException;
 public class LoginController {
 
     private MainApp mainApp;
+    private MainController mainController;
     private Stage loginStage;
 
     public LoginController() {
@@ -88,16 +90,19 @@ public class LoginController {
                 @Override
                 public void handle(WorkerStateEvent workerStateEvent) {
                     System.out.println("login.getValue(): " + login.getValue());
+                    System.out.println("login.getValue().getName(): " + login.getValue().getName());
                     loginButton.setText("Login");
-                    if (login.getValue().equals("Success")) {
+                    if (login.getValue().getName().equals(profileNameField.getText())) {
+                        login.setProfileName(login.getValue().getName());
+                        mainApp.setProfile(login.getValue());
                         loginStage.close();
                         try {
-                            mainApp.showProfileWindow();
+                            mainApp.showMainWindow(login.getValue());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
-                    else if (login.getValue().equals("Fail")){
+                    else if (login.getValue().equals(null)){
                         Alert profileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
                         profileNotFoundAlert.setTitle("Login Unsuccessful");
                         profileNotFoundAlert.setHeaderText("Profile name or password incorrect");

@@ -11,7 +11,11 @@ import org.hibernate.query.Query;
 
 import java.util.List;
 
-public class Login extends Service<String> {
+public class Login extends Service<Profile> {
+
+    public void setProfileName(String profileName) {
+        this.profileName = profileName;
+    }
 
     private String profileName, profilePassword;
 
@@ -21,11 +25,11 @@ public class Login extends Service<String> {
     }
 
     @Override
-    protected Task<String> createTask() {
-        return new Task<String>() {
+    protected Task<Profile> createTask() {
+        return new Task<Profile>() {
             @Override
-            protected String call() throws Exception {
-                String result = "Fail";
+            protected Profile call() throws Exception {
+                Profile result = null;
                 SessionFactory factory = null;
                 final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
                 try{
@@ -43,11 +47,11 @@ public class Login extends Service<String> {
                     List queryResults = query.list();
                     if(queryResults.size() == 1) {
                         Profile profile = (Profile)queryResults.get(0);
-                        System.out.println(profile);
-                        result = "Success";
+                        System.out.println(profile.getName());
+                        result = profile;
                     }
                     else if (queryResults.size() > 1) {
-                        result = "Too many records found!";
+                        result = null;
                         System.out.println("Too many records found! Clean up database.");
                     }
                 }
@@ -65,10 +69,6 @@ public class Login extends Service<String> {
 
     public String getProfileName() {
         return profileName;
-    }
-
-    public String getProfilePassword() {
-        return profilePassword;
     }
 
 }

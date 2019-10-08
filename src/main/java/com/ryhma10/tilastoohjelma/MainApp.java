@@ -1,5 +1,7 @@
 package com.ryhma10.tilastoohjelma;
 
+import com.ryhma10.tilastoohjelma.model.Profile;
+import com.ryhma10.tilastoohjelma.view.*;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -10,21 +12,17 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.ryhma10.tilastoohjelma.view.LoginController;
-import com.ryhma10.tilastoohjelma.view.CreateNewUserController;
-import com.ryhma10.tilastoohjelma.view.InputController;
-import com.ryhma10.tilastoohjelma.view.FeedBackController;
-import com.ryhma10.tilastoohjelma.view.ProfileController;
-
 
 public class MainApp extends Application {
 
     private Stage primaryStage;
     private AnchorPane loginWindow;
     private AnchorPane createNewUserWindow;
+    private AnchorPane mainWindow;
     private AnchorPane inputWindow;
     private AnchorPane feedBackWindow;
     private AnchorPane profileWindow;
+    private Profile profile;
 
     public MainApp() {
         //Constructor
@@ -71,6 +69,28 @@ public class MainApp extends Application {
         createNewUserController.setCreateNewUserStage(createNewUserStage);
 
         createNewUserStage.showAndWait();
+    }
+
+    public void showMainWindow(Profile profile) throws IOException {
+        System.out.println("user: " + profile.getName());
+        System.out.println("psw: " + profile.getPsw());
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("/fxml/Main.fxml"));
+        mainWindow = (AnchorPane)loader.load();
+
+        Stage mainStage = new Stage();
+        mainStage.setTitle(primaryStage.getTitle());
+        mainStage.initOwner(primaryStage);
+        Scene mainScene = new Scene(mainWindow);
+        mainScene.getStylesheets().add("/styles/Styles.css");
+        mainStage.setScene(mainScene);
+
+        MainController mainController = loader.getController();
+        mainController.setMainApp(this);
+        mainController.setCurrentProfile(profile);
+        mainController.setMainStage(mainStage);
+
+        mainStage.show();
     }
     
     
@@ -137,6 +157,14 @@ public class MainApp extends Application {
 
     public MainApp getMainApp() {
         return this;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    public Profile getProfile() {
+        return this.profile;
     }
 
     /**
