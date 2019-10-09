@@ -41,7 +41,7 @@ public class ProfileController {
    } 
    
    @FXML
-   private void handleCancel() {
+   private void handleBack() {
 	   profileStage.close();
    }
 

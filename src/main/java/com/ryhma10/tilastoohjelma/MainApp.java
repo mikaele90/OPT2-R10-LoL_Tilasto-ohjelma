@@ -102,7 +102,7 @@ public class MainApp extends Application {
 
         Stage inputStage = new Stage();
         inputStage.setTitle("Input your in-game statistics");
-        inputStage.initModality(Modality.WINDOW_MODAL);
+        inputStage.initModality(Modality.APPLICATION_MODAL);
         inputStage.initOwner(primaryStage);
         Scene InputScene = new Scene(inputWindow);
         inputStage.setScene(InputScene);
@@ -121,7 +121,7 @@ public class MainApp extends Application {
 
         Stage feedBackStage = new Stage();
         feedBackStage.setTitle("Check out your match analysis");
-        feedBackStage.initModality(Modality.WINDOW_MODAL);
+        feedBackStage.initModality(Modality.APPLICATION_MODAL);
         feedBackStage.initOwner(primaryStage);
         Scene FeedBackScene = new Scene(feedBackWindow);
         feedBackStage.setScene(FeedBackScene);
@@ -140,7 +140,7 @@ public class MainApp extends Application {
 
         Stage profileStage = new Stage();
         profileStage.setTitle("Check out your profile");
-        profileStage.initModality(Modality.WINDOW_MODAL);
+        profileStage.initModality(Modality.APPLICATION_MODAL);
         profileStage.initOwner(primaryStage);
         Scene ProfileScene = new Scene(profileWindow);
         profileStage.setScene(ProfileScene);

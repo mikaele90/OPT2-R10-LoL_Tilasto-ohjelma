@@ -16,8 +16,8 @@
       <Label layoutX="26.0" layoutY="47.0" text="Welcome to your profile" />
       <ButtonBar layoutX="124.0" layoutY="346.0" prefHeight="40.0" prefWidth="256.0">
         <buttons>
-            <Button mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
-            <Button mnemonicParsing="false" onAction="#handleInputNewMatch" text="Input new match" />
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBack" text="Back" />
+            <Button fx:id="inputNewGameButton" mnemonicParsing="false" onAction="#handleInputNewMatch" text="Input new match" />
         </buttons>
       </ButtonBar>
       <GridPane layoutX="14.0" layoutY="142.0" prefHeight="90.0" prefWidth="297.0">
