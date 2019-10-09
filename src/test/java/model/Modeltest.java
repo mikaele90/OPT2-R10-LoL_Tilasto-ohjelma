@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.*;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -28,7 +29,6 @@ public class Modeltest{
 	private List<Gamedata> vertauslista3 = Arrays.asList(g1, g2, g3);
 	private double gold, time;
 	
-	
 	@Test void profiiliListaan() {
 		p1 = new Profile("junit1", "testi");
 		p2 = new Profile("junit2", "jaa");
@@ -37,13 +37,17 @@ public class Modeltest{
 	}
 	
 	
-	//EI TOIMI HÖH
-//	@Test
-//	public void testReadProfile() {
-//		//Profile test = modelDAO.readProfile("junit1");
-//		assertEquals(p1, modelDAO.readProfile(p1.getName()), "ei ole sama");
-//		assertEquals(p2, modelDAO.readProfile(p2.getName()), "profiili ei vastaa");
-//	}
+	@Test
+	public void testReadProfile() {
+	        String testName = "junit3";
+	        String testPass = "testi";
+	        Profile p3 = new Profile(testName, testPass);
+	        modelDAO.addProfile(p3);
+	        assertNotNull(modelDAO.readProfile(p3.getName()));
+	        Assert.assertEquals(testName, p3.getName());
+	        Assert.assertEquals(testPass, p3.getPsw());
+	}
+	
 	
 	@Test
 	public void addGamedata() {
@@ -52,6 +56,7 @@ public class Modeltest{
 		assertEquals(true, modelDAO.createGamedata(g3), "datan lisäiys ei onnistu");
 		assertEquals(true, modelDAO.createGamedata(g3), "datan lisäiys ei onnistu");
 	}
+	
 	
 	@Test
 	public void countGpm() {
