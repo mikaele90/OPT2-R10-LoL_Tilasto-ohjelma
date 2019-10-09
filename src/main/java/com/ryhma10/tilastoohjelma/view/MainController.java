@@ -21,6 +21,7 @@ public class MainController {
     private Stage mainStage;
     private LoginController loginController;
     private String profileName;
+    
 
     public Profile getCurrentProfile() {
         return currentProfile;

@@ -11,15 +11,9 @@
       org.mariadb.jdbc.Driver
    </property>
 
-   <property name="hibernate.connection.url">
-      jdbc:mariadb://10.114.32.47:3306/loldatabase
-   </property>
-   <property name="hibernate.connection.username">
-      ryhma10
-   </property>
-   <property name="hibernate.connection.password">
-      ryhma10
-   </property>
+   <property name="hibernate.connection.url">jdbc:mariadb://10.114.32.47:3306/loldatabase</property>
+   <property name="hibernate.connection.username">ryhma10</property>
+   <property name="hibernate.connection.password">ryhma10</property>
    <property name="hbm2ddl.auto">update</property>
    <property name="show_sql">true</property>
    <mapping class="com.ryhma10.tilastoohjelma.model.Profile"/>

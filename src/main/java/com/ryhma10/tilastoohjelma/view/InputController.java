@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.model.*;
 
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
@@ -21,7 +22,13 @@ import javafx.scene.control.TextField;
 
 public class InputController  {
 	
-	ObservableList<String> champsList = FXCollections.observableArrayList("Twisted fate", "Kassadin", "Malzahar");
+	ObservableList<String> champsList = FXCollections.observableArrayList("Kha'Zix", "Lucian", "Qiyana");
+	
+	private Gamedata match;
+	private Profile profile;
+	private LoginController login;
+	private ModelAccessObject dao;
+	private MainController maincontroller;
 	
 	
 	@FXML
@@ -30,21 +37,22 @@ public class InputController  {
 	private TextField textfield2;
 	@FXML
 	private TextField textfield3;
-	@FXML
-	private TextField textfield4;
+	//@FXML
+	//private TextField textfield4;
 	
 	@FXML
 	private ChoiceBox champsPlayed;
 	
 	private MainApp mainApp;
     private Stage inputStage;
+	
     
     @FXML
     private Label label;
     
     @FXML
 	private void initialize() {
-		champsPlayed.setValue("Twisted fate");
+		champsPlayed.setValue("Kha'Zix");
 		champsPlayed.setItems(champsList);
 	}
     
@@ -66,14 +74,19 @@ public class InputController  {
     
     @FXML
     private void handleSubmit(ActionEvent event) throws IOException {
+    	dao = new ModelAccessObject();
+    	profile = mainApp.getProfile();
+		match = new Gamedata(champsPlayed.getSelectionModel().getSelectedItem().toString(), Integer.parseInt(textfield1.getText()), Integer.parseInt(textfield2.getText()), Integer.parseInt(textfield3.getText()), "", "", 0, "", "", "", "", "", "", profile.getName());
+    	dao.createGamedata(match);
         mainApp.showFeedBackWindow();
     }
+    
     
     public void handleClearAll(ActionEvent event) throws IOException {
     	textfield1.setText("");
     	textfield2.setText("");
     	textfield3.setText("");
-    	textfield4.setText("");
+    	//textfield4.setText("");
     	
     }
     
