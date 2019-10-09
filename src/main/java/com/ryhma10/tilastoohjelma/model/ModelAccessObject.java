@@ -5,6 +5,8 @@ import org.hibernate.*;
 import org.hibernate.boot.registry.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.query.Query;
+
+
 import java.lang.Math;
   
 
@@ -49,11 +51,7 @@ public class ModelAccessObject implements IModelDAO {
 		boolean totuus = false;
 		try(Session session = factory.openSession()) {
 			transaction = session.beginTransaction();
-			Gamedata game = new Gamedata(gamedata.getChampion(), gamedata.getKills(), gamedata.getDeaths(),
-					gamedata.getAssits(), gamedata.getPositio(), gamedata.getWinlose(), gamedata.getGpm(),
-					gamedata.getSlot1(), gamedata.getSlot2(), gamedata.getSlot3(), gamedata.getSlot4(),
-					gamedata.getSlot5(), gamedata.getSlot6(), gamedata.getPname());
-			session.saveOrUpdate(game);
+			session.saveOrUpdate(gamedata);
 			transaction.commit();
 			session.close();
 			totuus = true;
@@ -129,5 +127,23 @@ public class ModelAccessObject implements IModelDAO {
 			
 		return totuus;
 	}
-
+	
+	@Override
+	public boolean addProfile(Profile profile) {
+		Transaction transaction = null;
+		boolean totuus = false;
+		try(Session session = factory.openSession()){
+			transaction = session.beginTransaction();
+			session.saveOrUpdate(profile);
+			session.getTransaction().commit();
+			session.close();
+			totuus = true;
+		}catch (Exception e) {
+			transaction.rollback();
+			throw e;
+		}
+			
+		return totuus;
+	}
+ 
 }	
