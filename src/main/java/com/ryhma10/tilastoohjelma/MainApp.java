@@ -23,6 +23,7 @@ public class MainApp extends Application {
     private AnchorPane feedBackWindow;
     private AnchorPane profileWindow;
     private Profile profile;
+    private MainController mainController;
 
     public MainApp() {
         //Constructor
@@ -165,6 +166,14 @@ public class MainApp extends Application {
 
     public Profile getProfile() {
         return this.profile;
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
+
+    public MainController getMainController() {
+        return this.mainController;
     }
 
     /**

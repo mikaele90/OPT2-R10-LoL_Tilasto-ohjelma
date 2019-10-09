@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import com.ryhma10.tilastoohjelma.MainApp;
 import com.ryhma10.tilastoohjelma.model.*;
 
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -28,8 +29,8 @@ public class InputController  {
 	private Profile profile;
 	private LoginController login;
 	private ModelAccessObject dao;
-	private MainController maincontroller;
-	
+	private MainController mainController;
+
 	
 	@FXML
 	private TextField textfield1;
@@ -54,6 +55,11 @@ public class InputController  {
 	private void initialize() {
 		champsPlayed.setValue("Kha'Zix");
 		champsPlayed.setItems(champsList);
+
+		Platform.runLater(() -> {
+			this.mainController = mainApp.getMainController();
+		});
+
 	}
     
     public InputController() {
@@ -68,10 +74,6 @@ public class InputController  {
         this.inputStage = inputStage;
     }
     
-    
-
-    
-    
     @FXML
     private void handleSubmit(ActionEvent event) throws IOException {
     	dao = new ModelAccessObject();
@@ -79,9 +81,11 @@ public class InputController  {
 		match = new Gamedata(champsPlayed.getSelectionModel().getSelectedItem().toString(), Integer.parseInt(textfield1.getText()), Integer.parseInt(textfield2.getText()), Integer.parseInt(textfield3.getText()), "", "", 0, "", "", "", "", "", "", profile.getName());
     	dao.createGamedata(match);
         mainApp.showFeedBackWindow();
+        mainController.refreshScene();
+        inputStage.close();
     }
     
-    
+    @FXML
     public void handleClearAll(ActionEvent event) throws IOException {
     	textfield1.setText("");
     	textfield2.setText("");
@@ -89,8 +93,9 @@ public class InputController  {
     	//textfield4.setText("");
     	
     }
-    
-    
 
-
+	@FXML
+	public void handleCancel(ActionEvent actionEvent) {
+    	inputStage.close();
+	}
 }

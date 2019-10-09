@@ -41,7 +41,7 @@
       </GridPane>
       <ButtonBar layoutX="117.0" layoutY="346.0" prefHeight="40.0" prefWidth="269.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Back" />
+          <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
             <Button mnemonicParsing="false" onAction="#handleClearAll" text="Clear all" />
             <Button mnemonicParsing="false" onAction="#handleSubmit" text="Submit" />
         </buttons>

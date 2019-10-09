@@ -36,12 +36,13 @@ public class ProfileController {
    
    @FXML
    private void handleInputNewMatch() throws IOException {
-   	mainApp.showInputWindow();
+   	    mainApp.showInputWindow();
+   	    profileStage.close();
    } 
    
    @FXML
    private void handleCancel() {
-	   System.exit(0);
+	   profileStage.close();
    }
 
 }

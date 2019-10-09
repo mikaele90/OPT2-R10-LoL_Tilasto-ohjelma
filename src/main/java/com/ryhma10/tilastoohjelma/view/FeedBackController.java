@@ -38,8 +38,13 @@ public class FeedBackController {
     }
     
     @FXML
-    private void handleBack() throws IOException, SQLException {
-    	mainApp.showLoginWindow();
-    } 
+    private void handleBack() throws IOException {
+	    feedBackStage.close();
+    }
+
+    @FXML
+    private void handleProfile() throws IOException {
+	    mainApp.showProfileWindow();
+    }
 
 }
