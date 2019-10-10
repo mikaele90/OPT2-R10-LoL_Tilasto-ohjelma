@@ -3,7 +3,7 @@ package model;
 import com.ryhma10.tilastoohjelma.model.*;
 
 import org.junit.Assert;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
@@ -29,7 +29,8 @@ public class Modeltest{
 	private List<Gamedata> vertauslista3 = Arrays.asList(g1, g2, g3);
 	private double gold, time;
 	
-	@Test void profiiliListaan() {
+	@Test
+	public void profiiliListaan() {
 		p1 = new Profile("junit1", "testi");
 		p2 = new Profile("junit2", "jaa");
 		assertEquals(true, modelDAO.addProfile(p1), "profiili ei mennyt db:hen");
