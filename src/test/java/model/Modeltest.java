@@ -2,14 +2,14 @@ package model;
 
 import com.ryhma10.tilastoohjelma.model.*;
 
-import org.junit.Assert;
+//import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
+//import static org.junit.Assert.*;
+//import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
+//import java.util.*;
 
 
 public class Modeltest{
@@ -40,8 +40,8 @@ public class Modeltest{
 	        Profile p3 = new Profile(testName, testPass);
 	        modelDAO.addProfile(p3);
 	        assertNotNull(modelDAO.readProfile(p3.getName()));
-	        Assert.assertEquals(testName, p3.getName());
-	        Assert.assertEquals(testPass, p3.getPsw());
+	        assertEquals(testName, p3.getName());
+	        assertEquals(testPass, p3.getPsw());
 	}
 	
 	
