@@ -2,17 +2,10 @@ package model;
 
 import com.ryhma10.tilastoohjelma.model.*;
 
-//import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
-//import static org.junit.Assert.*;
-//import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
 
-//import java.util.*;
-
-
-public class Modeltest{
+public class ModelTest {
 	
 	private ModelAccessObject modelDAO;
 	private Profile p1, p2;
