@@ -29,19 +29,19 @@
             <Label text="Kills:" />
             <Label text="Deaths:" GridPane.rowIndex="1" />
             <Label text="Assists:" GridPane.rowIndex="2" />
-            <Label text="Match length (Min):" GridPane.rowIndex="3" />
+            <!--  <Label text="Match length (Min):" GridPane.rowIndex="3" /> -->
             <Label text="Champion played:" GridPane.rowIndex="4" />
             <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <ChoiceBox fx:id="champsPlayed" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="textfield1" GridPane.columnIndex="1" />
             <TextField fx:id="textfield2" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="textfield3" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="textfield4" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <!-- <TextField fx:id="textfield4" GridPane.columnIndex="1" GridPane.rowIndex="3" /> -->
          </children>
       </GridPane>
       <ButtonBar layoutX="117.0" layoutY="346.0" prefHeight="40.0" prefWidth="269.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Back" />
+          <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
             <Button mnemonicParsing="false" onAction="#handleClearAll" text="Clear all" />
             <Button mnemonicParsing="false" onAction="#handleSubmit" text="Submit" />
         </buttons>

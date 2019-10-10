@@ -24,9 +24,6 @@
    <property name="show_sql">true</property>
    <mapping class="com.ryhma10.tilastoohjelma.model.Profile"/>
    <mapping class="com.ryhma10.tilastoohjelma.model.Gamedata"/>
-   <mapping class="com.ryhma10.tilastoohjelma.model.Item"/>
-   
-   
 
 </session-factory>
 </hibernate-configuration>

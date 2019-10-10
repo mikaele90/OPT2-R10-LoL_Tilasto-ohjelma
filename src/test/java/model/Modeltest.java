@@ -1,16 +1,15 @@
 package model;
 
-import com.ryhma10.tilastoohjelma.model.*;
-
-import org.junit.Assert;
+import com.ryhma10.tilastoohjelma.model.Gamedata;
+import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
+import com.ryhma10.tilastoohjelma.model.Profile;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
+import java.util.List;
 
-import java.util.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Modeltest{
 	
@@ -44,9 +43,9 @@ public class Modeltest{
 	        String testPass = "testi";
 	        Profile p3 = new Profile(testName, testPass);
 	        modelDAO.addProfile(p3);
-	        assertNotNull(modelDAO.readProfile(p3.getName()));
-	        Assert.assertEquals(testName, p3.getName());
-	        Assert.assertEquals(testPass, p3.getPsw());
+	        Assertions.assertNotNull(modelDAO.readProfile(p3.getName()));
+	        Assertions.assertEquals(testName, p3.getName());
+			Assertions.assertEquals(testPass, p3.getPsw());
 	}
 	
 	
