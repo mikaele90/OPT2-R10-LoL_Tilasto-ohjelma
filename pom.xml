@@ -26,6 +26,10 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <organization>
@@ -72,6 +76,16 @@
             <artifactId>testfx-junit</artifactId>
             <version>4.0.15-alpha</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.taycaldwell</groupId>
+            <artifactId>riot-api-java</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.merakianalytics.orianna</groupId>
+            <artifactId>orianna</artifactId>
+            <version>4.0.0-rc5</version>
         </dependency>
     </dependencies>
 
