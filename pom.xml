@@ -37,11 +37,13 @@
         <name>Ryhmä 10</name>
     </organization>
     <dependencies>
+        <!-- MariaDB driver -->
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
             <version>2.4.3</version>
         </dependency>
+        <!-- JUnit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -53,6 +55,7 @@
             <version>1.5.1</version>
             <scope>test</scope>
         </dependency>
+        <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-agroal</artifactId>
@@ -64,7 +67,7 @@
             <artifactId>hibernate-annotations</artifactId>
             <version>3.5.6-Final</version>
         </dependency>
-
+        <!-- TestFX -->
         <dependency>
             <groupId>org.testfx</groupId>
             <artifactId>testfx-core</artifactId>
@@ -77,16 +80,39 @@
             <version>4.0.15-alpha</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.taycaldwell</groupId>
-            <artifactId>riot-api-java</artifactId>
-            <version>4.2.0</version>
-        </dependency>
+        <!-- LoL-APIs -->
         <dependency>
             <groupId>com.merakianalytics.orianna</groupId>
             <artifactId>orianna</artifactId>
             <version>4.0.0-rc5</version>
         </dependency>
+        <!-- Orianna-API dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.29</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.29</version>
+        </dependency>
+        <dependency>
+            <groupId>es.usc.citius.hipster</groupId>
+            <artifactId>hipster-all</artifactId>
+            <version>1.0.0-rc2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>failureaccess</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.2.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>
