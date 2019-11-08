@@ -4,13 +4,14 @@ import java.util.List;
 
 
 public interface IModelDAO{
-	public abstract Profile  readProfile(String name);
-	public abstract boolean createGamedata(Gamedata gamedata);
+	public abstract Profile readProfile(String name);
+	public abstract boolean createGamedata(String name, Gamedata gamedata, Item item);
+	//public abstract boolean removeGame(int gameid);
 	public abstract List<Gamedata> readGames();
-	public abstract List<Gamedata> readSpesificGames(String pname);
-	public abstract double gpmCalculus(double time, double gold);
-	public abstract boolean deleteGame(int gameid);
-	public abstract boolean addProfile(Profile profile);
+	public abstract List<Item> readItems();
+	public abstract List<Gamedata> readSpecificGame(String name);
+	public List<Item> readGamesWithItems();
+	public List<Object[]> readGamesTestaus();
 
 
 }

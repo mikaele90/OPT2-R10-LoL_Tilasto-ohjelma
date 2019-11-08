@@ -1,14 +1,13 @@
 package com.ryhma10.tilastoohjelma.model;
 
+import org.hibernate.boot.registry.*;
+
 import java.util.*;
 import org.hibernate.*;
 import org.hibernate.boot.registry.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.query.Query;
 
-
-import java.lang.Math;
-  
 
 public class ModelAccessObject implements IModelDAO {
 	
@@ -27,6 +26,8 @@ public class ModelAccessObject implements IModelDAO {
 			}
 	}
 	
+	
+	//toimii...
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Profile readProfile(String name) {
@@ -45,13 +46,22 @@ public class ModelAccessObject implements IModelDAO {
 		}
 	}
 	
+	
+	//toimii..
 	@Override
-	public boolean createGamedata(Gamedata gamedata) {
+	public boolean createGamedata(String name, Gamedata gamedata, Item item) {
 		Transaction transaction = null;
 		boolean totuus = false;
 		try(Session session = factory.openSession()) {
 			transaction = session.beginTransaction();
-			session.saveOrUpdate(gamedata);
+			Profile profile = readProfile(name);
+			Gamedata game = gamedata;
+			game.setProfile(profile);
+			Item uitem = item;
+			game.setItem(uitem);
+			uitem.setGamedata(game);
+			session.saveOrUpdate(game);
+			session.saveOrUpdate(uitem);
 			transaction.commit();
 			session.close();
 			totuus = true;
@@ -61,7 +71,7 @@ public class ModelAccessObject implements IModelDAO {
 		}
 		return totuus;
 	}
-	
+	//toimii...
 	@SuppressWarnings( "unchecked")
 	@Override
 	
@@ -70,7 +80,7 @@ public class ModelAccessObject implements IModelDAO {
 		try (Session session = factory.openSession()){
 			transaction = session.beginTransaction();
 			
-			List<Gamedata> games = session.createQuery("FROM Gamedata ORDER BY gameid DESC").getResultList();
+			List<Gamedata> games = session.createQuery("FROM Gamedata").getResultList();
 			
 			session.getTransaction().commit();
 			session.close();
@@ -78,72 +88,89 @@ public class ModelAccessObject implements IModelDAO {
 			}catch(Exception e) {
 			transaction.rollback();
 			throw e;
-			}
-			
-	}
-	
-	
-	public double gpmCalculus(double time, double gold) {
-		double result = gold/time;
-		double gpm = (double)Math.round(result);
-	
-		return gpm;
-		
+			}	
 	}
 
+	
+	//toimii...
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Gamedata> readSpesificGames(String pname) {
+	public List<Item> readItems() {
 		Transaction transaction = null;
 		try (Session session = factory.openSession()){
 			transaction = session.beginTransaction();
-			List<Gamedata> games = session.createQuery("FROM Gamedata WHERE pname = :pname ORDER BY gameid DESC").setParameter("pname", pname).getResultList();
+			
+			List<Item> items = session.createQuery("FROM Item").getResultList();
+			
 			session.getTransaction().commit();
 			session.close();
-			return games;
+			return items;
 			}catch(Exception e) {
 			transaction.rollback();
 			throw e;
 			}
 	}
 	
-	
-
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deleteGame(int gameid) {
+	public List<Gamedata> readSpecificGame(String name) {
 		Transaction transaction = null;
-		Gamedata game = new Gamedata();
-		boolean totuus = false;
 		try(Session session = factory.openSession()){
 			transaction = session.beginTransaction();
-			session.load(game, gameid);
-			session.delete(game);
-			session.getTransaction().commit();
-			session.close();
-			totuus = true;
-		}catch (Exception e) {
-			transaction.rollback();
-		}
+			 
 			
-		return totuus;
-	}
-	
-	@Override
-	public boolean addProfile(Profile profile) {
-		Transaction transaction = null;
-		boolean totuus = false;
-		try(Session session = factory.openSession()){
-			transaction = session.beginTransaction();
-			session.saveOrUpdate(profile);
+			List<Gamedata> results = session.createQuery("select g FROM  Gamedata as g Join g.profile as p where p.name = :name").setParameter("name", name).getResultList();
 			session.getTransaction().commit();
 			session.close();
-			totuus = true;
-		}catch (Exception e) {
+			return results;
+		}catch(Exception e) {
 			transaction.rollback();
 			throw e;
-		}
-			
-		return totuus;
+			}
+		
 	}
- 
-}	
+	
+	//toimii mut vaatii hiukan ihmettelyä vielä
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Item> readGamesWithItems() {
+		Transaction transaction = null;
+		try (Session session = factory.openSession()){
+			transaction = session.beginTransaction();
+			
+			List<Item> results = session.createQuery("Select i FROM Item as i JOIN i.gamedata as g where g.gameid = 1").getResultList();
+			
+			session.getTransaction().commit();
+			session.close();
+			return results;
+			}catch(Exception e) {
+			transaction.rollback();
+			throw e;
+			}	
+	}
+	
+	
+	//muitipaikat saa mut ei tunnista get metodeja vaikka typecastaus?
+	@SuppressWarnings( "unchecked")
+	@Override
+	
+	public List<Object[]> readGamesTestaus() {
+		Transaction transaction = null;
+		try (Session session = factory.openSession()){
+			transaction = session.beginTransaction();
+			
+			List<Object[]> games = session.createQuery("from Gamedata as g join g.profile as p").list();
+			
+			session.getTransaction().commit();
+			session.close();
+			return games;
+			}catch(Exception e) {
+			transaction.rollback();
+			throw e;
+			}	
+	}
+	
+	
+	
+
+}
