@@ -1,9 +1,11 @@
 package com.ryhma10.tilastoohjelma;
 
+import com.ryhma10.tilastoohjelma.api.ApiKey;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.Queue;
 import com.merakianalytics.orianna.types.common.Region;
 import com.merakianalytics.orianna.types.core.match.Match;
 import com.merakianalytics.orianna.types.core.match.MatchHistory;
@@ -15,8 +17,12 @@ import com.merakianalytics.orianna.types.core.summoner.Summoners;
 public class ApiMatchExample {
 
 public static void main(String[] args) throws InterruptedException {
+	
 		
-        Orianna.setRiotAPIKey("RGAPI-369145d7-105b-41e5-9ae5-003962bb54a4");
+		
+		ApiKey key = new ApiKey();
+		
+        Orianna.setRiotAPIKey(key.getKey());
         //Orianna.setDefaultPlatform(Platform.NORTH_AMERICA);
 
         List<Summoner> summoners = Summoners.named("Daddy Chrollo").withRegion(Region.EUROPE_WEST).get();
@@ -29,7 +35,6 @@ public static void main(String[] args) throws InterruptedException {
         System.out.println(match.getBlueTeam().getParticipants().get(4));
         List<Match> matches = Matches.withIds(2718292415L, 2718244702L).withRegion(Region.EUROPE_NORTH_EAST).get();
 		*/
-
 
         MatchHistory history = MatchHistory.forSummoner(summoners.get(0)).get();
         ArrayList<Long> historyArrayList = new ArrayList<Long>();
@@ -47,7 +52,9 @@ public static void main(String[] args) throws InterruptedException {
             int j = 0;
             for (final Participant player : currentMatch.getParticipants()) {
             	if (currentMatch.getParticipants().get(j).getSummoner().getName().equals(playerName)) {
-            		System.out.println("Match date: "+currentMatch.getCreationTime().toDate());
+            		System.out.println("Rank: "+player.getSummoner().getLeaguePosition(Queue.RANKED_SOLO).getTier()+" "+player.getSummoner().getLeaguePosition(Queue.RANKED_TFT).getDivision());
+            		System.out.println("Match ID: "+currentMatch.getId());
+            		System.out.println("Match date: "+currentMatch.getCreationTime().toDate().toString());
             		System.out.println("Game mode: "+currentMatch.getMode());
             		System.out.println("Game duration: "+currentMatch.getDuration().getStandardSeconds()+" sec");
             		System.out.println("Champion: "+player.getChampion().getName());
@@ -56,7 +63,6 @@ public static void main(String[] args) throws InterruptedException {
                 	System.out.println("Assists: "+player.getStats().getAssists());
                 	int k = 0;
                 	for(final Item items : currentMatch.getParticipants().get(j).getItems()) {
-                		//items.getName();
                 		if(k == 0) {
                 			System.out.println("Items: - "+items.getName());
                 		} else {
@@ -64,7 +70,7 @@ public static void main(String[] args) throws InterruptedException {
                 		}
                 		k++;
                 	}
-                	System.out.println("Gold earned: "+player.getStats().getGoldEarned());
+                	System.out.println("Gold earned: "+player.getStats().getGoldEarned()+"g");
                 	if (player.getTeam().isWinner() == false) {
                 		System.out.println("Result: Loss");
                 	} else {
