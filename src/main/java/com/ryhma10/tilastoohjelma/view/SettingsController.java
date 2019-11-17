@@ -84,8 +84,9 @@ public class SettingsController {
     }
 
     @FXML
-    public void handleApply(ActionEvent actionEvent) {
+    public boolean handleApply(ActionEvent actionEvent) {
         boolean dbUpdateRequired = false;
+        boolean success = true;
         if ((!apiKeyTextField.getText().equals("")) && (!apiKeyTextField.getText().equals(currentProfile.getRiotAPIKey()))) {
             Orianna.setRiotAPIKey(apiKeyTextField.getText());
             currentProfile.setRiotAPIKey(apiKeyTextField.getText());
@@ -104,8 +105,9 @@ public class SettingsController {
                 dbUpdateRequired = true;
             }
             else {
-                Alert nonMatchingPasswords = alertFactory.createAlert("Passwords do not match");
-                nonMatchingPasswords.show();
+                success = false;
+                Alert nonMatchingPasswordsAlert = alertFactory.createAlert("Passwords do not match");
+                nonMatchingPasswordsAlert.show();
             }
         }
         if (dbUpdateRequired) {
@@ -114,12 +116,14 @@ public class SettingsController {
         }
         mainController.setCurrentProfile(currentProfile);
         mainController.printProfileData();
+        return success;
     }
 
     @FXML
     public void handleSave(ActionEvent actionEvent) {
-        handleApply(new ActionEvent());
-        settingsStage.close();
+        if(handleApply(new ActionEvent())) {
+            settingsStage.close();
+        }
     }
 
     @FXML

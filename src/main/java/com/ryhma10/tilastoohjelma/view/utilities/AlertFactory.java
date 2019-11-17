@@ -76,6 +76,7 @@ public class AlertFactory {
                 alertToReturn.setTitle("Password change failed");
                 alertToReturn.setHeaderText("Passwords didn't match");
                 alertToReturn.setContentText("The passwords that you entered didn't match. If you wish to change the password, please type the same passwords in both fields. If you didn't wish to change password, make sure that the 'Change password'-field is empty.");
+                break;
             default:
                 alertToReturn.setAlertType(Alert.AlertType.ERROR);
                 alertToReturn.setTitle("Internal error");
