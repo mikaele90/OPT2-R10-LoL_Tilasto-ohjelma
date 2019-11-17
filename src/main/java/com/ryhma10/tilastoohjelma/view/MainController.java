@@ -169,6 +169,11 @@ public class MainController {
     }
 
     @FXML
+    public void handleSettings(ActionEvent actionEvent) throws IOException {
+        mainApp.showSettingsWindow();
+    }
+
+    @FXML
     public void handleExit(ActionEvent actionEvent) {
         System.exit(0);
     }
@@ -177,6 +182,21 @@ public class MainController {
     public void handleMainHelp(ActionEvent actionEvent) {
         System.out.println("Not yet implemented");
         //TODO
+    }
+
+    public void printProfileData() {
+        if (currentProfile.getRiotAPIKey() != null) {
+            System.out.println("Riot API Key found: " + currentProfile.getRiotAPIKey());
+        }
+        if (currentProfile.getDefaultRegion() != null) {
+            System.out.println("Region set to: " + Orianna.getSettings().getDefaultPlatform());
+        }
+        if (currentProfile.getDefaultRiotAccount() != null) {
+            System.out.println("Profile default riot account id: " + currentProfile.getDefaultRiotAccount());
+        }
+        if (currentProfile.getDefaultLanguage() != null) {
+            System.out.println("Profile default language: " + currentProfile.getDefaultLanguage());
+        }
     }
 
     public void refreshMainScene() {

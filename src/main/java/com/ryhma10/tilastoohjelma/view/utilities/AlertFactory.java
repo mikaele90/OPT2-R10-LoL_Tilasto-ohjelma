@@ -63,7 +63,7 @@ public class AlertFactory {
                 alertToReturn.setAlertType(Alert.AlertType.WARNING);
                 alertToReturn.setTitle("Warning");
                 alertToReturn.setHeaderText("Non-functional API-key");
-                alertToReturn.setContentText("Click the 'Help'-button in case you don't have a working\nAPI-key from Riot Entertainment.");
+                alertToReturn.setContentText("Click the 'Help'-button in case you don't have a working\nAPI-key from Riot Entertainment.\nNewly generated keys can take a few minutes to register.");
                 break;
             case "APIKeyTest:Pass":
                 alertToReturn.setAlertType(Alert.AlertType.INFORMATION);
@@ -71,6 +71,11 @@ public class AlertFactory {
                 alertToReturn.setHeaderText("Valid API-key");
                 alertToReturn.setContentText("The key was successfully validated.\nJust finish the registration-process and you should be\ngood to go.");
                 break;
+            case "Passwords do not match":
+                alertToReturn.setAlertType(Alert.AlertType.WARNING);
+                alertToReturn.setTitle("Password change failed");
+                alertToReturn.setHeaderText("Passwords didn't match");
+                alertToReturn.setContentText("The passwords that you entered didn't match. If you wish to change the password, please type the same passwords in both fields. If you didn't wish to change password, make sure that the 'Change password'-field is empty.");
             default:
                 alertToReturn.setAlertType(Alert.AlertType.ERROR);
                 alertToReturn.setTitle("Internal error");

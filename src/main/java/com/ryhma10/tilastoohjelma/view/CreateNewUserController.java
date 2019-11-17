@@ -23,46 +23,6 @@ public class CreateNewUserController {
     private MainApp mainApp;
     private Stage createNewUserStage;
     private AlertFactory alertFactory;
-    //private ArrayList<Region> regionArrayList = new ArrayList<Region>(Arrays.asList(Region.values()));
-    //private ObservableList<Region> observableRegionList = FXCollections.observableArrayList(regionArrayList);
-
-    public CreateNewUserController() {
-        //Constructor
-    }
-
-    public void initialize() {
-        alertFactory = new AlertFactory();
-        if (progressIndicator.isVisible()) {
-            progressIndicator.setVisible(false);
-        }
-
-        profileNameTextField.setText("");
-        profileNameTextField.setPromptText("New profile name");
-        profilePasswordField.setText("");
-        profilePasswordField.setPromptText("Password");
-        riotAPIKeyTextField.setText("");
-        riotAPIKeyTextField.setPromptText("Your Riot API-key");
-
-        centerAccordion.setExpandedPane(requiredInformationPane);
-
-        Platform.runLater(() -> {
-            for (Region region : Region.values()) {
-                riotRegionChoiceBox.getItems().add(region.name().replace("_", " "));
-            }
-            riotRegionChoiceBox.setValue(Region.NORTH_AMERICA.name().replace("_", " "));
-        });
-
-
-    }
-
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-    }
-
-    public void setCreateNewUserStage(Stage createNewUserStage) {
-        this.createNewUserStage = createNewUserStage;
-    }
-
     @FXML
     private Accordion centerAccordion;
     @FXML
@@ -83,6 +43,40 @@ public class CreateNewUserController {
     private ChoiceBox languageChoiceBox;
     @FXML
     private Button testAPIKeyButton;
+    //private ArrayList<Region> regionArrayList = new ArrayList<Region>(Arrays.asList(Region.values()));
+    //private ObservableList<Region> observableRegionList = FXCollections.observableArrayList(regionArrayList);
+
+    public CreateNewUserController() {
+        //Constructor
+    }
+
+    public void initialize() {
+        alertFactory = new AlertFactory();
+        if (progressIndicator.isVisible()) {
+            progressIndicator.setVisible(false);
+        }
+        profileNameTextField.setText("");
+        profileNameTextField.setPromptText("New profile name");
+        profilePasswordField.setText("");
+        profilePasswordField.setPromptText("Password");
+        riotAPIKeyTextField.setText("");
+        riotAPIKeyTextField.setPromptText("Your Riot API-key");
+        centerAccordion.setExpandedPane(requiredInformationPane);
+        Platform.runLater(() -> {
+            for (Region region : Region.values()) {
+                riotRegionChoiceBox.getItems().add(region.name().replace("_", " "));
+            }
+            riotRegionChoiceBox.setValue(Region.NORTH_AMERICA.name().replace("_", " "));
+        });
+    }
+
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    public void setCreateNewUserStage(Stage createNewUserStage) {
+        this.createNewUserStage = createNewUserStage;
+    }
 
     @FXML
     public void handleCancel(ActionEvent actionEvent) {
@@ -103,23 +97,26 @@ public class CreateNewUserController {
         //TODO
     }
 
+    @FXML
     public void handleTestAPIKey(ActionEvent actionEvent) {
         Platform.runLater(() -> {
             progressIndicator.setVisible(true);
             testAPIKeyButton.setText("Testing key...");
             testAPIKeyButton.setDisable(true);
         });
-        Thread testAPIThread = new Thread(() -> {
+        new Thread(() -> {
             Orianna.setRiotAPIKey(riotAPIKeyTextField.getText());
             ShardStatus status;
             try {
                 status = ShardStatus.withRegion(Region.NORTH_AMERICA).get();
-                System.out.println(status);
-                if (status != null) {
+                if (status.exists()) {
                     Platform.runLater(() -> {
                         Alert apiKeySuccessAlert = alertFactory.createAlert("APIKeyTest:Pass");
                         apiKeySuccessAlert.show();
                     });
+                }
+                else {
+                    System.out.println("Unknown error. Status: " + status.exists());
                 }
             } catch (OriannaException oe) {
                 System.out.println(oe.getClass().getSimpleName());
@@ -133,8 +130,7 @@ public class CreateNewUserController {
                 testAPIKeyButton.setText("Test API-key");
                 testAPIKeyButton.setDisable(false);
             });
-        });
-        testAPIThread.start();
+        }).start();
     }
 
     @FXML

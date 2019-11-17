@@ -24,6 +24,7 @@ public class MainApp extends Application {
     private AnchorPane inputWindow;
     private AnchorPane feedBackWindow;
     private AnchorPane profileWindow;
+    private BorderPane settingsWindow;
     private SoftwareProfile currentProfile;
     private MainController mainController;
 
@@ -151,6 +152,25 @@ public class MainApp extends Application {
         profileController.setProfileStage(profileStage);
 
         profileStage.showAndWait();
+    }
+
+    public void showSettingsWindow() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("/fxml/Settings.fxml"));
+        settingsWindow = (BorderPane)loader.load();
+
+        Stage settingsStage = new Stage();
+        settingsStage.setTitle("Settings");
+        settingsStage.initModality(Modality.APPLICATION_MODAL);
+        settingsStage.initOwner(primaryStage);
+        Scene settingsScene = new Scene(settingsWindow);
+        settingsStage.setScene(settingsScene);
+
+        SettingsController settingsController = loader.getController();
+        settingsController.setMainApp(this);
+        settingsController.setSettingsStage(settingsStage);
+
+        settingsStage.show();
     }
 
     public Stage getPrimaryStage() {

@@ -6,7 +6,6 @@ import org.hibernate.boot.registry.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.query.Query;
 
-
 import java.lang.Math;
   
 
@@ -23,7 +22,6 @@ public class ModelAccessObject implements IModelDAO {
 			System.out.println("Istuntotehtaan luonti ei onnistunut");
 			StandardServiceRegistryBuilder.destroy(registry);
 			e.printStackTrace();
-			System.exit(-1);
 			}
 	}
 	
@@ -31,7 +29,7 @@ public class ModelAccessObject implements IModelDAO {
 	@Override
 	public SoftwareProfile readProfile(String profileName) {
 		Transaction transaction = null;
-		try(Session session = factory.openSession()) {;
+		try(Session session = factory.openSession()) {
 			transaction = session.beginTransaction();
 			Query q = session.createQuery("FROM SoftwareProfile WHERE profileName = :profileName");
 			q.setParameter("profileName", profileName);
@@ -146,6 +144,7 @@ public class ModelAccessObject implements IModelDAO {
 		return totuus;
 	}
 
+	@Override
 	public String createProfile(String profileName, String profilePassword, String defaultRegion, String defaultLanguage, String defaultRiotAccount, String riotAPIKey) {
 		SoftwareProfile newProfile;
 		String resultString;
@@ -185,6 +184,7 @@ public class ModelAccessObject implements IModelDAO {
 		return resultString;
 	}
 
+	@Override
 	public String loginProfile(String profileName, String profilePassword) {
 		String resultString;
 		try {
@@ -217,9 +217,9 @@ public class ModelAccessObject implements IModelDAO {
 		return resultString;
 	}
 
+	@Override
 	public SoftwareProfile setLoggedInProfile(String profileName, String profilePassword) {
 		SoftwareProfile loggedInProfile = null;
-		Transaction transaction = null;
 		try {
 			Session session = factory.openSession();
 			Query query = session.createQuery("FROM SoftwareProfile WHERE profileName = :profileName AND profilePassword = :profilePassword");
@@ -246,5 +246,36 @@ public class ModelAccessObject implements IModelDAO {
 		}
 		return loggedInProfile;
 	}
- 
+
+	@Override
+	public boolean updateProfile(SoftwareProfile currentProfile) {
+		boolean success = false;
+		Transaction transaction = null;
+		try {
+			Session session = factory.openSession();
+			transaction = session.beginTransaction();
+			SoftwareProfile placeholderProfile = session.load(SoftwareProfile.class, currentProfile.getProfileId());
+			placeholderProfile.setRiotAPIKey(currentProfile.getRiotAPIKey());
+			placeholderProfile.setDefaultRegion(currentProfile.getDefaultRegion());
+			placeholderProfile.setProfilePassword(currentProfile.getProfilePassword());
+			placeholderProfile.setDefaultRiotAccount(null);
+			session.update(placeholderProfile);
+			session.getTransaction().commit();
+			success = true;
+			session.close();
+		} catch (Exception e) {
+			if (factory != null && transaction != null) {
+				transaction.rollback();
+			}
+			if (factory != null) {
+				factory.close();
+			}
+			e.printStackTrace();
+			return success;
+		}
+		if (factory.isOpen()) {
+			factory.close();
+		}
+		return success;
+	}
 }	
