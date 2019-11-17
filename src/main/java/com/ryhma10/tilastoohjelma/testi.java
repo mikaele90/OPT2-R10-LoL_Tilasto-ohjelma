@@ -1,13 +1,12 @@
 package com.ryhma10.tilastoohjelma;
 
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
 import org.hibernate.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.*;
 
 import com.ryhma10.tilastoohjelma.model.Gamedata;
-import com.ryhma10.tilastoohjelma.model.Item;
-import com.ryhma10.tilastoohjelma.model.Profile;
- 
+
 
 public class testi {
 	
@@ -25,8 +24,8 @@ public class testi {
 		}
 		
 	
-		Profile p1 = new Profile("testi", "testi");
-		Profile p2 = new Profile("jaa", "jaa");
+		SoftwareProfile p1 = new SoftwareProfile("testi", "testi", null, null, null, null);
+		SoftwareProfile p2 = new SoftwareProfile("jaa", "jaa", null, null, null, null);
 		
 		Gamedata g1 = new Gamedata("wat", 6, 7, 8, 
 				"lose", "testi", 5, "kama", "kama", "kama", "kama","kama","kama","jaa");

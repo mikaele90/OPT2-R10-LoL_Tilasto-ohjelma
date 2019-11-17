@@ -1,18 +1,19 @@
 package com.ryhma10.tilastoohjelma.view;
 
+import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.OriannaException;
+import com.merakianalytics.orianna.types.common.Region;
+import com.merakianalytics.orianna.types.core.status.ShardStatus;
 import com.ryhma10.tilastoohjelma.MainApp;
-import com.ryhma10.tilastoohjelma.model.CreateNewUser;
-import javafx.concurrent.WorkerStateEvent;
+import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
+import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -21,19 +22,37 @@ public class CreateNewUserController {
 
     private MainApp mainApp;
     private Stage createNewUserStage;
+    private AlertFactory alertFactory;
+    //private ArrayList<Region> regionArrayList = new ArrayList<Region>(Arrays.asList(Region.values()));
+    //private ObservableList<Region> observableRegionList = FXCollections.observableArrayList(regionArrayList);
 
     public CreateNewUserController() {
         //Constructor
     }
 
     public void initialize() {
+        alertFactory = new AlertFactory();
         if (progressIndicator.isVisible()) {
             progressIndicator.setVisible(false);
         }
-        createProfileNameField.setText("");
-        createProfileNameField.setPromptText("New profile name");
-        createProfilePasswordField.setText("");
-        createProfilePasswordField.setPromptText("Password");
+
+        profileNameTextField.setText("");
+        profileNameTextField.setPromptText("New profile name");
+        profilePasswordField.setText("");
+        profilePasswordField.setPromptText("Password");
+        riotAPIKeyTextField.setText("");
+        riotAPIKeyTextField.setPromptText("Your Riot API-key");
+
+        centerAccordion.setExpandedPane(requiredInformationPane);
+
+        Platform.runLater(() -> {
+            for (Region region : Region.values()) {
+                riotRegionChoiceBox.getItems().add(region.name().replace("_", " "));
+            }
+            riotRegionChoiceBox.setValue(Region.NORTH_AMERICA.name().replace("_", " "));
+        });
+
+
     }
 
     public void setMainApp(MainApp mainApp) {
@@ -45,13 +64,25 @@ public class CreateNewUserController {
     }
 
     @FXML
+    private Accordion centerAccordion;
+    @FXML
+    private TitledPane requiredInformationPane;
+    @FXML
+    private TitledPane optionalInformationPane;
+    @FXML
     private ProgressIndicator progressIndicator;
-
     @FXML
-    private TextField createProfileNameField;
-
+    private TextField profileNameTextField;
     @FXML
-    private PasswordField createProfilePasswordField;
+    private PasswordField profilePasswordField;
+    @FXML
+    private TextField riotAPIKeyTextField;
+    @FXML
+    private ChoiceBox riotRegionChoiceBox;
+    @FXML
+    private ChoiceBox languageChoiceBox;
+    @FXML
+    private Button testAPIKeyButton;
 
     @FXML
     public void handleCancel(ActionEvent actionEvent) {
@@ -67,55 +98,81 @@ public class CreateNewUserController {
     }
 
     @FXML
+    public void handleCreateNewProfileHelp(ActionEvent actionEvent) {
+        System.out.println("Not yet implemented");
+        //TODO
+    }
+
+    public void handleTestAPIKey(ActionEvent actionEvent) {
+        Platform.runLater(() -> {
+            progressIndicator.setVisible(true);
+            testAPIKeyButton.setText("Testing key...");
+            testAPIKeyButton.setDisable(true);
+        });
+        Thread testAPIThread = new Thread(() -> {
+            Orianna.setRiotAPIKey(riotAPIKeyTextField.getText());
+            ShardStatus status;
+            try {
+                status = ShardStatus.withRegion(Region.NORTH_AMERICA).get();
+                System.out.println(status);
+                if (status != null) {
+                    Platform.runLater(() -> {
+                        Alert apiKeySuccessAlert = alertFactory.createAlert("APIKeyTest:Pass");
+                        apiKeySuccessAlert.show();
+                    });
+                }
+            } catch (OriannaException oe) {
+                System.out.println(oe.getClass().getSimpleName());
+                Platform.runLater(() -> {
+                    Alert apiKeyFailAlert = alertFactory.createAlert("APIKeyTest:Fail");
+                    apiKeyFailAlert.show();
+                });
+            }
+            Platform.runLater(() -> {
+                progressIndicator.setVisible(false);
+                testAPIKeyButton.setText("Test API-key");
+                testAPIKeyButton.setDisable(false);
+            });
+        });
+        testAPIThread.start();
+    }
+
+    @FXML
     public void handleDone(ActionEvent actionEvent) throws IOException {
-        if(createProfileNameField.getText().length() > 0 && createProfilePasswordField.getText().length() > 3) {
-            CreateNewUser createNewUser = new CreateNewUser(createProfileNameField.getText(), createProfilePasswordField.getText());
-            progressIndicator.visibleProperty().bind(createNewUser.runningProperty());
-            createNewUser.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent workerStateEvent) {
-                    if(createNewUser.getValue().equals("Success")) {
-                        Alert newProfileSuccess = new Alert(Alert.AlertType.INFORMATION);
-                        newProfileSuccess.setTitle("Success");
-                        newProfileSuccess.setHeaderText("Profile created");
-                        newProfileSuccess.setContentText("Profile created successfully.");
-                        newProfileSuccess.showAndWait();
-                        System.out.println(createNewUser.getValue());
-                        createNewUserStage.close();
-                    }
-                    else if (createNewUser.getValue().equals("Profile already exists")) {
-                        Alert existingProfileError = new Alert(Alert.AlertType.WARNING);
-                        existingProfileError.setTitle("Profile creation unsuccessful");
-                        existingProfileError.setHeaderText("A profile by that name already exists");
-                        existingProfileError.setContentText("Please choose a different profile name.");
-                        existingProfileError.showAndWait();
-                    }
+        if(profileNameTextField.getText().length() > 0 && profilePasswordField.getText().length() > 3) {
+            new Thread(() -> {
+                String riotAPIKey = riotAPIKeyTextField.getText();
+                if (riotAPIKey.equals("")) {
+                    riotAPIKey = null;
                 }
-            });
-
-            createNewUser.setOnFailed(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent workerStateEvent) {
-
-                    Alert newProfileProblem = new Alert(Alert.AlertType.ERROR);
-                    newProfileProblem.setTitle("Error");
-                    newProfileProblem.setHeaderText("Profile couldn't be created");
-                    newProfileProblem.setContentText("A problem occurred while trying to create the profile.");
-                    newProfileProblem.showAndWait();
-                    System.out.println(createNewUser.getValue());
-                    createNewUserStage.close();
-                }
-            });
-            createNewUser.restart();
+                progressIndicator.setVisible(true);
+                ModelAccessObject modelAccessObject = new ModelAccessObject();
+                String resultStringFromMethod = modelAccessObject.createProfile(profileNameTextField.getText(), profilePasswordField.getText(),
+                        riotRegionChoiceBox.getSelectionModel().getSelectedItem().toString().replace(" ", "_"),
+                        null, null, riotAPIKey);
+                Platform.runLater(() -> {
+                    switch (resultStringFromMethod) {
+                        case "Profile successfully created":
+                            System.out.println(resultStringFromMethod);
+                            Alert successAlert = alertFactory.createAlert(resultStringFromMethod);
+                            successAlert.show();
+                            createNewUserStage.close();
+                            break;
+                        case "Profile already exists":
+                        case "Database connection error":
+                            System.out.println(resultStringFromMethod);
+                            Alert errorAlert = alertFactory.createAlert(resultStringFromMethod);
+                            errorAlert.show();
+                            break;
+                    }
+                    progressIndicator.setVisible(false);
+                });
+            }).start();
         }
         else {
-            Alert emptyFieldError = new Alert(Alert.AlertType.ERROR);
-            emptyFieldError.setTitle("Error");
-            emptyFieldError.setHeaderText("Profile couldn't be created");
-            emptyFieldError.setContentText("Profile name has to be at least one character long and the password 4 characters long.");
-            emptyFieldError.showAndWait();
+            Alert userInputErrorAlert = alertFactory.createAlert("CreateProfile:UserInputError");
+            userInputErrorAlert.showAndWait();
         }
-
     }
 
 }

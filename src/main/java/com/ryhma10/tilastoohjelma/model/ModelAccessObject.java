@@ -29,13 +29,13 @@ public class ModelAccessObject implements IModelDAO {
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public Profile readProfile(String name) {
+	public SoftwareProfile readProfile(String profileName) {
 		Transaction transaction = null;
 		try(Session session = factory.openSession()) {;
 			transaction = session.beginTransaction();
-			Query q = session.createQuery("FROM Profile WHERE name = :name");
-			q.setParameter("name", name);
-			Profile profile = (Profile) q.uniqueResult();
+			Query q = session.createQuery("FROM SoftwareProfile WHERE profileName = :profileName");
+			q.setParameter("profileName", profileName);
+			SoftwareProfile profile = (SoftwareProfile) q.uniqueResult();
 			session.getTransaction().commit();
 			session.close();
 			return profile;
@@ -93,11 +93,11 @@ public class ModelAccessObject implements IModelDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Gamedata> readSpesificGames(String pname) {
+	public List<Gamedata> readSpesificGames(String profileName) {
 		Transaction transaction = null;
 		try (Session session = factory.openSession()){
 			transaction = session.beginTransaction();
-			List<Gamedata> games = session.createQuery("FROM Gamedata WHERE pname = :pname ORDER BY gameid DESC").setParameter("pname", pname).getResultList();
+			List<Gamedata> games = session.createQuery("FROM Gamedata WHERE pname = :pname ORDER BY gameid DESC").setParameter("pname", profileName).getResultList();
 			session.getTransaction().commit();
 			session.close();
 			return games;
@@ -127,9 +127,9 @@ public class ModelAccessObject implements IModelDAO {
 			
 		return totuus;
 	}
-	
+
 	@Override
-	public boolean addProfile(Profile profile) {
+	public boolean addProfile(SoftwareProfile profile) {
 		Transaction transaction = null;
 		boolean totuus = false;
 		try(Session session = factory.openSession()){
@@ -142,8 +142,109 @@ public class ModelAccessObject implements IModelDAO {
 			transaction.rollback();
 			throw e;
 		}
-			
+
 		return totuus;
+	}
+
+	public String createProfile(String profileName, String profilePassword, String defaultRegion, String defaultLanguage, String defaultRiotAccount, String riotAPIKey) {
+		SoftwareProfile newProfile;
+		String resultString;
+		Transaction transaction = null;
+		try {
+			Session session = factory.openSession();
+			Query query = session.createQuery("FROM SoftwareProfile WHERE profileName = :profileName");
+			query.setParameter("profileName", profileName);
+			List queryResult = query.list();
+			if (queryResult.isEmpty()) {
+				transaction = session.beginTransaction();
+				newProfile = new SoftwareProfile(profileName, profilePassword, defaultRegion, defaultLanguage, defaultRiotAccount, riotAPIKey);
+				session.saveOrUpdate(newProfile);
+				transaction.commit();
+				factory.close();
+				resultString = "Profile successfully created";
+			}
+			else {
+				System.out.println("Failed to create profile. Probably too many records found.");
+				resultString = "Profile already exists";
+			}
+		} catch (Exception e) {
+			resultString = "Database connection error";
+			System.out.println("Failed to create profile.");
+			if (transaction != null && factory != null) {
+				transaction.rollback();
+			}
+			if (factory != null) {
+				factory.close();
+			}
+			e.printStackTrace();
+			return resultString;
+		}
+		if (factory.isOpen()) {
+			factory.close();
+		}
+		return resultString;
+	}
+
+	public String loginProfile(String profileName, String profilePassword) {
+		String resultString;
+		try {
+			Session session = factory.openSession();
+			Query query = session.createQuery("FROM SoftwareProfile WHERE profileName = :profileName AND profilePassword = :profilePassword");
+			query.setParameter("profileName", profileName);
+			query.setParameter("profilePassword", profilePassword);
+			List queryResult = query.list();
+			if (queryResult.size() == 1) {
+				resultString = "Login successful";
+			}
+			else if (queryResult.isEmpty()){
+				resultString = "Profile not found";
+			}
+			else {
+				resultString = "Too many records found";
+			}
+		} catch (Exception e) {
+			resultString = "Database connection error";
+			System.out.println("Database connection error (loginProfile)");
+			if (factory != null) {
+				factory.close();
+			}
+			e.printStackTrace();
+			return resultString;
+		}
+		if (factory.isOpen()) {
+			factory.close();
+		}
+		return resultString;
+	}
+
+	public SoftwareProfile setLoggedInProfile(String profileName, String profilePassword) {
+		SoftwareProfile loggedInProfile = null;
+		Transaction transaction = null;
+		try {
+			Session session = factory.openSession();
+			Query query = session.createQuery("FROM SoftwareProfile WHERE profileName = :profileName AND profilePassword = :profilePassword");
+			query.setParameter("profileName", profileName);
+			query.setParameter("profilePassword", profilePassword);
+			List queryResult = query.list();
+			System.out.println(queryResult);
+			if (queryResult.size() == 1) {
+				loggedInProfile = (SoftwareProfile)queryResult.get(0);
+				factory.close();
+			}
+			else {
+				System.out.println("Fail (setLoggedInProfile)");
+			}
+		} catch (Exception e) {
+			if (factory != null) {
+				factory.close();
+			}
+			e.printStackTrace();
+			return loggedInProfile;
+		}
+		if (factory.isOpen()) {
+			factory.close();
+		}
+		return loggedInProfile;
 	}
  
 }	

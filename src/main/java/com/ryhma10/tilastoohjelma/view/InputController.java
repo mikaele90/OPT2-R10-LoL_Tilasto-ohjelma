@@ -1,8 +1,6 @@
 package com.ryhma10.tilastoohjelma.view;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 import com.ryhma10.tilastoohjelma.MainApp;
 import com.ryhma10.tilastoohjelma.model.*;
@@ -12,10 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -26,7 +20,7 @@ public class InputController  {
 	ObservableList<String> champsList = FXCollections.observableArrayList("Kha'Zix", "Lucian", "Qiyana");
 	
 	private Gamedata match;
-	private Profile profile;
+	private SoftwareProfile profile;
 	private LoginController login;
 	private ModelAccessObject dao;
 	private MainController mainController;
@@ -78,10 +72,10 @@ public class InputController  {
     private void handleSubmit(ActionEvent event) throws IOException {
     	dao = new ModelAccessObject();
     	profile = mainApp.getProfile();
-		match = new Gamedata(champsPlayed.getSelectionModel().getSelectedItem().toString(), Integer.parseInt(textfield1.getText()), Integer.parseInt(textfield2.getText()), Integer.parseInt(textfield3.getText()), "", "", 0, "", "", "", "", "", "", profile.getName());
+		match = new Gamedata(champsPlayed.getSelectionModel().getSelectedItem().toString(), Integer.parseInt(textfield1.getText()), Integer.parseInt(textfield2.getText()), Integer.parseInt(textfield3.getText()), "", "", 0, "", "", "", "", "", "", profile.getProfileName());
     	dao.createGamedata(match);
         mainApp.showFeedBackWindow();
-        mainController.refreshScene();
+        mainController.refreshMainScene();
         inputStage.close();
     }
     

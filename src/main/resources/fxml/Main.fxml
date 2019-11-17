@@ -17,101 +17,105 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="650.0" prefWidth="1400.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma10.tilastoohjelma.view.MainController">
-   <children>
-      <SplitPane dividerPositions="0.15644555694618273" layoutX="1.0" prefHeight="650.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
-          <AnchorPane minHeight="400.0" minWidth="200.0" prefHeight="650.0" prefWidth="280.0">
-               <children>
-                  <VBox layoutY="-1.0" prefHeight="650.0" prefWidth="247.0">
-                     <children>
-                        <MenuBar>
-                          <menus>
-                            <Menu fx:id="actionsMenu" mnemonicParsing="false" text="Actions">
-                              <items>
-                                <MenuItem fx:id="addNewGameMenuItem" mnemonicParsing="false" onAction="#handleAddNewGame" text="Add new game..." />
-                                    <MenuItem fx:id="profileMenuItem" mnemonicParsing="false" onAction="#handleAddNewGame" text="Profile overview" />
-                                    <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
-                              </items>
-                            </Menu>
-                            <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
-                              <items>
-                                <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAbout" text="About" />
-                              </items>
-                            </Menu>
-                          </menus>
+    <children>
+        <SplitPane dividerPositions="0.15644555694618273" layoutX="1.0" prefHeight="650.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <items>
+                <AnchorPane minHeight="400.0" minWidth="200.0" prefHeight="650.0" prefWidth="247.0">
+                    <children>
+                        <VBox layoutY="-1.0" prefHeight="650.0" prefWidth="247.0">
+                            <children>
+                                <GridPane prefHeight="65.0" prefWidth="247.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="111.6666259765625" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="140.66668701171875" minWidth="10.0" prefWidth="135.3333740234375" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Label fx:id="welcomeLabel" text="Welcome">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <GridPane.margin>
+                                                <Insets />
+                                            </GridPane.margin>
+                                            <padding>
+                                                <Insets bottom="15.0" left="25.0" right="10.0" top="20.0" />
+                                            </padding>
+                                        </Label>
+                                        <Label fx:id="profileNameLabel" text="user" GridPane.columnIndex="1">
+                                            <font>
+                                                <Font size="18.0" />
+                                            </font>
+                                            <padding>
+                                                <Insets bottom="15.0" top="20.0" />
+                                            </padding>
+                                        </Label>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets top="30.0" />
+                                    </VBox.margin>
+                                </GridPane>
+                                <Button fx:id="addNewGameButton" minHeight="32.0" minWidth="145.0" mnemonicParsing="false" onAction="#handleAddGames" prefHeight="40.0" prefWidth="160.0" text="Add games...">
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </padding>
+                                    <VBox.margin>
+                                        <Insets left="25.0" top="50.0" />
+                                    </VBox.margin>
+                                </Button>
+                                <Button fx:id="profileOverviewButton" minHeight="32.0" minWidth="145.0" mnemonicParsing="false" onAction="#handleProfileOverview" prefHeight="40.0" prefWidth="160.0" text="Profile overview">
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </padding>
+                                    <VBox.margin>
+                                        <Insets left="25.0" top="20.0" />
+                                    </VBox.margin>
+                                </Button>
+                            </children></VBox>
+                        <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <menus>
+                                <Menu fx:id="actionsMenu" mnemonicParsing="false" text="Actions">
+                                    <items>
+                                        <MenuItem fx:id="addGamesMenuItem" mnemonicParsing="false" onAction="#handleAddGames" text="Add games..." />
+                                        <MenuItem fx:id="profileMenuItem" mnemonicParsing="false" onAction="#handleProfileOverview" text="Profile overview" />
+                                        <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+                                    </items>
+                                </Menu>
+                                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                                    <items>
+                                        <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleMainHelp" text="Help" />
+                                        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAbout" text="About" />
+                                    </items>
+                                </Menu>
+                            </menus>
                         </MenuBar>
-                        <GridPane prefHeight="65.0" prefWidth="247.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="115.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.0" minWidth="10.0" prefWidth="132.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label fx:id="welcomeLabel" text="Welcome">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <GridPane.margin>
-                                    <Insets />
-                                 </GridPane.margin>
-                                 <padding>
-                                    <Insets bottom="15.0" left="25.0" right="15.0" top="20.0" />
-                                 </padding>
-                              </Label>
-                              <Label fx:id="profileNameLabel" text="user" GridPane.columnIndex="1">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets bottom="15.0" top="20.0" />
-                                 </padding>
-                              </Label>
-                           </children>
-                        </GridPane>
-                        <Button fx:id="addNewGameButton" minHeight="32.0" minWidth="145.0" mnemonicParsing="false" onAction="#handleAddNewGame" prefHeight="40.0" prefWidth="160.0" text="Add new game...">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets left="25.0" top="50.0" />
-                           </VBox.margin>
-                        </Button>
-                        <Button fx:id="profileOverviewButton" minHeight="32.0" minWidth="145.0" mnemonicParsing="false" onAction="#handleProfileOverview" prefHeight="40.0" prefWidth="160.0" text="Profile overview">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets left="25.0" top="20.0" />
-                           </VBox.margin>
-                        </Button>
-                     </children></VBox>
-               </children>
-            </AnchorPane>
-          <AnchorPane minHeight="400.0" minWidth="560.0" prefHeight="648.0" prefWidth="620.0">
-               <children>
-                  <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <columns>
-                      <TableColumn fx:id="gameIdColumn" prefWidth="75.0" text="GameId" />
-                      <TableColumn fx:id="championColumn" prefWidth="75.0" text="Champion" />
-                        <TableColumn fx:id="killsColumn" prefWidth="75.0" text="Kills" />
-                        <TableColumn fx:id="deathsColumn" prefWidth="75.0" text="Deaths" />
-                        <TableColumn fx:id="assistsColumn" prefWidth="75.0" text="Assists" />
-                        <TableColumn fx:id="winLoseColumn" prefWidth="75.0" text="Result" />
-                        <TableColumn fx:id="positionColumn" prefWidth="75.0" text="Position" />
-                        <TableColumn fx:id="gpmColumn" prefWidth="75.0" text="GPM" />
-                        <TableColumn fx:id="slot1Column" prefWidth="75.0" text="Item 1" />
-                        <TableColumn fx:id="slot2Column" prefWidth="75.0" text="Item 2" />
-                        <TableColumn fx:id="slot3Column" prefWidth="75.0" text="Item 3" />
-                        <TableColumn fx:id="slot4Column" prefWidth="75.0" text="Item 4" />
-                        <TableColumn fx:id="slot5Column" prefWidth="75.0" text="Item 5" />
-                        <TableColumn fx:id="slot6Column" prefWidth="75.0" text="Item 6" />
-                        <TableColumn fx:id="profileNameColumn" prefWidth="75.0" text="Profile" />
-                    </columns>
-                  </TableView>
-               </children></AnchorPane>
-        </items>
-      </SplitPane>
-   </children>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="400.0" minWidth="560.0" prefHeight="648.0" prefWidth="620.0">
+                    <children>
+                        <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <columns>
+                                <TableColumn fx:id="gameIdColumn" prefWidth="75.0" text="GameId" />
+                                <TableColumn fx:id="championColumn" prefWidth="75.0" text="Champion" />
+                                <TableColumn fx:id="killsColumn" prefWidth="75.0" text="Kills" />
+                                <TableColumn fx:id="deathsColumn" prefWidth="75.0" text="Deaths" />
+                                <TableColumn fx:id="assistsColumn" prefWidth="75.0" text="Assists" />
+                                <TableColumn fx:id="winLoseColumn" prefWidth="75.0" text="Result" />
+                                <TableColumn fx:id="positionColumn" prefWidth="75.0" text="Position" />
+                                <TableColumn fx:id="gpmColumn" prefWidth="75.0" text="GPM" />
+                                <TableColumn fx:id="slot1Column" prefWidth="75.0" text="Item 1" />
+                                <TableColumn fx:id="slot2Column" prefWidth="75.0" text="Item 2" />
+                                <TableColumn fx:id="slot3Column" prefWidth="75.0" text="Item 3" />
+                                <TableColumn fx:id="slot4Column" prefWidth="75.0" text="Item 4" />
+                                <TableColumn fx:id="slot5Column" prefWidth="75.0" text="Item 5" />
+                                <TableColumn fx:id="slot6Column" prefWidth="75.0" text="Item 6" />
+                                <TableColumn fx:id="profileNameColumn" prefWidth="75.0" text="Profile" />
+                            </columns>
+                        </TableView>
+                    </children></AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
 </AnchorPane>

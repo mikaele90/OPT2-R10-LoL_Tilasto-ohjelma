@@ -35,11 +35,11 @@
         <Label fx:id="label1" layoutX="14.0" layoutY="110.0" minHeight="16" minWidth="69" text="Password:" />
         <Separator layoutX="7.0" layoutY="62.0" maxHeight="2.0" prefHeight="2.0" prefWidth="474.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="64.0" />
         <TextField fx:id="profileNameField" layoutX="105.0" layoutY="71.0" onKeyPressed="#onEnter" prefHeight="26.0" prefWidth="220.0" AnchorPane.leftAnchor="105.0" />
-      <PasswordField fx:id="passwordField" layoutX="105.0" layoutY="105.0" onKeyPressed="#onEnter" prefHeight="31.0" prefWidth="220.0" promptText="Password" />
+        <PasswordField fx:id="passwordField" layoutX="105.0" layoutY="105.0" onKeyPressed="#onEnter" prefHeight="31.0" prefWidth="220.0" promptText="Password" />
         <Separator layoutX="14.0" layoutY="138.0" maxHeight="2.0" prefHeight="2.0" prefWidth="474.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="142.0" />
         <Label layoutX="14.0" layoutY="141.0" text="Don't have a profile yet? Create one by clicking the button:" AnchorPane.topAnchor="146.0" />
         <Button fx:id="loginButton" layoutX="334.0" layoutY="71.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="59.0" prefWidth="113.0" text="Login" />
-      <ProgressIndicator fx:id="progressIndicator" layoutX="434.0" layoutY="74.0" AnchorPane.rightAnchor="14.0" />
+        <ProgressIndicator fx:id="progressIndicator" layoutX="434.0" layoutY="74.0" AnchorPane.rightAnchor="14.0" />
     </children>
     <padding>
         <Insets bottom="14.0" />

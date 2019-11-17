@@ -1,14 +1,16 @@
 package com.ryhma10.tilastoohjelma;
 
-import com.ryhma10.tilastoohjelma.model.Profile;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
 import com.ryhma10.tilastoohjelma.view.*;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -17,12 +19,12 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private AnchorPane loginWindow;
-    private AnchorPane createNewUserWindow;
+    private BorderPane createNewUserWindow;
     private AnchorPane mainWindow;
     private AnchorPane inputWindow;
     private AnchorPane feedBackWindow;
     private AnchorPane profileWindow;
-    private Profile profile;
+    private SoftwareProfile currentProfile;
     private MainController mainController;
 
     public MainApp() {
@@ -32,7 +34,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        primaryStage.setTitle("LoL Tilasto-ohjelma");
+        primaryStage.setTitle("WinStreak.exe");
         showLoginWindow();
     }
 
@@ -55,7 +57,7 @@ public class MainApp extends Application {
     public void showCreateNewUserWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/CreateNewUser.fxml"));
-        createNewUserWindow = (AnchorPane)loader.load();
+        createNewUserWindow = (BorderPane)loader.load();
 
         Stage createNewUserStage = new Stage();
         createNewUserStage.setTitle("Create new profile");
@@ -69,12 +71,12 @@ public class MainApp extends Application {
         createNewUserController.setMainApp(this);
         createNewUserController.setCreateNewUserStage(createNewUserStage);
 
-        createNewUserStage.showAndWait();
+        createNewUserStage.show();
     }
 
-    public void showMainWindow(Profile profile) throws IOException {
-        System.out.println("user: " + profile.getName());
-        System.out.println("psw: " + profile.getPsw());
+    public void showMainWindow(SoftwareProfile profile) throws IOException {
+        System.out.println("user: " + profile.getProfileName());
+        //System.out.println("psw: " + profile.getProfilePassword());
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/Main.fxml"));
         mainWindow = (AnchorPane)loader.load();
@@ -88,13 +90,12 @@ public class MainApp extends Application {
 
         MainController mainController = loader.getController();
         mainController.setMainApp(this);
-        mainController.setCurrentProfile(profile);
         mainController.setMainStage(mainStage);
 
         mainStage.show();
     }
-    
-    
+
+
     public void showInputWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/Input.fxml"));
@@ -113,7 +114,7 @@ public class MainApp extends Application {
 
         inputStage.showAndWait();
     }
-    
+
     public void showFeedBackWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/FeedBack.fxml"));
@@ -132,7 +133,7 @@ public class MainApp extends Application {
 
         feedBackStage.showAndWait();
     }
-    
+
     public void showProfileWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/Profile.fxml"));
@@ -160,12 +161,12 @@ public class MainApp extends Application {
         return this;
     }
 
-    public void setProfile(Profile profile) {
-        this.profile = profile;
+    public void setProfile(SoftwareProfile profile) {
+        this.currentProfile = profile;
     }
 
-    public Profile getProfile() {
-        return this.profile;
+    public SoftwareProfile getProfile() {
+        return this.currentProfile;
     }
 
     public void setMainController(MainController mainController) {

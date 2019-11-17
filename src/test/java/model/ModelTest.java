@@ -5,17 +5,14 @@ import com.ryhma10.tilastoohjelma.model.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.*;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.*;
 
 
 public class ModelTest{
 
 	static ModelAccessObject modelDAO = new ModelAccessObject();
-	private Profile p1, p2;
+	private SoftwareProfile p1, p2;
 	private Gamedata g1 = new Gamedata("wat", 6, 7, 8,
 			"lose", "testi", 5, "kama", "kama", "kama", "kama","kama","kama","junit1");
 	private Gamedata g2 = new Gamedata ("jaha", 7, 2, 3,
@@ -31,8 +28,8 @@ public class ModelTest{
 
 	@Test 
 	public void profiiliListaan() {
-		p1 = new Profile("junit1", "testi");
-		p2 = new Profile("junit2", "jaa");
+		p1 = new SoftwareProfile("junit1", "testi", null, null, null, null);
+		p2 = new SoftwareProfile("junit2", "jaa", null, null, null, null);
 		assertEquals(true, modelDAO.addProfile(p1), "profiili ei mennyt db:hen");
 		assertEquals(true, modelDAO.addProfile(p2), "profiili ei mennyt db:hen");
 	}
@@ -42,11 +39,11 @@ public class ModelTest{
 	public void testReadProfile() {
 		String testName = "junit3";
 		String testPass = "testi";
-		Profile p3 = new Profile(testName, testPass);
+		SoftwareProfile p3 = new SoftwareProfile(testName, testPass, null, null, null, null);
 		modelDAO.addProfile(p3);
 
-		Assert.assertEquals(testName, p3.getName());
-		Assert.assertEquals(testPass, p3.getPsw());
+		Assert.assertEquals(testName, p3.getProfileName());
+		Assert.assertEquals(testPass, p3.getProfilePassword());
 	}
 
 

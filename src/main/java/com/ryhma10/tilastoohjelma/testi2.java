@@ -10,8 +10,8 @@ public class testi2 {
 	
 	public static void main(String[] args) {
 		
-	Profile p1 = modelDAO.readProfile("testi");
-	System.out.println(p1.getId() + " " + p1.getName());
+	SoftwareProfile p1 = modelDAO.readProfile("testi");
+	System.out.println(p1.getProfileId() + " " + p1.getProfileName());
 	
 //	Gamedata g66 = new Gamedata("hermanni", 7, 15, 0, "middle", "win", 10,
 //			"kama","kama","kama","kama","kama","kama", "testi");
