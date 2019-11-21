@@ -43,22 +43,36 @@ public class ModelAccessObject implements IModelDAO {
 		}
 	}
 	
-	@Override
-	public boolean createGamedata(Gamedata gamedata) {
-		Transaction transaction = null;
-		boolean totuus = false;
-		try(Session session = factory.openSession()) {
-			transaction = session.beginTransaction();
-			session.saveOrUpdate(gamedata);
-			transaction.commit();
-			session.close();
-			totuus = true;
-		}catch(Exception e) {
-			transaction.rollback();
-			throw e;
+	//toimii..
+		@Override
+		public boolean createGamedata(String name, Gamedata gamedata, Item item, Team team, Additional additional) {
+			Transaction transaction = null;
+			boolean totuus = false;
+			try(Session session = factory.openSession()) {
+				transaction = session.beginTransaction();
+				SoftwareProfile profile = readProfile(name);
+				Gamedata game = gamedata;
+				game.setSoftwareProfile(profile);
+				Item newItem = item;
+				game.setItem(newItem);
+				newItem.setGamedata(game);
+				Team newTeam = team;
+				Additional newData = additional;
+				newTeam.setGamedata(game);
+				newData.setGamedata(game);
+				session.saveOrUpdate(game);
+				session.saveOrUpdate(newItem);
+				session.saveOrUpdate(newTeam);
+				session.saveOrUpdate(newData);
+				transaction.commit();
+				session.close();
+				totuus = true;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+			}
+			return totuus;
 		}
-		return totuus;
-	}
 	
 	@SuppressWarnings( "unchecked")
 	@Override
@@ -91,21 +105,19 @@ public class ModelAccessObject implements IModelDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Gamedata> readSpesificGames(String profileName) {
+	public List<Gamedata> readSpecificProfilesGames(String name) {
 		Transaction transaction = null;
-		try (Session session = factory.openSession()){
+		try(Session session = factory.openSession()){
 			transaction = session.beginTransaction();
-			List<Gamedata> games = session.createQuery("FROM Gamedata WHERE pname = :pname ORDER BY gameid DESC").setParameter("pname", profileName).getResultList();
+			List<Gamedata> results = session.createQuery("select g FROM  Gamedata as g Join g.SoftwareProfile as p where p.profileName = :name").setParameter("name", name).getResultList();
 			session.getTransaction().commit();
 			session.close();
-			return games;
-			}catch(Exception e) {
+			return results;
+		}catch(Exception e) {
 			transaction.rollback();
 			throw e;
 			}
 	}
-	
-	
 
 	@Override
 	public boolean deleteGame(int gameid) {
@@ -278,4 +290,90 @@ public class ModelAccessObject implements IModelDAO {
 		}
 		return success;
 	}
+	
+	//toimii...
+		@SuppressWarnings("unchecked")
+		@Override
+		public List<Item> readGamesWithItems() {
+			Transaction transaction = null;
+			try (Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				
+				List<Item> results = session.createQuery("Select i FROM Item as i JOIN i.gamedata as g where g.gameid = 1").getResultList();
+				
+				session.getTransaction().commit();
+				session.close();
+				return results;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}	
+		}
+		
+		@SuppressWarnings("unchecked")
+		public List<Additional> readAdditionalData(long riotid){
+			Transaction transaction = null;
+			try(Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				
+				List<Additional> result = session.createQuery("Select a from Additional as a Join a.gamedata as g where g.riotid = :id").setParameter("id", riotid).getResultList();
+				session.getTransaction().commit();
+				return result;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}	
+		}
+		
+		@SuppressWarnings("unchecked")
+		public List<Team> readTeamComposition(long riotid){
+			Transaction transaction = null;
+			try(Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				
+				List<Team> result = session.createQuery("Select t from Team as t Join t.gamedata as g where g.riotid = :id").setParameter("id", riotid).getResultList();
+				session.getTransaction().commit();
+				return result;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}	
+		}
+		
+		@Override
+		@SuppressWarnings("rawtypes")
+		public Gamedata readOneGame(long riotid) {
+			Transaction transaction = null;
+			try(Session session = factory.openSession()) {
+				transaction = session.beginTransaction();
+				Query q = session.createQuery("FROM Gamedata WHERE riotid = :riotid");
+				q.setParameter("riotid", riotid);
+				Gamedata gamedata = (Gamedata) q.uniqueResult();
+				session.getTransaction().commit();
+				session.close();
+				return gamedata;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+			}
+		}
+
+		//toimii...
+		@SuppressWarnings("unchecked")
+		@Override
+		public List<Item> readItems() {
+			Transaction transaction = null;
+			try (Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				
+				List<Item> items = session.createQuery("FROM Item").getResultList();
+				
+				session.getTransaction().commit();
+				session.close();
+				return items;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}
+		}
 }	

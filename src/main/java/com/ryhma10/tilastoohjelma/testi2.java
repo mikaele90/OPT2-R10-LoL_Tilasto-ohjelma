@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ryhma10.tilastoohjelma.model.*;
 
-
 public class testi2 {
 	static ModelAccessObject modelDAO = new ModelAccessObject();
 	
@@ -13,39 +12,45 @@ public class testi2 {
 	SoftwareProfile p1 = modelDAO.readProfile("testi");
 	System.out.println(p1.getProfileId() + " " + p1.getProfileName());
 	
-//	Gamedata g66 = new Gamedata("hermanni", 7, 15, 0, "middle", "win", 10,
-//			"kama","kama","kama","kama","kama","kama", "testi");
-//	
-//	Gamedata g67 = new Gamedata("hiiri", 6, 6, 10, "carry", "lose", 500, 
-//			"kama","kama","kama","kama","kama","kama", "testi");
-//
-//	modelDAO.createGamedata(g66);
-//	modelDAO.createGamedata(g67);
-	
 		
-//	//tämä ei toimi niinkuin haluaisi
-//	List<Gamedata> games = modelDAO.readGames();
-//	for(Gamedata game : games) {
-//		System.out.println(game.getGameid() + " " + game.getChampion() + " " + game.getKills());
-//	}
-//	
-//	
-//	List<Gamedata> pelit = modelDAO.readSpesificGames("jaa");
-//	for(Gamedata peli : pelit) {
-//		System.out.println(peli.getGameid() + " " + peli.getChampion() + " " + peli.getKills());
-//	}
-//
-//	
-//	
-//	double goldperminute = modelDAO.gpmCalculus(120, 1500);
-//	System.out.println(goldperminute);
+		//tämä ei toimi niinkuin haluaisi
+		List<Gamedata> games = modelDAO.readGames();
+		for(Gamedata game : games) {
+			System.out.println(game.getGameid() + " " + game.getChampion() + " " + game.getKills() + " "+  game.getItem().getSlot2());
+		}
 	
-//	modelDAO.deleteGame(5);
 	
-	List<Gamedata> games2 = modelDAO.readGames();
-	for(Gamedata game : games2) {
-		System.out.println(game.getGameid() + " " + game.getChampion() + " " + game.getKills());
-	}
-	
+		List<Item> items = modelDAO.readItems();
+		for(Item item : items) {
+			System.out.println(item.getItemid() + " " + item.getSlot1() + " " + item.getSlot2() + " " + item.getSlot3());
+		}
+		
+
+		
+		List<Gamedata> tulokset = modelDAO.readSpecificProfilesGames("testi");
+		for(Gamedata tulos : tulokset) {
+			System.out.println(tulos.getSoftwareProfile().getProfileName() + " " + tulos.getChampion() + " " + tulos.getItem().getSlot1());
+		}
+		
+		List<Item> results = modelDAO.readGamesWithItems();
+		for(Item result : results) {
+			System.out.println(result.getSlot1() + " " + result.getGamedata().getChampion() + " " + result.getGamedata().getSoftwareProfile().getProfileName());
+		}
+		
+		
+		//toimii
+		List<Additional> jahas = modelDAO.readAdditionalData(55);
+		for(Additional result : jahas) {
+			System.out.println(result.getDamagedealt() + " " + result.getDamagetaken() + " " + result.getGold() + " " + result.getDuration());
+		}
+		
+		List<Team> kaipa = modelDAO.readTeamComposition(45);
+		for(Team result : kaipa) {
+			System.out.println(result.getChampion1() + " " + result.getEnemyChampion3());
+		}
+		
+		Gamedata oneGame = modelDAO.readOneGame(55);
+		System.out.println(oneGame.getIngameName() + " " + oneGame.getGameid() + " " + oneGame.getChampion() + " " + oneGame.getKills());
+		
 	}
 }

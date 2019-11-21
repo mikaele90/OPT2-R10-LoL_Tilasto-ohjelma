@@ -12,6 +12,7 @@ public class Item {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="itemid")
 	private int itemid;
+	
 	@Column(name="slot1")
 	private String slot1;
 	
@@ -30,8 +31,11 @@ public class Item {
 	@Column(name="slot6")
 	private String slot6;
 	
+	@Column(name="slot7")
+	private String slot7;
+	
 	@OneToOne
-	@JoinColumn(name="Gameid", referencedColumnName="gameid", nullable=false)
+	@JoinColumn(name="game_id", referencedColumnName="gameid", nullable=false)
 	private Gamedata gamedata;
 	
 	
@@ -39,14 +43,14 @@ public class Item {
 	}
 	
 	public Item(String slot1, String slot2, String slot3, String slot4,
-			String slot5, String slot6, Gamedata gamedata) {
+			String slot5, String slot6, String slot7) {
 		this.slot1 = slot1;
 		this.slot2 = slot2;
 		this.slot3 = slot3;
 		this.slot4 = slot4;
 		this.slot5 = slot5;
 		this.slot6 = slot6;
-		this.gamedata = gamedata;
+		this.slot7 = slot7;
 	}
 
 	public String getSlot1() {
@@ -97,13 +101,15 @@ public class Item {
 		this.slot6 = slot6;
 	}
 
-	public int getItemid() {
-		return itemid;
+	public String getSlot7() {
+		return slot7;
 	}
 
-	public void setItemid(int itemid) {
-		this.itemid = itemid;
+	public void setSlot7(String slot7) {
+		this.slot7 = slot7;
 	}
+	
+	
 
 	public Gamedata getGamedata() {
 		return gamedata;
@@ -113,5 +119,12 @@ public class Item {
 		this.gamedata = gamedata;
 	}
 
+	public int getItemid() {
+		return itemid;
+	}
+
+	public void setItemid(int itemid) {
+		this.itemid = itemid;
+	}
 
 }
