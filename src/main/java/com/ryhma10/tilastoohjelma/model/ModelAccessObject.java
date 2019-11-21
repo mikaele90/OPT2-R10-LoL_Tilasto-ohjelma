@@ -25,6 +25,8 @@ public class ModelAccessObject implements IModelDAO {
 			}
 	}
 	
+	
+	//lukee järjestelmän profiilin (creategamedata hyödyntää tätä)
 	@SuppressWarnings("rawtypes")
 	@Override
 	public SoftwareProfile readProfile(String profileName) {
@@ -44,6 +46,9 @@ public class ModelAccessObject implements IModelDAO {
 	}
 	
 	//toimii..
+	//Lisää pelin tietokantaan
+	// vaatii sisäänsä Järjestelmän profiilin nimen, gamedata- , item, team ja additionalolion
+	// mitä kukin olio vaatii sisäänsä näkee kyseisen filun konstruktorista
 		@Override
 		public boolean createGamedata(String name, Gamedata gamedata, Item item, Team team, Additional additional) {
 			Transaction transaction = null;
@@ -77,6 +82,7 @@ public class ModelAccessObject implements IModelDAO {
 	@SuppressWarnings( "unchecked")
 	@Override
 	
+	//lukee tietokannan kaikki pelit profiilista riippumatta
 	public List<Gamedata> readGames() {
 		Transaction transaction = null;
 		try (Session session = factory.openSession()){
@@ -94,7 +100,7 @@ public class ModelAccessObject implements IModelDAO {
 			
 	}
 	
-	
+	// ei tiedä tarviiko vai heivataanko pois, muuta gpm laskuri mahdollisesti jopa vailinainen semmoinen
 	public double gpmCalculus(double time, double gold) {
 		double result = gold/time;
 		double gpm = (double)Math.round(result);
@@ -102,7 +108,8 @@ public class ModelAccessObject implements IModelDAO {
 		return gpm;
 		
 	}
-
+	
+	//hakee tietokannasta yhden profiilin kaikki pelit
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Gamedata> readSpecificProfilesGames(String name) {
@@ -118,7 +125,8 @@ public class ModelAccessObject implements IModelDAO {
 			throw e;
 			}
 	}
-
+	
+	//poistaa pelin, refaktoroinnin jäljiltä toiminnallisuus nyt hiukan ?
 	@Override
 	public boolean deleteGame(int gameid) {
 		Transaction transaction = null;
@@ -292,6 +300,7 @@ public class ModelAccessObject implements IModelDAO {
 	}
 	
 	//toimii...
+	// tätä tuskin tarvitaan...
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<Item> readGamesWithItems() {
@@ -310,6 +319,7 @@ public class ModelAccessObject implements IModelDAO {
 				}	
 		}
 		
+		//hakee tietokannasta tietyn pelin spesifikaatio datat vaatii parametriksi riotId:n
 		@SuppressWarnings("unchecked")
 		public List<Additional> readAdditionalData(long riotid){
 			Transaction transaction = null;
@@ -325,6 +335,9 @@ public class ModelAccessObject implements IModelDAO {
 				}	
 		}
 		
+		//hakee tietokannasta tietyn pelin molempien puolien 
+		//sankarit lukuunottamatta pelaajan omaa koska tämä tieto on normi gamedatassa
+		//vaatii parimetriksi riotId:n
 		@SuppressWarnings("unchecked")
 		public List<Team> readTeamComposition(long riotid){
 			Transaction transaction = null;
@@ -340,6 +353,8 @@ public class ModelAccessObject implements IModelDAO {
 				}	
 		}
 		
+		//hakee yhden pelin gamedata taulun, tästä saa myös itemitkin mikäli haluaa
+		//parametriksi vaatii riotId:n
 		@Override
 		@SuppressWarnings("rawtypes")
 		public Gamedata readOneGame(long riotid) {
@@ -359,6 +374,7 @@ public class ModelAccessObject implements IModelDAO {
 		}
 
 		//toimii...
+		//hakee kaikki tavarat tietokannasta ei tietoa onko käyttöä
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<Item> readItems() {
