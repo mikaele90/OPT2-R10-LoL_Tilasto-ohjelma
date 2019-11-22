@@ -1,46 +1,42 @@
 package com.ryhma10.tilastoohjelma.view;
 
+import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.Region;
 import com.ryhma10.tilastoohjelma.MainApp;
-import com.ryhma10.tilastoohjelma.model.Gamedata;
 import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
-import com.ryhma10.tilastoohjelma.model.Profile;
+import com.ryhma10.tilastoohjelma.model.Gamedata;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
-import javafx.event.ActionEvent;
-
 import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class MainController {
 
     private MainApp mainApp;
     private Stage mainStage;
     private LoginController loginController;
+    private AlertFactory alertFactory;
     private ModelAccessObject modelAccessObject;
     private String profileName;
-    
+    private SoftwareProfile currentProfile;
 
-    public Profile getCurrentProfile() {
+    public SoftwareProfile getCurrentProfile() {
         return currentProfile;
     }
 
-    public void setCurrentProfile(Profile currentProfile) {
+    public void setCurrentProfile(SoftwareProfile currentProfile) {
         this.currentProfile = currentProfile;
     }
 
-    private Profile currentProfile;
     @FXML
     private Label profileNameLabel;
     @FXML
@@ -77,49 +73,67 @@ public class MainController {
     private TableColumn<Gamedata, String> profileNameColumn;
 
     public MainController() {
-        //Constructor
-    }
-
-    public String getProfileName() {
-        return profileName;
-    }
-
-    public void setProfileName(String profileName) {
-        this.profileName = profileName;
+        //Default constructor
     }
 
     public void initialize() {
         Platform.runLater(() -> {
+            System.out.println("MainController: Initialize");
+            alertFactory = new AlertFactory();
             this.currentProfile = mainApp.getProfile();
-            profileNameLabel.setText(currentProfile.getName());
-
+            profileNameLabel.setText(currentProfile.getProfileName());
+            try {
+                Orianna.loadConfiguration("apiconfig.json");
+                System.out.println("API config loaded");
+            } catch (Exception e) {
+                System.out.println("API config not found");
+            }
+            if (currentProfile.getRiotAPIKey() != null) {
+                Orianna.setRiotAPIKey(currentProfile.getRiotAPIKey());
+                System.out.println("Riot API Key found: " + currentProfile.getRiotAPIKey());
+            }
+            if (currentProfile.getDefaultRegion() != null) {
+                Orianna.setDefaultRegion(Region.valueOf(currentProfile.getDefaultRegion()));
+                System.out.println("Region set to: " + currentProfile.getDefaultRegion());
+            }
+            if (currentProfile.getDefaultRiotAccount() != null) {
+                System.out.println("Profile default riot account id: " + currentProfile.getDefaultRiotAccount());
+                //TODO
+                //Set riot account to profile default
+            }
+            if (currentProfile.getDefaultLanguage() != null) {
+                System.out.println("Profile default language: " + currentProfile.getDefaultLanguage());
+                //TODO
+                //Set language to profile defaultLanguage
+            }
             mainApp.setMainController(this);
 
-            modelAccessObject = new ModelAccessObject();
-            List<Gamedata> gamedataList = modelAccessObject.readSpesificGames(mainApp.getProfile().getName());
-            ObservableList<Gamedata> observableGamedataList = FXCollections.observableArrayList(gamedataList);
-            ObservableList<Gamedata> observableGameList = FXCollections.observableArrayList();
-
-            gameIdColumn.setCellValueFactory(new PropertyValueFactory<>("gameid"));
-            championColumn.setCellValueFactory(new PropertyValueFactory<>("champion"));
-            killsColumn.setCellValueFactory(new PropertyValueFactory<>("kills"));
-            deathsColumn.setCellValueFactory(new PropertyValueFactory<>("deaths"));
-            assistsColumn.setCellValueFactory(new PropertyValueFactory<>("assits"));
-            winLoseColumn.setCellValueFactory(new PropertyValueFactory<>("winlose"));
-            positionColumn.setCellValueFactory(new PropertyValueFactory<>("positio"));
-            gpmColumn.setCellValueFactory(new PropertyValueFactory<>("gpm"));
-            slot1Column.setCellValueFactory(new PropertyValueFactory<>("slot1"));
-            slot2Column.setCellValueFactory(new PropertyValueFactory<>("slot2"));
-            slot3Column.setCellValueFactory(new PropertyValueFactory<>("slot3"));
-            slot4Column.setCellValueFactory(new PropertyValueFactory<>("slot4"));
-            slot5Column.setCellValueFactory(new PropertyValueFactory<>("slot5"));
-            slot6Column.setCellValueFactory(new PropertyValueFactory<>("slot6"));
-            profileNameColumn.setCellValueFactory(new PropertyValueFactory<>("pname"));
-
-            tableView.setItems(observableGamedataList);
+            secondaryInitialize();
         });
+    }
 
+    public void secondaryInitialize() {
+        //dataAccessObject = new DataAccessObject();
+        //List<Gamedata> gamedataList = modelAccessObject.readSpesificGames(mainApp.getProfile().getName());
+        //ObservableList<Gamedata> observableGamedataList = FXCollections.observableArrayList(gamedataList);
 
+        gameIdColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Integer>("gameid"));
+        championColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("champion"));
+        killsColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Integer>("kills"));
+        deathsColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Integer>("deaths"));
+        assistsColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Integer>("assits"));
+        winLoseColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("winlose"));
+        positionColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("positio"));
+        gpmColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Double>("gpm"));
+        slot1Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot1"));
+        slot2Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot2"));
+        slot3Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot3"));
+        slot4Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot4"));
+        slot5Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot5"));
+        slot6Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot6"));
+        profileNameColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("pname"));
+
+        //tableView.setItems(observableGamedataList);
     }
 
     public void setMainApp(MainApp mainApp) {
@@ -130,12 +144,16 @@ public class MainController {
         this.mainStage = mainStage;
     }
 
+    public String getProfileName() {
+        return profileName;
+    }
+
     public void setProfileNameLabel(String profileName) {
         profileNameLabel.setText(profileName);
     }
 
     @FXML
-    public void handleAddNewGame(ActionEvent actionEvent) throws IOException, InterruptedException {
+    public void handleAddGames(ActionEvent actionEvent) throws IOException {
         mainApp.showInputWindow();
     }
 
@@ -146,11 +164,13 @@ public class MainController {
 
     @FXML
     public void handleAbout(ActionEvent actionEvent) {
-        Alert aboutApplication = new Alert(Alert.AlertType.INFORMATION);
-        aboutApplication.setTitle("About LoL Tilasto-ohjelma");
-        aboutApplication.setHeaderText("About application");
-        aboutApplication.setContentText("Authors: Ryhmä 10\nGitHub: https://github.com/mikaele90/LoL_Tilasto-ohjelma\nVersion: 0.0.1");
-        aboutApplication.showAndWait();
+        Alert aboutAlert = alertFactory.createAlert("About application");
+        aboutAlert.showAndWait();
+    }
+
+    @FXML
+    public void handleSettings(ActionEvent actionEvent) throws IOException {
+        mainApp.showSettingsWindow();
     }
 
     @FXML
@@ -158,8 +178,29 @@ public class MainController {
         System.exit(0);
     }
 
-    public void refreshScene() {
-        initialize();
+    @FXML
+    public void handleMainHelp(ActionEvent actionEvent) {
+        System.out.println("Not yet implemented");
+        //TODO
+    }
+
+    public void printProfileData() {
+        if (currentProfile.getRiotAPIKey() != null) {
+            System.out.println("Riot API Key found: " + currentProfile.getRiotAPIKey());
+        }
+        if (currentProfile.getDefaultRegion() != null) {
+            System.out.println("Region set to: " + Orianna.getSettings().getDefaultPlatform());
+        }
+        if (currentProfile.getDefaultRiotAccount() != null) {
+            System.out.println("Profile default riot account id: " + currentProfile.getDefaultRiotAccount());
+        }
+        if (currentProfile.getDefaultLanguage() != null) {
+            System.out.println("Profile default language: " + currentProfile.getDefaultLanguage());
+        }
+    }
+
+    public void refreshMainScene() {
+        secondaryInitialize();
     }
 
 }

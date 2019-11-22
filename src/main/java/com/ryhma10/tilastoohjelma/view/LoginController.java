@@ -1,11 +1,11 @@
 package com.ryhma10.tilastoohjelma.view;
 
 import com.ryhma10.tilastoohjelma.MainApp;
-import com.ryhma10.tilastoohjelma.model.Login;
-import com.ryhma10.tilastoohjelma.view.MainController;
-import javafx.concurrent.WorkerStateEvent;
+import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -19,18 +19,23 @@ public class LoginController {
     private MainApp mainApp;
     private MainController mainController;
     private Stage loginStage;
+    private AlertFactory alertFactory;
 
     public LoginController() {
         //Constructor
     }
 
     public void initialize() {
-        progressIndicator.setVisible(false);
+        alertFactory = new AlertFactory();
+        if (progressIndicator.isVisible()) {
+            progressIndicator.setVisible(false);
+        }
         loginButton.setText("Login");
         profileNameField.setText("");
         profileNameField.setPromptText("Profile name");
         passwordField.setText("");
         passwordField.setPromptText("Password");
+
     }
 
     public void setMainApp(MainApp mainApp) {
@@ -43,13 +48,10 @@ public class LoginController {
 
     @FXML
     private TextField profileNameField;
-
     @FXML
     private PasswordField passwordField;
-
     @FXML
     private Button loginButton, createNewProfileButton;
-
     @FXML
     private ProgressIndicator progressIndicator;
 
@@ -63,11 +65,8 @@ public class LoginController {
 
     @FXML
     public void handleAboutApplication(ActionEvent actionEvent) {
-        Alert aboutApplication = new Alert(Alert.AlertType.INFORMATION);
-        aboutApplication.setTitle("About LoL Tilasto-ohjelma");
-        aboutApplication.setHeaderText("About application");
-        aboutApplication.setContentText("Authors: Ryhmä 10\nGitHub: https://github.com/mikaele90/LoL_Tilasto-ohjelma\nVersion: 0.0.1");
-        aboutApplication.showAndWait();
+        Alert aboutAlert = alertFactory.createAlert("About application");
+        aboutAlert.showAndWait();
     }
 
     @FXML
@@ -83,56 +82,50 @@ public class LoginController {
     @FXML
     public void handleLogin(ActionEvent actionEvent) throws IOException {
         if(profileNameField.getText().length() > 0 && passwordField.getText().length() > 3) {
-            Login login = new Login(profileNameField.getText(), passwordField.getText());
-            progressIndicator.visibleProperty().bind(login.runningProperty());
             loginButton.setText("Logging in...");
-            login.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent workerStateEvent) {
-                    System.out.println("login.getValue(): " + login.getValue());
+            new Thread(() -> {
+                progressIndicator.setVisible(true);
+                ModelAccessObject modelAccessObject1 = new ModelAccessObject();
+                String resultStringFromMethod = modelAccessObject1.loginProfile(profileNameField.getText(), passwordField.getText());
+                Platform.runLater(() -> {
+                    switch (resultStringFromMethod) {
+                        case "Login successful":
+                            System.out.println(resultStringFromMethod);
+                            ModelAccessObject modelAccessObject2 = new ModelAccessObject();
+                            SoftwareProfile currentProfile = modelAccessObject2.setLoggedInProfile(profileNameField.getText(), passwordField.getText());
+                            if (currentProfile != null) {
+                                System.out.println(currentProfile.getProfileName());
+                                mainApp.setProfile(currentProfile);
+                                loginStage.close();
+                                try {
+                                    mainApp.showMainWindow(currentProfile);
+                                } catch (IOException e) {
+                                    System.out.println("Something went wrong during the login (showMainWindow).");
+                                    e.printStackTrace();
+                                }
+                            }
+                            else {
+                                System.out.println("Something went wrong during the login (setLoggedInProfile).");
+                            }
+                            break;
+                        case "Profile not found":
+                        case "Too many records found":
+                        case "Database connection error":
+                            System.out.println(resultStringFromMethod);
+                            Alert errorAlert = alertFactory.createAlert(resultStringFromMethod);
+                            errorAlert.show();
+                            break;
+                    }
+                    progressIndicator.setVisible(false);
                     loginButton.setText("Login");
-                    if (login.getValue() == null) {
-                        Alert profileNotFoundAlert = new Alert(Alert.AlertType.ERROR);
-                        profileNotFoundAlert.setTitle("Login Unsuccessful");
-                        profileNotFoundAlert.setHeaderText("Profile name or password incorrect");
-                        profileNotFoundAlert.setContentText("Check profile name and password.");
-                        profileNotFoundAlert.showAndWait();
-                    }
-                    else if (login.getValue().getName().equals(profileNameField.getText())) {
-                        login.setProfileName(login.getValue().getName());
-                        mainApp.setProfile(login.getValue());
-                        loginStage.close();
-                        try {
-                            mainApp.showMainWindow(login.getValue());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else {
-
-                    }
-
-                }
-            });
-
-            login.setOnFailed(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent workerStateEvent) {
-                    loginButton.setText("Login");
-                    System.out.println("login.getValue(): " + login.getValue());
-                    System.out.println("Shiiiet");
-                }
-            });
-            login.restart();
-
+                });
+            }).start();
         }
         else {
-            Alert emptyFieldError = new Alert(Alert.AlertType.ERROR);
-            emptyFieldError.setTitle("Error");
-            emptyFieldError.setHeaderText("Login error");
-            emptyFieldError.setContentText("Profile name has to be at least one character long and the password 4 characters long.");
-            emptyFieldError.showAndWait();
+            Alert userInputErrorAlert = alertFactory.createAlert("Login:UserInputError");
+            userInputErrorAlert.showAndWait();
         }
+
     }
 
 }

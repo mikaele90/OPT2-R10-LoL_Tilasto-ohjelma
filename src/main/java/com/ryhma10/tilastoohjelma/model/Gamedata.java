@@ -2,6 +2,7 @@ package com.ryhma10.tilastoohjelma.model;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name="gamedata")
 
@@ -13,30 +14,36 @@ public class Gamedata{
 	@Column(name="gameid")
 	private int gameid;
 	
+	@Column(name="riotid")
+	private long riotid;
+	
+	@Column(name="ingameName")
+	private String ingameName;
+	
 	@Column(name="champion")
 	private String champion;
 	
 	@Column(name="kills")
-	private int kills;
+	private long kills;
 	
 	@Column(name="deaths")
-	private int deaths;
+	private long deaths;
 
 	@Column(name="assist")
-	private int assits;
+	private long assist;
 	
 	@Column(name="winlose")
 	private String winlose;
+
+	@Column(name="position")
+	private String position;
 	
-	@Column(name="positio")
-	private String positio;
-	
-	@Column(name="gpm")
-	private double gpm;
+	@Column(name="rank")
+	private String rank;
 	
 	@ManyToOne
 	@JoinColumn(name="profile_id", nullable=false)
-	private Profile profile;
+	private SoftwareProfile SoftwareProfile;
 	
 	@OneToOne(mappedBy = "gamedata", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Item item;
@@ -45,15 +52,34 @@ public class Gamedata{
 		
 	}
 	
-	public Gamedata(String champion, int kills, int deaths, int assits, 
-			String winlose, String positio, double gpm) {
+
+	public Gamedata(long riotid, String ingameName, String champion, long kills, long deaths, long assist,
+			String winlose, String position, String rank) {
+		this.riotid = riotid;
+		this.ingameName = ingameName;
 		this.champion = champion;
 		this.kills = kills;
 		this.deaths = deaths;
-		this.assits =assits;
+		this.assist =assist;
 		this.winlose = winlose;
-		this.positio = positio;
-		this.gpm = gpm;
+		this.position = position;
+		this.rank = rank;
+	}
+	
+	public String getIngameName() {
+		return ingameName;
+	}
+
+	public void setIngameName(String ingameName) {
+		this.ingameName = ingameName;
+	}
+
+	public long getRiotid() {
+		return riotid;
+	}
+
+	public void setRiotid(long riotid) {
+		this.riotid = riotid;
 	}
 
 	public String getChampion() {
@@ -64,28 +90,28 @@ public class Gamedata{
 		this.champion = champion;
 	}
 
-	public int getKills() {
+	public long getKills() {
 		return kills;
 	}
 
-	public void setKills(int kills) {
+	public void setKills(long kills) {
 		this.kills = kills;
 	}
 
-	public int getDeaths() {
+	public long getDeaths() {
 		return deaths;
 	}
 
-	public void setDeaths(int deaths) {
+	public void setDeaths(long deaths) {
 		this.deaths = deaths;
 	}
 
-	public int getAssits() {
-		return assits;
+	public long getAssist() {
+		return assist;
 	}
 
-	public void setAssits(int assits) {
-		this.assits = assits;
+	public void setAssist(long assist) {
+		this.assist = assist;
 	}
 
 	public int getGameid() {
@@ -104,28 +130,29 @@ public class Gamedata{
 		this.winlose = winlose;
 	}
 
-	public String getPositio() {
-		return positio;
+	public String getPosition() {
+		return position;
 	}
 
-	public void setPositio(String positio) {
-		this.positio = positio;
+	public void setPosition(String position) {
+		this.position = position;
+	}
+	
+
+	public String getRank() {
+		return rank;
 	}
 
-	public double getGpm() {
-		return gpm;
+	public void setRank(String rank) {
+		this.rank = rank;
 	}
 
-	public void setGpm(double gpm) {
-		this.gpm = gpm;
+	public SoftwareProfile getSoftwareProfile() {
+		return SoftwareProfile;
 	}
 
-	public Profile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(Profile profile) {
-		this.profile = profile;
+	public void setSoftwareProfile(SoftwareProfile SoftwareProfile) {
+		this.SoftwareProfile = SoftwareProfile;
 	}
 
 	public Item getItem() {
@@ -135,4 +162,5 @@ public class Gamedata{
 	public void setItem(Item item) {
 		this.item = item;
 	}
+
 }
