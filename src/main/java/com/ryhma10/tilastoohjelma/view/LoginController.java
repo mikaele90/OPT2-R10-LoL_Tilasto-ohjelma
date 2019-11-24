@@ -12,7 +12,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.*;
 
 public class LoginController {
 
@@ -20,6 +22,23 @@ public class LoginController {
     private MainController mainController;
     private Stage loginStage;
     private AlertFactory alertFactory;
+    private ResourceBundle textBundle;
+    private List<CheckMenuItem> languageList;
+
+    @FXML
+    private TextField profileNameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private Button loginButton, createNewProfileButton;
+    @FXML
+    private ProgressIndicator progressIndicator;
+    @FXML
+    private CheckMenuItem en_US;
+    @FXML
+    private CheckMenuItem fi_FI;
+    @FXML
+    private Menu languageMenu;
 
     public LoginController() {
         //Constructor
@@ -30,6 +49,27 @@ public class LoginController {
         if (progressIndicator.isVisible()) {
             progressIndicator.setVisible(false);
         }
+        Platform.runLater(() -> {
+            languageList = new ArrayList<>();
+            for (MenuItem menuItem : languageMenu.getItems()) {
+                languageList.add((CheckMenuItem)menuItem);
+            }
+            switch (textBundle.getString("locale")) {
+                case "en_US":
+                    en_US.setSelected(true);
+                    break;
+                case "fi_FI":
+                    fi_FI.setSelected(true);
+                    break;
+                default:
+                    System.out.println("Cannot determine language");
+            }
+            for (CheckMenuItem language : languageList) {
+                if (!language.getId().equals(textBundle.getString("locale"))) {
+                    language.setSelected(false);
+                }
+            }
+        });
         loginButton.setText("Login");
         profileNameField.setText("");
         profileNameField.setPromptText("Profile name");
@@ -45,15 +85,6 @@ public class LoginController {
     public void setLoginStage(Stage loginStage) {
         this.loginStage = loginStage;
     }
-
-    @FXML
-    private TextField profileNameField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private Button loginButton, createNewProfileButton;
-    @FXML
-    private ProgressIndicator progressIndicator;
 
     @FXML
     public void onEnter(KeyEvent keyEvent) throws IOException {
@@ -128,4 +159,38 @@ public class LoginController {
 
     }
 
+    public void handleChangeLanguage(ActionEvent actionEvent) {
+        CheckMenuItem clickedItem = (CheckMenuItem)actionEvent.getTarget();
+        mainApp.getDefaultProperties().setProperty("language", clickedItem.getId().substring(0,2));
+        mainApp.getDefaultProperties().setProperty("country", clickedItem.getId().substring(3,5));
+        System.out.println(mainApp.getDefaultProperties().getProperty("language"));
+        System.out.println(mainApp.getDefaultProperties().getProperty("country"));
+        try {
+            mainApp.getDefaultProperties().store(new FileOutputStream(mainApp.getApplicationResourceBundleFilePath()), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mainApp.init();
+        try {
+            mainApp.start(mainApp.getPrimaryStage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Platform.runLater(() -> {
+            try {
+                mainApp.showLoginWindow(mainApp.getTextBundle());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+    public ResourceBundle getTextBundle() {
+        return textBundle;
+    }
+
+    public void setTextBundle(ResourceBundle textBundle) {
+        this.textBundle = textBundle;
+    }
 }

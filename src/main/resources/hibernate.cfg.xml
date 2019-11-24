@@ -18,7 +18,7 @@
    <property name="show_sql">true</property>
    <mapping class="com.ryhma10.tilastoohjelma.model.SoftwareProfile"/>
    <mapping class="com.ryhma10.tilastoohjelma.model.Gamedata"/>
-   <mapping class="com.ryhma10.tilastoohjelma.model.Team"/>
+   <mapping class="com.ryhma10.tilastoohjelma.model.Item"/>
    <mapping class="com.ryhma10.tilastoohjelma.model.Additional"/>
    <mapping class="com.ryhma10.tilastoohjelma.model.Team"/>
    

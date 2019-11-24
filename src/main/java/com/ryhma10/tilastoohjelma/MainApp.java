@@ -6,13 +6,15 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.sql.SQLException;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 
 public class MainApp extends Application {
@@ -25,8 +27,21 @@ public class MainApp extends Application {
     private AnchorPane feedBackWindow;
     private AnchorPane profileWindow;
     private BorderPane settingsWindow;
+
     private SoftwareProfile currentProfile;
     private MainController mainController;
+
+    private ResourceBundle textBundle;
+    private Properties defaultProperties;
+    private String applicationResourceBundleFilePath;
+    private Locale currentLocale;
+    private String currentLanguage;
+    private String currentCountry;
+
+    private String loginWindowTitle;
+    private String createNewUserWindowTitle;
+    private String mainWindowTitle;
+    private String settingsWindowTitle;
 
     public MainApp() {
         //Constructor
@@ -35,11 +50,39 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
-        primaryStage.setTitle("WinStreak.exe");
-        showLoginWindow();
+        primaryStage.setTitle(loginWindowTitle);
+        showLoginWindow(textBundle);
     }
 
-    public void showLoginWindow() throws IOException, SQLException {
+    public void init() {
+        this.applicationResourceBundleFilePath = "src/main/resources/defaultconfig.properties";
+        this.defaultProperties = new Properties();
+        try {
+            this.defaultProperties.load(new FileInputStream(applicationResourceBundleFilePath));
+            this.currentLanguage = defaultProperties.getProperty("language");
+            this.currentCountry = defaultProperties.getProperty("country");
+            this.currentLocale = new Locale(currentLanguage, currentCountry);
+            System.out.println(currentLocale.toString());
+        } catch (Exception e) {
+            System.out.println("Default properties: file not found");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        try {
+            this.textBundle = ResourceBundle.getBundle("TextResources", currentLocale);
+            //Set window titles
+            this.loginWindowTitle = textBundle.getString("loginWindowTitle");
+            this.createNewUserWindowTitle = textBundle.getString("createNewUserWindowTitle");
+            this.mainWindowTitle = textBundle.getString("mainWindowTitle");
+            this.settingsWindowTitle = textBundle.getString("settingsWindowTitle");
+        }catch (Exception e) {
+            System.out.println("TextBundle: file not found");
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
+
+    public void showLoginWindow(ResourceBundle textBundle) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/Login.fxml"));
         loginWindow = (AnchorPane)loader.load();
@@ -51,6 +94,7 @@ public class MainApp extends Application {
         LoginController loginController = loader.getController();
         loginController.setMainApp(this);
         loginController.setLoginStage(primaryStage);
+        loginController.setTextBundle(textBundle);
 
         primaryStage.show();
     }
@@ -61,7 +105,7 @@ public class MainApp extends Application {
         createNewUserWindow = (BorderPane)loader.load();
 
         Stage createNewUserStage = new Stage();
-        createNewUserStage.setTitle("Create new profile");
+        createNewUserStage.setTitle(createNewUserWindowTitle);
         createNewUserStage.initModality(Modality.WINDOW_MODAL);
         createNewUserStage.initOwner(primaryStage);
         Scene createNewUserScene = new Scene(createNewUserWindow);
@@ -83,7 +127,7 @@ public class MainApp extends Application {
         mainWindow = (AnchorPane)loader.load();
 
         Stage mainStage = new Stage();
-        mainStage.setTitle(primaryStage.getTitle());
+        mainStage.setTitle(mainWindowTitle);
         mainStage.initOwner(primaryStage);
         Scene mainScene = new Scene(mainWindow);
         mainScene.getStylesheets().add("/styles/Styles.css");
@@ -160,7 +204,7 @@ public class MainApp extends Application {
         settingsWindow = (BorderPane)loader.load();
 
         Stage settingsStage = new Stage();
-        settingsStage.setTitle("Settings");
+        settingsStage.setTitle(settingsWindowTitle);
         settingsStage.initModality(Modality.APPLICATION_MODAL);
         settingsStage.initOwner(primaryStage);
         Scene settingsScene = new Scene(settingsWindow);
@@ -195,6 +239,54 @@ public class MainApp extends Application {
 
     public MainController getMainController() {
         return this.mainController;
+    }
+
+    public ResourceBundle getTextBundle() {
+        return textBundle;
+    }
+
+    public void setTextBundle(ResourceBundle textBundle) {
+        this.textBundle = textBundle;
+    }
+
+    public Locale getCurrentLocale() {
+        return currentLocale;
+    }
+
+    public void setCurrentLocale(Locale currentLocale) {
+        this.currentLocale = currentLocale;
+    }
+
+    public String getCurrentLanguage() {
+        return currentLanguage;
+    }
+
+    public void setCurrentLanguage(String currentLanguage) {
+        this.currentLanguage = currentLanguage;
+    }
+
+    public String getCurrentCountry() {
+        return currentCountry;
+    }
+
+    public void setCurrentCountry(String currentCountry) {
+        this.currentCountry = currentCountry;
+    }
+
+    public Properties getDefaultProperties() {
+        return defaultProperties;
+    }
+
+    public void setDefaultProperties(Properties defaultProperties) {
+        this.defaultProperties = defaultProperties;
+    }
+
+    public String getApplicationResourceBundleFilePath() {
+        return applicationResourceBundleFilePath;
+    }
+
+    public void setApplicationResourceBundleFilePath(String applicationResourceBundleFilePath) {
+        this.applicationResourceBundleFilePath = applicationResourceBundleFilePath;
     }
 
     /**
