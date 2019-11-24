@@ -38,19 +38,17 @@ public class testi2 {
 		}
 		
 		
-		//toimii
-		List<Additional> jahas = modelDAO.readAdditionalData(55);
-		for(Additional result : jahas) {
-			System.out.println(result.getDamagedealt() + " " + result.getDamagetaken() + " " + result.getGold() + " " + result.getDuration());
-		}
+		Additional additionalinfo = modelDAO.readAdditionalData(55);
+		System.out.println(additionalinfo.getDamagedealt() + " " + additionalinfo.getDamagetaken() + " " + additionalinfo.getGold() + " " + additionalinfo.getDuration());
 		
-		List<Team> kaipa = modelDAO.readTeamComposition(45);
-		for(Team result : kaipa) {
-			System.out.println(result.getChampion1() + " " + result.getEnemyChampion3());
-		}
+		Team teaminfo = modelDAO.readTeamComposition(45);
+		System.out.println(teaminfo.getChampion1() + " " + teaminfo.getEnemyChampion3());
 		
 		Gamedata oneGame = modelDAO.readOneGame(55);
 		System.out.println(oneGame.getIngameName() + " " + oneGame.getGameid() + " " + oneGame.getChampion() + " " + oneGame.getKills());
+		
+		boolean truth = modelDAO.checkGame(22);
+		System.out.println(truth);
 		
 	}
 }

@@ -131,8 +131,21 @@ public class ModelAccessObject implements IModelDAO {
 
 	@Override
 	public boolean addProfile(SoftwareProfile profile) {
-		return false;
-	}
+		Transaction transaction = null;
+		boolean totuus = false;
+		try(Session session = factory.openSession()){
+			transaction = session.beginTransaction();
+			session.saveOrUpdate(profile);
+			session.getTransaction().commit();
+			session.close();
+			totuus = true;
+		}catch (Exception e) {
+			transaction.rollback();
+			throw e;
+		}
+			
+		return totuus;
+		}
 
 
 	@Override
@@ -292,12 +305,12 @@ public class ModelAccessObject implements IModelDAO {
 		
 		//hakee tietokannasta tietyn pelin spesifikaatio datat vaatii parametriksi riotId:n
 		@SuppressWarnings("unchecked")
-		public List<Additional> readAdditionalData(long riotid){
+		public Additional readAdditionalData(long riotid){
 			Transaction transaction = null;
 			try(Session session = factory.openSession()){
 				transaction = session.beginTransaction();
 				
-				List<Additional> result = session.createQuery("Select a from Additional as a Join a.gamedata as g where g.riotid = :id").setParameter("id", riotid).getResultList();
+				Additional result = (Additional) session.createQuery("Select a from Additional as a Join a.gamedata as g where g.riotid = :id").setParameter("id", riotid).uniqueResult();
 				session.getTransaction().commit();
 				return result;
 			}catch(Exception e) {
@@ -310,12 +323,12 @@ public class ModelAccessObject implements IModelDAO {
 		//sankarit lukuunottamatta pelaajan omaa koska tämä tieto on normi gamedatassa
 		//vaatii parimetriksi riotId:n
 		@SuppressWarnings("unchecked")
-		public List<Team> readTeamComposition(long riotid){
+		public Team readTeamComposition(long riotid){
 			Transaction transaction = null;
 			try(Session session = factory.openSession()){
 				transaction = session.beginTransaction();
 				
-				List<Team> result = session.createQuery("Select t from Team as t Join t.gamedata as g where g.riotid = :id").setParameter("id", riotid).getResultList();
+				Team result = (Team) session.createQuery("Select t from Team as t Join t.gamedata as g where g.riotid = :id").setParameter("id", riotid).uniqueResult();
 				session.getTransaction().commit();
 				return result;
 			}catch(Exception e) {
@@ -362,6 +375,30 @@ public class ModelAccessObject implements IModelDAO {
 				transaction.rollback();
 				throw e;
 				}
+		}
+		
+		//tarkastaa onko kyseinen peli jo tietokannassa
+		@SuppressWarnings("rawtypes")
+		@Override
+		public boolean checkGame(long riotid) {
+			Transaction transaction = null;
+			try(Session session = factory.openSession()) {
+				transaction = session.beginTransaction();
+				Query q = session.createQuery("FROM Gamedata WHERE riotid = :riotid");
+				q.setParameter("riotid", riotid);
+				Gamedata gamedata = (Gamedata) q.uniqueResult();
+				session.getTransaction().commit();
+				session.close();
+				if (gamedata !=null) {
+					return true;
+				}
+				else {
+					return false;
+				}
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+			}
 		}
 
 }

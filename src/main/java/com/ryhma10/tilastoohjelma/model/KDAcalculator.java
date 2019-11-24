@@ -4,14 +4,13 @@ package com.ryhma10.tilastoohjelma.model;
 
 public class KDAcalculator{
 	
-	Gamedata g = new Gamedata();
-	double a = g.getAssits();
+	Gamedata g;
+	double a = g.getAssist();
 	double k = g.getKills();
 	double d = g.getDeaths();
 	
-	public KDAcalculator() {
-		
-		
+	public KDAcalculator(Gamedata g) {
+		this.g = g;
 	}
 	
 	public double getKDA() {
