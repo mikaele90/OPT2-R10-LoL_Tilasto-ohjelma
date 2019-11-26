@@ -53,10 +53,10 @@ public class testi {
 		Team t3 = new Team("sankari", "sankari", "sankari", "sankari", "sankari", "sankari", "sankari", "sankari", "sankari");
 		Team t4 = new Team("mato", "mato", "mato", "mato", "mato", "mato", "mato", "mato", "mato");
 		
-		Additional a1 = new Additional(475, 500, "normi", 4, 7, "joulukuu");
-		Additional a2 = new Additional(425, 400, "normi", 4, 7, "tammi");
-		Additional a3 = new Additional(488, 552, "normi", 4, 7, "maalis");
-		Additional a4 = new Additional(4, 5, "normi", 4, 7, "kesä");
+		Additional a1 = new Additional(475, 500, "normi", 4, 7, "joulukuu", 80, 25);
+		Additional a2 = new Additional(425, 400, "normi", 4, 7, "tammi", 7, 3);
+		Additional a3 = new Additional(488, 552, "normi", 4, 7, "maalis", 4, 9);
+		Additional a4 = new Additional(4, 5, "normi", 4, 7, "kesä",5 ,6);
 		
 
 		Transaction transaction = null;

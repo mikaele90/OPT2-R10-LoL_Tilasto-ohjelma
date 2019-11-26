@@ -30,6 +30,12 @@ public class Additional {
 	@Column(name="date")
 	private String date;
 	
+	@Column(name="wardsScore")
+	private long wardsScore;
+	
+	@Column(name="creepScore")
+	private long creepScore;
+	
 	@OneToOne
 	@JoinColumn(name="game_id", referencedColumnName="gameid", nullable=false)
 	private Gamedata gamedata;
@@ -38,13 +44,16 @@ public class Additional {
 		
 	}
 	
-	public Additional(long damagedealt, long damagetaken, String gamemode, long gold, long duration, String date) {
+	public Additional(long damagedealt, long damagetaken, String gamemode, long gold, long duration,
+			String date, long wardsScore, long creepScore) {
 		this.damagedealt = damagedealt;
 		this.damagetaken = damagetaken;
 		this.gamemode = gamemode;
 		this.gold = gold;
 		this.duration = duration;
 		this.date = date;
+		this.wardsScore = wardsScore;
+		this.creepScore = creepScore;
 	
 	}
 
@@ -103,6 +112,23 @@ public class Additional {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+	
+
+	public long getWardsScore() {
+		return wardsScore;
+	}
+
+	public void setWardsScore(long wards) {
+		this.wardsScore = wards;
+	}
+	
+	public long getCreepScore() {
+		return creepScore;
+	}
+
+	public void setCreepScore(long creepScore) {
+		this.creepScore = creepScore;
 	}
 
 	public Gamedata getGamedata() {
