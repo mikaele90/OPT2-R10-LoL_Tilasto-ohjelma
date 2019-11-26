@@ -252,7 +252,7 @@ public class ModelAccessObject implements IModelDAO {
 	}
 
 	@Override
-	public boolean updateProfile(SoftwareProfile currentProfile) {
+	public boolean updateProfile(SoftwareProfile currentProfile, boolean updateDefaultRegion, boolean updateDefaultLanguage) {
 		boolean success = false;
 		Transaction transaction = null;
 		try {
@@ -260,7 +260,12 @@ public class ModelAccessObject implements IModelDAO {
 			transaction = session.beginTransaction();
 			SoftwareProfile placeholderProfile = session.load(SoftwareProfile.class, currentProfile.getProfileId());
 			placeholderProfile.setRiotAPIKey(currentProfile.getRiotAPIKey());
-			placeholderProfile.setDefaultRegion(currentProfile.getDefaultRegion());
+			if (updateDefaultRegion) {
+				placeholderProfile.setDefaultRegion(currentProfile.getDefaultRegion());
+			}
+			if (updateDefaultLanguage) {
+				placeholderProfile.setDefaultLanguage(currentProfile.getDefaultLanguage());
+			}
 			placeholderProfile.setProfilePassword(currentProfile.getProfilePassword());
 			placeholderProfile.setDefaultRiotAccount(null);
 			session.update(placeholderProfile);

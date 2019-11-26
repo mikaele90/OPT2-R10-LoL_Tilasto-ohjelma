@@ -7,10 +7,18 @@ import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
 import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
 import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class SettingsController {
 
@@ -19,28 +27,22 @@ public class SettingsController {
     private Stage settingsStage;
     private AlertFactory alertFactory;
     private SoftwareProfile currentProfile;
+    private ResourceBundle textBundle;
+
     @FXML
     private TabPane settingsTabPane;
     @FXML
-    private Tab apiAndUserInterfaceTab;
+    private Tab apiAndUserInterfaceTab, profileTab;
     @FXML
     private TextField apiKeyTextField;
     @FXML
     private Button testAPIKeyButton;
     @FXML
-    private ChoiceBox changeRegionChoiceBox;
+    private ChoiceBox<String> changeRegionChoiceBox, changeLanguageChoiceBox;
     @FXML
-    private CheckBox makeRegionDefaultCheckBox;
+    private CheckBox makeRegionDefaultCheckBox, makeLanguageDefaultCheckBox;
     @FXML
-    private ChoiceBox changeLanguageChoiceBox;
-    @FXML
-    private CheckBox makeLanguageDefaultCheckBox;
-    @FXML
-    private Tab profileTab;
-    @FXML
-    private PasswordField profilePasswordField;
-    @FXML
-    private PasswordField confirmProfilePasswordField;
+    private PasswordField profilePasswordField, confirmProfilePasswordField;
     
     public SettingsController() {
         //Default Constructor
@@ -74,6 +76,10 @@ public class SettingsController {
                 changeRegionChoiceBox.setValue(Region.NORTH_AMERICA.name().replace("_", " "));
             }
             makeRegionDefaultCheckBox.setSelected(false);
+            List<String> languageArrayList = mainApp.getLanguageArrayList();
+            ObservableList<String> languageObservableList = FXCollections.observableList(languageArrayList);
+            changeLanguageChoiceBox.getItems().addAll(languageObservableList);
+            changeLanguageChoiceBox.setValue(textBundle.getString(currentProfile.getDefaultLanguage()));
             makeLanguageDefaultCheckBox.setSelected(false);
         });
     }
@@ -86,16 +92,27 @@ public class SettingsController {
     @FXML
     public boolean handleApply(ActionEvent actionEvent) {
         boolean dbUpdateRequired = false;
+        boolean dbUpdateRegion = false;
+        boolean dbUpdateLanguage = false;
         boolean success = true;
         if ((!apiKeyTextField.getText().equals("")) && (!apiKeyTextField.getText().equals(currentProfile.getRiotAPIKey()))) {
             Orianna.setRiotAPIKey(apiKeyTextField.getText());
             currentProfile.setRiotAPIKey(apiKeyTextField.getText());
             dbUpdateRequired = true;
         }
-        if (!changeRegionChoiceBox.getSelectionModel().getSelectedItem().toString().replace(" ", "_").equals(currentProfile.getDefaultRegion())) {
-            Orianna.setDefaultRegion(Region.valueOf(changeRegionChoiceBox.getSelectionModel().getSelectedItem().toString().replace(" ", "_")));
+        if (!changeRegionChoiceBox.getSelectionModel().getSelectedItem().replace(" ", "_").equals(currentProfile.getDefaultRegion()) || makeRegionDefaultCheckBox.isSelected()) {
+            currentProfile.setDefaultRegion(changeRegionChoiceBox.getSelectionModel().getSelectedItem().replace(" ", "_"));
+            Orianna.setDefaultRegion(Region.valueOf(currentProfile.getDefaultRegion()));
             if (makeRegionDefaultCheckBox.isSelected()) {
-                currentProfile.setDefaultRegion(changeRegionChoiceBox.getSelectionModel().getSelectedItem().toString().replace(" ", "_"));
+                dbUpdateRegion = true;
+                dbUpdateRequired = true;
+            }
+        }
+        if (!getSelectedLanguage(changeLanguageChoiceBox.getSelectionModel().getSelectedIndex()).equals(currentProfile.getDefaultLanguage()) || makeLanguageDefaultCheckBox.isSelected()) {
+            currentProfile.setDefaultLanguage(getSelectedLanguage(changeLanguageChoiceBox.getSelectionModel().getSelectedIndex()));
+            System.out.println(currentProfile.getDefaultLanguage());
+            if (makeLanguageDefaultCheckBox.isSelected()) {
+                dbUpdateLanguage = true;
                 dbUpdateRequired = true;
             }
         }
@@ -112,9 +129,10 @@ public class SettingsController {
         }
         if (dbUpdateRequired) {
             ModelAccessObject modelAccessObject = new ModelAccessObject();
-            modelAccessObject.updateProfile(currentProfile);
+            modelAccessObject.updateProfile(currentProfile, dbUpdateRegion, dbUpdateLanguage);
         }
         mainController.setCurrentProfile(currentProfile);
+        mainApp.setProfile(currentProfile);
         mainController.printProfileData();
         return success;
     }
@@ -132,6 +150,21 @@ public class SettingsController {
         //TODO
     }
 
+    private String getSelectedLanguage(int langIndex) {
+        String selectedLanguage;
+        selectedLanguage = changeLanguageChoiceBox.getSelectionModel().getSelectedItem().toString();
+        String langString = mainApp.getLanguageDirFiles().get(langIndex);
+        Properties propertiesHelper = new Properties();
+        try {
+            propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + "/" + langString));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        selectedLanguage = propertiesHelper.getProperty("localeINFO");
+        System.out.println(selectedLanguage);
+        return selectedLanguage;
+    }
+
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
@@ -139,4 +172,13 @@ public class SettingsController {
     public void setSettingsStage(Stage settingsStage) {
         this.settingsStage = settingsStage;
     }
+
+    public ResourceBundle getTextBundle() {
+        return textBundle;
+    }
+
+    public void setTextBundle(ResourceBundle textBundle) {
+        this.textBundle = textBundle;
+    }
+
 }

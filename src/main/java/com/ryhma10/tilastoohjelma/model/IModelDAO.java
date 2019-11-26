@@ -14,7 +14,7 @@ public interface IModelDAO{
 	public abstract String createProfile(String profileName, String profilePassword, String defaultRegion, String defaultLanguage, String defaultRiotAccount, String riotAPIKey);
 	public abstract String loginProfile(String profileName, String profilePassword);
 	public abstract SoftwareProfile setLoggedInProfile(String profileName, String profilePassword);
-	public abstract boolean updateProfile(SoftwareProfile currentProfile);
+	public abstract boolean updateProfile(SoftwareProfile currentProfile, boolean updateDefaultRegion, boolean updateDefaultLanguage);
 	public abstract List<Item> readItems();
 	public abstract List<Gamedata> readSpecificProfilesGames(String name);
 	public abstract List<Item> readGamesWithItems();

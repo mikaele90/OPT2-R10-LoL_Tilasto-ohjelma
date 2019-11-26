@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class MainController {
 
@@ -28,14 +29,7 @@ public class MainController {
     private ModelAccessObject modelAccessObject;
     private String profileName;
     private SoftwareProfile currentProfile;
-
-    public SoftwareProfile getCurrentProfile() {
-        return currentProfile;
-    }
-
-    public void setCurrentProfile(SoftwareProfile currentProfile) {
-        this.currentProfile = currentProfile;
-    }
+    private ResourceBundle textBundle;
 
     @FXML
     private Label profileNameLabel;
@@ -98,16 +92,14 @@ public class MainController {
             }
             if (currentProfile.getDefaultRiotAccount() != null) {
                 System.out.println("Profile default riot account id: " + currentProfile.getDefaultRiotAccount());
-                //TODO
+                //TODO IF NEEDED
                 //Set riot account to profile default
             }
             if (currentProfile.getDefaultLanguage() != null) {
                 System.out.println("Profile default language: " + currentProfile.getDefaultLanguage());
-                //TODO
-                //Set language to profile defaultLanguage
+                System.out.println("TextRes locale: " + textBundle.getLocale().toString());
             }
             mainApp.setMainController(this);
-
             secondaryInitialize();
         });
     }
@@ -136,20 +128,8 @@ public class MainController {
         //tableView.setItems(observableGamedataList);
     }
 
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
-    }
+    public void setTexts() {
 
-    public void setMainStage(Stage mainStage) {
-        this.mainStage = mainStage;
-    }
-
-    public String getProfileName() {
-        return profileName;
-    }
-
-    public void setProfileNameLabel(String profileName) {
-        profileNameLabel.setText(profileName);
     }
 
     @FXML
@@ -189,7 +169,7 @@ public class MainController {
             System.out.println("Riot API Key found: " + currentProfile.getRiotAPIKey());
         }
         if (currentProfile.getDefaultRegion() != null) {
-            System.out.println("Region set to: " + Orianna.getSettings().getDefaultPlatform());
+            System.out.println("Region set to: " + currentProfile.getDefaultRegion());
         }
         if (currentProfile.getDefaultRiotAccount() != null) {
             System.out.println("Profile default riot account id: " + currentProfile.getDefaultRiotAccount());
@@ -199,8 +179,41 @@ public class MainController {
         }
     }
 
+    public SoftwareProfile getCurrentProfile() {
+        return currentProfile;
+    }
+
+    public void setCurrentProfile(SoftwareProfile currentProfile) {
+        this.currentProfile = currentProfile;
+    }
+
     public void refreshMainScene() {
         secondaryInitialize();
     }
+
+    public void setMainApp(MainApp mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    public void setMainStage(Stage mainStage) {
+        this.mainStage = mainStage;
+    }
+
+    public String getProfileName() {
+        return profileName;
+    }
+
+    public void setProfileNameLabel(String profileName) {
+        profileNameLabel.setText(profileName);
+    }
+
+    public ResourceBundle getTextBundle() {
+        return textBundle;
+    }
+
+    public void setTextBundle(ResourceBundle textBundle) {
+        this.textBundle = textBundle;
+    }
+
 
 }

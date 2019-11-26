@@ -12,6 +12,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -26,6 +27,8 @@ public class LoginController {
     private List<CheckMenuItem> languageList;
 
     @FXML
+    private Label labelUseExistingProfile, labelNoProfileYet, labelProfileName, labelProfilePassword;
+    @FXML
     private TextField profileNameField;
     @FXML
     private PasswordField passwordField;
@@ -34,11 +37,9 @@ public class LoginController {
     @FXML
     private ProgressIndicator progressIndicator;
     @FXML
-    private CheckMenuItem en_US;
+    private Menu languageMenu, fileMenu, helpMenu;
     @FXML
-    private CheckMenuItem fi_FI;
-    @FXML
-    private Menu languageMenu;
+    private MenuItem menuItemCreateNewProfile, menuItemExit, menuItemAbout;
 
     public LoginController() {
         //Constructor
@@ -50,32 +51,43 @@ public class LoginController {
             progressIndicator.setVisible(false);
         }
         Platform.runLater(() -> {
-            languageList = new ArrayList<>();
-            for (MenuItem menuItem : languageMenu.getItems()) {
-                languageList.add((CheckMenuItem)menuItem);
-            }
-            switch (textBundle.getString("locale")) {
-                case "en_US":
-                    en_US.setSelected(true);
-                    break;
-                case "fi_FI":
-                    fi_FI.setSelected(true);
-                    break;
-                default:
-                    System.out.println("Cannot determine language");
-            }
-            for (CheckMenuItem language : languageList) {
-                if (!language.getId().equals(textBundle.getString("locale"))) {
-                    language.setSelected(false);
+            if (languageList == null) {
+                for (int i = 0; i < mainApp.getLanguageDirLength(); i++) {
+                    String langString = mainApp.getLanguageDirFiles().get(i);
+                    Properties propertiesHelper = new Properties();
+                    try {
+                        propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + "/" + langString));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    CheckMenuItem checkMenuItemHelper = new CheckMenuItem(textBundle.getString(propertiesHelper.getProperty("localeINFO")));
+                    checkMenuItemHelper.setId(propertiesHelper.getProperty("localeINFO"));
+                    checkMenuItemHelper.setOnAction(this::handleChangeLanguage);
+                    languageMenu.getItems().add(checkMenuItemHelper);
+                }
+                languageList = new ArrayList<>();
+                for (MenuItem menuItem : languageMenu.getItems()) {
+                    languageList.add((CheckMenuItem)menuItem);
                 }
             }
+            setSelectedLanguageMenuItem();
+            fileMenu.setText(textBundle.getString("file"));
+            languageMenu.setText(textBundle.getString("language"));
+            helpMenu.setText(textBundle.getString("help"));
+            menuItemCreateNewProfile.setText(textBundle.getString("createNewProfile"));
+            menuItemExit.setText(textBundle.getString("exit"));
+            menuItemAbout.setText(textBundle.getString("aboutProgram"));
+            labelUseExistingProfile.setText(textBundle.getString("useExistingProfile"));
+            labelNoProfileYet.setText(textBundle.getString("noProfileYet") + ":");
+            labelProfileName.setText(textBundle.getString("profileName") + ":");
+            labelProfilePassword.setText(textBundle.getString("password") + ":");
+            loginButton.setText(textBundle.getString("login"));
+            createNewProfileButton.setText(textBundle.getString("createNewProfile"));
+            profileNameField.setText("");
+            profileNameField.setPromptText(textBundle.getString("profileName"));
+            passwordField.setText("");
+            passwordField.setPromptText(textBundle.getString("password"));
         });
-        loginButton.setText("Login");
-        profileNameField.setText("");
-        profileNameField.setPromptText("Profile name");
-        passwordField.setText("");
-        passwordField.setPromptText("Password");
-
     }
 
     public void setMainApp(MainApp mainApp) {
@@ -113,7 +125,7 @@ public class LoginController {
     @FXML
     public void handleLogin(ActionEvent actionEvent) throws IOException {
         if(profileNameField.getText().length() > 0 && passwordField.getText().length() > 3) {
-            loginButton.setText("Logging in...");
+            loginButton.setText(textBundle.getString("loggingIn"));
             new Thread(() -> {
                 progressIndicator.setVisible(true);
                 ModelAccessObject modelAccessObject1 = new ModelAccessObject();
@@ -148,7 +160,7 @@ public class LoginController {
                             break;
                     }
                     progressIndicator.setVisible(false);
-                    loginButton.setText("Login");
+                    loginButton.setText(textBundle.getString("login"));
                 });
             }).start();
         }
@@ -161,29 +173,42 @@ public class LoginController {
 
     public void handleChangeLanguage(ActionEvent actionEvent) {
         CheckMenuItem clickedItem = (CheckMenuItem)actionEvent.getTarget();
-        mainApp.getDefaultProperties().setProperty("language", clickedItem.getId().substring(0,2));
-        mainApp.getDefaultProperties().setProperty("country", clickedItem.getId().substring(3,5));
-        System.out.println(mainApp.getDefaultProperties().getProperty("language"));
-        System.out.println(mainApp.getDefaultProperties().getProperty("country"));
-        try {
-            mainApp.getDefaultProperties().store(new FileOutputStream(mainApp.getApplicationResourceBundleFilePath()), null);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mainApp.init();
-        try {
-            mainApp.start(mainApp.getPrimaryStage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Platform.runLater(() -> {
+        if ((!mainApp.getDefaultProperties().getProperty("languageINFO").equals(clickedItem.getId().substring(0,2))) && (!mainApp.getDefaultProperties().getProperty("countryINFO").equals(clickedItem.getId().substring(3,5)))) {
+            mainApp.getDefaultProperties().setProperty("languageINFO", clickedItem.getId().substring(0,2));
+            mainApp.getDefaultProperties().setProperty("countryINFO", clickedItem.getId().substring(3,5));
+            //System.out.println(mainApp.getDefaultProperties().getProperty("language"));
+            //System.out.println(mainApp.getDefaultProperties().getProperty("country"));
             try {
-                mainApp.showLoginWindow(mainApp.getTextBundle());
+                mainApp.getDefaultProperties().store(new FileOutputStream(mainApp.getApplicationDefaultConfigFilePath()), null);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+            mainApp.init();
+            try {
+                mainApp.start(mainApp.getPrimaryStage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Platform.runLater(() -> {
+                try {
+                    mainApp.showLoginWindow(mainApp.getTextBundle());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        setSelectedLanguageMenuItem();
+    }
 
+    private void setSelectedLanguageMenuItem() {
+        for (CheckMenuItem language : languageList) {
+            if (language.getId().equals(textBundle.getString("localeINFO"))) {
+                language.setSelected(true);
+            }
+            else {
+                language.setSelected(false);
+            }
+        }
     }
 
     public ResourceBundle getTextBundle() {

@@ -4,10 +4,14 @@ import com.merakianalytics.orianna.Orianna;
 import com.merakianalytics.orianna.types.common.OriannaException;
 import com.merakianalytics.orianna.types.common.Region;
 import com.merakianalytics.orianna.types.core.status.ShardStatus;
+
 import com.ryhma10.tilastoohjelma.MainApp;
 import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
 import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
+
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -15,7 +19,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 
 public class CreateNewUserController {
@@ -23,28 +31,22 @@ public class CreateNewUserController {
     private MainApp mainApp;
     private Stage createNewUserStage;
     private AlertFactory alertFactory;
+    private ResourceBundle textBundle;
+
     @FXML
     private Accordion centerAccordion;
     @FXML
-    private TitledPane requiredInformationPane;
-    @FXML
-    private TitledPane optionalInformationPane;
+    private TitledPane requiredInformationPane, optionalInformationPane;
     @FXML
     private ProgressIndicator progressIndicator;
     @FXML
-    private TextField profileNameTextField;
+    private TextField profileNameTextField, riotAPIKeyTextField;
     @FXML
     private PasswordField profilePasswordField;
     @FXML
-    private TextField riotAPIKeyTextField;
-    @FXML
-    private ChoiceBox riotRegionChoiceBox;
-    @FXML
-    private ChoiceBox languageChoiceBox;
+    private ChoiceBox<String> riotRegionChoiceBox, languageChoiceBox;
     @FXML
     private Button testAPIKeyButton;
-    //private ArrayList<Region> regionArrayList = new ArrayList<Region>(Arrays.asList(Region.values()));
-    //private ObservableList<Region> observableRegionList = FXCollections.observableArrayList(regionArrayList);
 
     public CreateNewUserController() {
         //Constructor
@@ -67,6 +69,10 @@ public class CreateNewUserController {
                 riotRegionChoiceBox.getItems().add(region.name().replace("_", " "));
             }
             riotRegionChoiceBox.setValue(Region.NORTH_AMERICA.name().replace("_", " "));
+            List<String> languageArrayList = mainApp.getLanguageArrayList();
+            ObservableList<String> languageObservableList = FXCollections.observableList(languageArrayList);
+            languageChoiceBox.getItems().addAll(languageObservableList);
+            languageChoiceBox.setValue(textBundle.getString(mainApp.getCurrentLocale().toString()));
         });
     }
 
@@ -145,7 +151,7 @@ public class CreateNewUserController {
                 ModelAccessObject modelAccessObject = new ModelAccessObject();
                 String resultStringFromMethod = modelAccessObject.createProfile(profileNameTextField.getText(), profilePasswordField.getText(),
                         riotRegionChoiceBox.getSelectionModel().getSelectedItem().toString().replace(" ", "_"),
-                        null, null, riotAPIKey);
+                        getSelectedLanguage(languageChoiceBox.getSelectionModel().getSelectedIndex()), null, riotAPIKey);
                 Platform.runLater(() -> {
                     switch (resultStringFromMethod) {
                         case "Profile successfully created":
@@ -170,5 +176,29 @@ public class CreateNewUserController {
             userInputErrorAlert.showAndWait();
         }
     }
+
+    private String getSelectedLanguage(int langIndex) {
+        String selectedLanguage;
+        selectedLanguage = languageChoiceBox.getSelectionModel().getSelectedItem().toString();
+        String langString = mainApp.getLanguageDirFiles().get(langIndex);
+        Properties propertiesHelper = new Properties();
+        try {
+            propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + "/" + langString));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        selectedLanguage = propertiesHelper.getProperty("localeINFO");
+        System.out.println(selectedLanguage);
+        return selectedLanguage;
+    }
+
+    public ResourceBundle getTextBundle() {
+        return textBundle;
+    }
+
+    public void setTextBundle(ResourceBundle textBundle) {
+        this.textBundle = textBundle;
+    }
+
 
 }

@@ -10,11 +10,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class MainApp extends Application {
@@ -33,10 +32,13 @@ public class MainApp extends Application {
 
     private ResourceBundle textBundle;
     private Properties defaultProperties;
-    private String applicationResourceBundleFilePath;
+    private String applicationDefaultConfigFilePath;
+    private String languageDirPath;
     private Locale currentLocale;
     private String currentLanguage;
     private String currentCountry;
+    private int languageDirLength;
+    private List<String> languageDirFiles;
 
     private String loginWindowTitle;
     private String createNewUserWindowTitle;
@@ -55,25 +57,27 @@ public class MainApp extends Application {
     }
 
     public void init() {
-        this.applicationResourceBundleFilePath = "src/main/resources/defaultconfig.properties";
+        this.applicationDefaultConfigFilePath = "src/main/resources/defaultconfig.properties";
+        this.languageDirPath = "src/main/resources/languages";
         this.defaultProperties = new Properties();
         try {
-            this.defaultProperties.load(new FileInputStream(applicationResourceBundleFilePath));
-            this.currentLanguage = defaultProperties.getProperty("language");
-            this.currentCountry = defaultProperties.getProperty("country");
+            this.defaultProperties.load(new FileInputStream(applicationDefaultConfigFilePath));
+            this.currentLanguage = defaultProperties.getProperty("languageINFO");
+            this.currentCountry = defaultProperties.getProperty("countryINFO");
             this.currentLocale = new Locale(currentLanguage, currentCountry);
-            System.out.println(currentLocale.toString());
+            System.out.println("Current Locale (mainApp):" + currentLocale.toString());
         } catch (Exception e) {
             System.out.println("Default properties: file not found");
             e.printStackTrace();
             System.exit(-1);
         }
         try {
-            this.textBundle = ResourceBundle.getBundle("TextResources", currentLocale);
-            //Set window titles
+            this.textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
+            this.languageDirLength = checkLangDirLength();
+            this.languageDirFiles = Arrays.asList(Objects.requireNonNull(new File(languageDirPath).list()));
+            //Set window titles using defaultconfig
             this.loginWindowTitle = textBundle.getString("loginWindowTitle");
             this.createNewUserWindowTitle = textBundle.getString("createNewUserWindowTitle");
-            this.mainWindowTitle = textBundle.getString("mainWindowTitle");
             this.settingsWindowTitle = textBundle.getString("settingsWindowTitle");
         }catch (Exception e) {
             System.out.println("TextBundle: file not found");
@@ -115,6 +119,7 @@ public class MainApp extends Application {
         CreateNewUserController createNewUserController = loader.getController();
         createNewUserController.setMainApp(this);
         createNewUserController.setCreateNewUserStage(createNewUserStage);
+        createNewUserController.setTextBundle(textBundle);
 
         createNewUserStage.show();
     }
@@ -136,7 +141,14 @@ public class MainApp extends Application {
         MainController mainController = loader.getController();
         mainController.setMainApp(this);
         mainController.setMainStage(mainStage);
-
+        if (profile.getDefaultLanguage() != null) {
+            currentLocale = Locale.forLanguageTag(profile.getDefaultLanguage().replace("_", "-"));
+            currentLanguage = currentLocale.getLanguage();
+            currentCountry = currentLocale.getCountry();
+            textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
+        }
+        mainController.setTextBundle(textBundle);
+        mainStage.setTitle(textBundle.getString("mainWindowTitle"));
         mainStage.show();
     }
 
@@ -213,8 +225,29 @@ public class MainApp extends Application {
         SettingsController settingsController = loader.getController();
         settingsController.setMainApp(this);
         settingsController.setSettingsStage(settingsStage);
+        settingsController.setTextBundle(textBundle);
+        settingsStage.setTitle(textBundle.getString("settingsWindowTitle"));
 
         settingsStage.show();
+    }
+
+    public List<String> getLanguageArrayList() {
+        List<String> languageArrayList = new ArrayList<>();
+        Properties propertiesHelper = new Properties();
+        for (int i = 0; i < getLanguageDirLength(); i++) {
+            String langString = getLanguageDirFiles().get(i);
+            try {
+                propertiesHelper.load(new FileInputStream(getLanguageDirPath() + "/" + langString));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            languageArrayList.add(textBundle.getString(propertiesHelper.getProperty("localeINFO")));
+        }
+        return languageArrayList;
+    }
+
+    public int checkLangDirLength() {
+        return (Objects.requireNonNull(new File(languageDirPath).listFiles())).length;
     }
 
     public Stage getPrimaryStage() {
@@ -281,13 +314,38 @@ public class MainApp extends Application {
         this.defaultProperties = defaultProperties;
     }
 
-    public String getApplicationResourceBundleFilePath() {
-        return applicationResourceBundleFilePath;
+    public String getApplicationDefaultConfigFilePath() {
+        return applicationDefaultConfigFilePath;
     }
 
-    public void setApplicationResourceBundleFilePath(String applicationResourceBundleFilePath) {
-        this.applicationResourceBundleFilePath = applicationResourceBundleFilePath;
+    public void setApplicationDefaultConfigFilePath(String applicationDefaultConfigFilePath) {
+        this.applicationDefaultConfigFilePath = applicationDefaultConfigFilePath;
     }
+
+    public int getLanguageDirLength() {
+        return languageDirLength;
+    }
+
+    public void setLanguageDirLength(int languageDirLength) {
+        this.languageDirLength = languageDirLength;
+    }
+
+    public String getLanguageDirPath() {
+        return languageDirPath;
+    }
+
+    public void setLanguageDirPath(String languageDirPath) {
+        this.languageDirPath = languageDirPath;
+    }
+
+    public List<String> getLanguageDirFiles() {
+        return languageDirFiles;
+    }
+
+    public void setLanguageDirFiles(List<String> languageDirFiles) {
+        this.languageDirFiles = languageDirFiles;
+    }
+
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
