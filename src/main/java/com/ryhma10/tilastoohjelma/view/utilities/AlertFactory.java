@@ -8,11 +8,20 @@ public class AlertFactory {
 
     private ResourceBundle textBundle;
 
+    /**
+     * Constructor.
+     * @param textBundle Requires a ResourceBundle.
+     */
     public AlertFactory(ResourceBundle textBundle) {
         //Default constructor
         this.textBundle = textBundle;
     }
 
+    /**
+     * Creates different types of Alert alerts.
+     * @param alertType String that defines which Alert to return.
+     * @return Returns an Alert in the language defined by the ResourceBundle passed to the constructor.
+     */
     public Alert createAlert(String alertType) {
         Alert alertToReturn = new Alert(null);
         switch (alertType) {

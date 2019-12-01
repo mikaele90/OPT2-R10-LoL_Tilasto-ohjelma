@@ -52,10 +52,16 @@ public class CreateNewUserController {
     @FXML
     private Tooltip testAPIKeyButtonTooltip;
 
+    /**
+     * Empty constructor.
+     */
     public CreateNewUserController() {
         //Constructor
     }
 
+    /**
+     * Initializes the CreateNewUser-window.
+     */
     public void initialize() {
         if (progressIndicator.isVisible()) {
             progressIndicator.setVisible(false);
@@ -77,33 +83,57 @@ public class CreateNewUserController {
         });
     }
 
+    /**
+     * Sets the MainApp.
+     * @param mainApp The MainApp.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
+    /**
+     * Sets the Stage.
+     * @param createNewUserStage The Stage.
+     */
     public void setCreateNewUserStage(Stage createNewUserStage) {
         this.createNewUserStage = createNewUserStage;
     }
 
+    /**
+     * Cancels the creation of a new SoftwareProfile.
+     * @param actionEvent Interacting with the button, defined in CreateNewUser.fxml.
+     */
     @FXML
     public void handleCancel(ActionEvent actionEvent) {
         createNewUserStage.close();
     }
 
+    /**
+     * Detects if Enter is pressed.
+     * @param keyEvent Any KeyEvent.
+     */
     @FXML
-    public void onEnter(KeyEvent keyEvent) throws IOException {
+    public void onEnter(KeyEvent keyEvent) {
         if(keyEvent.getCode().equals(KeyCode.ENTER)) {
             System.out.println("Enter pressed");
             handleDone(new ActionEvent());
         }
     }
 
+    /**
+     * Opens the help-window. Help not yet implemented.
+     * @param actionEvent Interacting with the button, defined in CreateNewUser.fxml.
+     */
     @FXML
     public void handleCreateNewProfileHelp(ActionEvent actionEvent) {
         System.out.println("Not yet implemented");
         //TODO
     }
 
+    /**
+     * Tests the String inputted into the API-Key TextField.
+     * @param actionEvent Interacting with the button, defined in CreateNewUser.fxml.
+     */
     @FXML
     public void handleTestAPIKey(ActionEvent actionEvent) {
         Platform.runLater(() -> {
@@ -140,8 +170,12 @@ public class CreateNewUserController {
         }).start();
     }
 
+    /**
+     * Exports the given values into the database. Creates a new SoftwareProfile.
+     * @param actionEvent Interacting with the button, defined in CreateNewUser.fxml.
+     */
     @FXML
-    public void handleDone(ActionEvent actionEvent) throws IOException {
+    public void handleDone(ActionEvent actionEvent) {
         if(profileNameTextField.getText().length() > 0 && profilePasswordField.getText().length() > 3) {
             new Thread(() -> {
                 String riotAPIKey = riotAPIKeyTextField.getText();
@@ -178,6 +212,12 @@ public class CreateNewUserController {
         }
     }
 
+    /**
+     * Selects the language that the user has selected.
+     * @param langIndex The index of the language; Corresponds to the index of the file when read from the folder due to
+     *                  the way the ChoiceBox lists languages in a similar manner.
+     * @return String of language and country, e.g. "en_US" or "fi_FI".
+     */
     private String getSelectedLanguage(int langIndex) {
         String selectedLanguage;
         selectedLanguage = languageChoiceBox.getSelectionModel().getSelectedItem().toString();
@@ -193,10 +233,18 @@ public class CreateNewUserController {
         return selectedLanguage;
     }
 
+    /**
+     * Getter for the ResourceBundle.
+     * @return The ResourceBundle
+     */
     public ResourceBundle getTextBundle() {
         return textBundle;
     }
 
+    /**
+     * Setter for the ResourceBundle.
+     * @param textBundle The ResourceBundle to be set.
+     */
     public void setTextBundle(ResourceBundle textBundle) {
         this.textBundle = textBundle;
     }
