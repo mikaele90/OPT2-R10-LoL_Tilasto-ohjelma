@@ -25,6 +25,7 @@ public class MainApp extends Application {
     private AnchorPane inputWindow;
     private AnchorPane feedBackWindow;
     private AnchorPane profileWindow;
+    private AnchorPane IGWindow;
     private BorderPane settingsWindow;
 
     private SoftwareProfile currentProfile;
@@ -150,6 +151,25 @@ public class MainApp extends Application {
         mainController.setTextBundle(textBundle);
         mainStage.setTitle(textBundle.getString("mainWindowTitle"));
         mainStage.show();
+    }
+    
+    public void showIGWindow() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(MainApp.class.getResource("/fxml/IndividualGame.fxml"));
+        IGWindow = (AnchorPane)loader.load();
+
+        Stage IGStage = new Stage();
+        IGStage.setTitle("Here are your statistics for this specific game");
+        IGStage.initModality(Modality.APPLICATION_MODAL);
+        IGStage.initOwner(primaryStage);
+        Scene IGScene = new Scene(IGWindow);
+        IGStage.setScene(IGScene);
+
+        IndividualGameController igcontroller = loader.getController();
+        igcontroller.setMainApp(this);
+        igcontroller.setIGStage(IGStage);
+
+        IGStage.showAndWait();
     }
 
 
