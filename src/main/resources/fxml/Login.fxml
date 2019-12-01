@@ -14,35 +14,35 @@
 
 <AnchorPane id="AnchorPane" fx:id="loginAnchorPane" prefHeight="215.0" prefWidth="589.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma10.tilastoohjelma.view.LoginController">
     <children>
-        <Button fx:id="createNewProfileButton" layoutX="15.0" layoutY="167.0" maxHeight="31.0" maxWidth="360.0" onAction="#handleCreateNewProfile" prefHeight="31.0" prefWidth="192.0" text="Create new profile..." AnchorPane.topAnchor="167.0" />
+        <Button fx:id="createNewProfileButton" layoutX="15.0" layoutY="167.0" maxHeight="31.0" maxWidth="360.0" onAction="#handleCreateNewProfile" prefHeight="31.0" prefWidth="192.0" text="%button.createNewProfile" AnchorPane.topAnchor="167.0" />
         <MenuBar fx:id="loginMenuBar" layoutY="2.0" prefHeight="31.0" prefWidth="500.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <menus>
-                <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+                <Menu fx:id="fileMenu" mnemonicParsing="false" text="%menu.file">
                     <items>
-                        <MenuItem fx:id="menuItemCreateNewProfile" mnemonicParsing="false" onAction="#handleCreateNewProfile" text="Create new profile..." />
-                        <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+                        <MenuItem fx:id="menuItemCreateNewProfile" mnemonicParsing="false" onAction="#handleCreateNewProfile" text="%menuItem.createNewProfile" />
+                        <MenuItem fx:id="menuItemExit" mnemonicParsing="false" onAction="#handleExit" text="%menuItem.exit" />
                     </items>
                 </Menu>
-            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+            <Menu fx:id="languageMenu" mnemonicParsing="false" text="%menu.language">
                <items>
                </items>
             </Menu>
-                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                <Menu fx:id="helpMenu" mnemonicParsing="false" text="%menu.help">
                     <items>
-                        <MenuItem fx:id="menuItemAbout" mnemonicParsing="false" onAction="#handleAboutApplication" text="About" />
+                        <MenuItem fx:id="menuItemAbout" mnemonicParsing="false" onAction="#handleAboutApplication" text="%menuItem.about" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-        <Label fx:id="labelUseExistingProfile" layoutX="14.0" layoutY="42.0" text="Use existing profile" />
-        <Label fx:id="labelProfileName" layoutX="14.0" layoutY="76.0" minHeight="16" minWidth="69" text="Profile name:" />
-        <Label fx:id="labelProfilePassword" layoutX="14.0" layoutY="110.0" minHeight="16" minWidth="69" text="Password:" />
+        <Label fx:id="labelUseExistingProfile" layoutX="14.0" layoutY="42.0" text="%label.useExistingProfile" />
+        <Label fx:id="labelProfileName" layoutX="14.0" layoutY="76.0" minHeight="16" minWidth="69" text="%label.profileName"/>
+        <Label fx:id="labelProfilePassword" layoutX="14.0" layoutY="110.0" minHeight="16" minWidth="69" text="%label.password" />
         <Separator fx:id="loginSeparator1" layoutX="7.0" layoutY="62.0" maxHeight="2.0" prefHeight="2.0" prefWidth="474.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="64.0" />
-        <TextField fx:id="profileNameField" layoutX="105.0" layoutY="71.0" onKeyPressed="#onEnter" prefHeight="26.0" prefWidth="220.0" AnchorPane.leftAnchor="105.0" />
-        <PasswordField fx:id="passwordField" layoutX="105.0" layoutY="105.0" onKeyPressed="#onEnter" prefHeight="31.0" prefWidth="220.0" promptText="Password" />
+        <TextField fx:id="profileNameField" layoutX="105.0" layoutY="71.0" onKeyPressed="#onEnter" prefHeight="26.0" prefWidth="220.0" AnchorPane.leftAnchor="105.0" promptText="%promptText.profileName"/>
+        <PasswordField fx:id="passwordField" layoutX="105.0" layoutY="105.0" onKeyPressed="#onEnter" prefHeight="31.0" prefWidth="220.0" promptText="%promptText.password" />
         <Separator fx:id="loginSeparator2" layoutX="14.0" layoutY="138.0" maxHeight="2.0" prefHeight="2.0" prefWidth="474.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="142.0" />
-        <Label fx:id="labelNoProfileYet" layoutX="14.0" layoutY="141.0" text="Don't have a profile yet? Create one by clicking the button:" AnchorPane.topAnchor="146.0" />
-        <Button fx:id="loginButton" layoutX="334.0" layoutY="71.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="64.0" prefWidth="150.0" text="Login" />
+        <Label fx:id="labelNoProfileYet" layoutX="14.0" layoutY="141.0" text="%label.noProfileYet" AnchorPane.topAnchor="146.0" />
+        <Button fx:id="loginButton" layoutX="334.0" layoutY="71.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="64.0" prefWidth="150.0" text="%button.login" />
         <ProgressIndicator fx:id="progressIndicator" layoutX="434.0" layoutY="74.0" AnchorPane.rightAnchor="14.0" />
     </children>
     <padding>

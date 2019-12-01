@@ -23,7 +23,7 @@
     <center>
         <Accordion fx:id="centerAccordion" BorderPane.alignment="CENTER">
             <panes>
-                <TitledPane fx:id="requiredInformationPane" animated="false" text="Required information">
+                <TitledPane fx:id="requiredInformationPane" animated="false" text="%titledPane.requiredInformation">
                     <content>
                         <GridPane fx:id="reqGridPane" hgap="2.0">
                             <columnConstraints>
@@ -36,7 +36,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label fx:id="profileNameLabel" text="Profile name:">
+                                <Label fx:id="profileNameLabel" text="%label.profileName">
                                     <GridPane.margin>
                                         <Insets left="14.0" />
                                     </GridPane.margin>
@@ -44,7 +44,7 @@
                                         <Font size="13.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="profilePasswordLabel" text="Password:" GridPane.rowIndex="1">
+                                <Label fx:id="profilePasswordLabel" text="%label.password" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="13.0" />
                                     </font>
@@ -52,8 +52,8 @@
                                         <Insets left="14.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <TextField fx:id="profileNameTextField" onKeyPressed="#onEnter" GridPane.columnIndex="1" />
-                                <PasswordField fx:id="profilePasswordField" onKeyPressed="#onEnter" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                <TextField fx:id="profileNameTextField" onKeyPressed="#onEnter" GridPane.columnIndex="1" promptText="%promptText.newProfileName"/>
+                                <PasswordField fx:id="profilePasswordField" onKeyPressed="#onEnter" GridPane.columnIndex="1" GridPane.rowIndex="1" promptText="%promptText.password"/>
                             </children>
                         </GridPane>
                     </content>
@@ -61,7 +61,7 @@
                         <Font size="13.0" />
                     </font>
                 </TitledPane>
-                <TitledPane fx:id="optionalInformationPane" animated="false" text="Optional information">
+                <TitledPane fx:id="optionalInformationPane" animated="false" text="%titledPane.optionalInformation">
                     <font>
                         <Font size="13.0" />
                     </font>
@@ -77,7 +77,7 @@
                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label fx:id="riotAPIKeyLabel" text="Riot API-key:">
+                                <Label fx:id="riotAPIKeyLabel" text="%label.riotAPIKey">
                                     <GridPane.margin>
                                         <Insets left="14.0" />
                                     </GridPane.margin>
@@ -85,7 +85,7 @@
                                         <Font size="13.0" />
                                     </font>
                                 </Label>
-                                <Label fx:id="riotRegionLabel" text="Region:" GridPane.rowIndex="1">
+                                <Label fx:id="riotRegionLabel" text="%label.region" GridPane.rowIndex="1">
                                     <font>
                                         <Font size="13.0" />
                                     </font>
@@ -93,7 +93,7 @@
                                         <Insets left="14.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <Label fx:id="languageLabel" text="Language:" GridPane.rowIndex="2">
+                                <Label fx:id="languageLabel" text="%label.language" GridPane.rowIndex="2">
                                     <font>
                                         <Font size="13.0" />
                                     </font>
@@ -105,17 +105,17 @@
                                 <ChoiceBox fx:id="languageChoiceBox" prefWidth="180.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                 <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                                     <children>
-                                        <TextField fx:id="riotAPIKeyTextField" onKeyPressed="#onEnter" prefHeight="27.0" prefWidth="195.0" HBox.hgrow="SOMETIMES">
+                                        <TextField fx:id="riotAPIKeyTextField" onKeyPressed="#onEnter" prefHeight="27.0" prefWidth="195.0" HBox.hgrow="SOMETIMES" promptText="%promptText.yourRiotAPIKey">
                                             <HBox.margin>
                                                 <Insets top="4.0" />
                                             </HBox.margin>
                                         </TextField>
-                                        <Button fx:id="testAPIKeyButton" mnemonicParsing="false" onAction="#handleTestAPIKey" text="Test API-key">
+                                        <Button fx:id="testAPIKeyButton" mnemonicParsing="false" onAction="#handleTestAPIKey" text="%button.testAPIKey">
                                             <HBox.margin>
                                                 <Insets left="14.0" right="4.0" top="3.0" />
                                             </HBox.margin>
                                             <tooltip>
-                                                <Tooltip fx:id="testAPIKeyButtonTooltip" text="Test the functionality of the inserted API key" />
+                                                <Tooltip fx:id="testAPIKeyButtonTooltip" text="%tooltip.testTheFunctionalityOfTheInsertedAPIKey" />
                                             </tooltip>
                                         </Button>
                                     </children>
@@ -130,7 +130,7 @@
     <top>
         <Pane fx:id="topStandardPane" prefHeight="34.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="createNewProfileLabel" layoutY="7.0" text="Create new profile">
+                <Label fx:id="createNewProfileLabel" layoutY="7.0" text="%label.createNewProfile">
                     <font>
                         <Font size="14.0" />
                     </font>
@@ -151,7 +151,7 @@
                 </ProgressIndicator>
             </right>
             <left>
-                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleCreateNewProfileHelp" text="Help" BorderPane.alignment="CENTER">
+                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleCreateNewProfileHelp" text="%button.help" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets left="14.0" />
                     </BorderPane.margin>
@@ -160,8 +160,8 @@
             <center>
                 <ButtonBar fx:id="buttonBar" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                     <buttons>
-                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
-                        <Button fx:id="doneButton" defaultButton="true" mnemonicParsing="false" onAction="#handleDone" text="Done" />
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="%button.cancel" />
+                        <Button fx:id="doneButton" defaultButton="true" mnemonicParsing="false" onAction="#handleDone" text="%button.done" />
                     </buttons>
                     <BorderPane.margin>
                         <Insets right="14.0" />

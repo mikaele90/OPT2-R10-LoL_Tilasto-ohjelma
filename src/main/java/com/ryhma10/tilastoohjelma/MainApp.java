@@ -77,9 +77,9 @@ public class MainApp extends Application {
             this.languageDirLength = checkLangDirLength();
             this.languageDirFiles = Arrays.asList(Objects.requireNonNull(new File(languageDirPath).list()));
             //Set window titles using defaultconfig
-            this.loginWindowTitle = textBundle.getString("loginWindowTitle");
-            this.createNewUserWindowTitle = textBundle.getString("createNewUserWindowTitle");
-            this.settingsWindowTitle = textBundle.getString("settingsWindowTitle");
+            this.loginWindowTitle = textBundle.getString("windowTitle.login");
+            this.createNewUserWindowTitle = textBundle.getString("windowTitle.createNewUser");
+            this.settingsWindowTitle = textBundle.getString("windowTitle.settings");
         }catch (Exception e) {
             System.out.println("TextBundle: file not found");
             e.printStackTrace();
@@ -88,8 +88,7 @@ public class MainApp extends Application {
     }
 
     public void showLoginWindow(ResourceBundle textBundle) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/Login.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"), textBundle);
         loginWindow = (AnchorPane)loader.load();
 
         Scene loginScene = new Scene(loginWindow);
@@ -105,8 +104,7 @@ public class MainApp extends Application {
     }
 
     public void showCreateNewUserWindow() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/CreateNewUser.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CreateNewUser.fxml"), textBundle);
         createNewUserWindow = (BorderPane)loader.load();
 
         Stage createNewUserStage = new Stage();
@@ -128,8 +126,7 @@ public class MainApp extends Application {
     public void showMainWindow(SoftwareProfile profile) throws IOException {
         System.out.println("user: " + profile.getProfileName());
         //System.out.println("psw: " + profile.getProfilePassword());
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/Main.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"), textBundle);
         mainWindow = (AnchorPane)loader.load();
 
         Stage mainStage = new Stage();
@@ -149,7 +146,7 @@ public class MainApp extends Application {
             textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
         }
         mainController.setTextBundle(textBundle);
-        mainStage.setTitle(textBundle.getString("mainWindowTitle"));
+        mainStage.setTitle(textBundle.getString("windowTitle.main"));
         mainStage.show();
     }
     
@@ -231,8 +228,7 @@ public class MainApp extends Application {
     }
 
     public void showSettingsWindow() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/Settings.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Settings.fxml"), textBundle);
         settingsWindow = (BorderPane)loader.load();
 
         Stage settingsStage = new Stage();
@@ -246,7 +242,7 @@ public class MainApp extends Application {
         settingsController.setMainApp(this);
         settingsController.setSettingsStage(settingsStage);
         settingsController.setTextBundle(textBundle);
-        settingsStage.setTitle(textBundle.getString("settingsWindowTitle"));
+        settingsStage.setTitle(textBundle.getString("windowTitle.settings"));
 
         settingsStage.show();
     }
@@ -276,6 +272,10 @@ public class MainApp extends Application {
 
     public MainApp getMainApp() {
         return this;
+    }
+
+    public void setSettingsWindow(BorderPane settingsWindow) {
+        this.settingsWindow = settingsWindow;
     }
 
     public void setProfile(SoftwareProfile profile) {

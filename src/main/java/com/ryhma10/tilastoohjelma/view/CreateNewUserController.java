@@ -46,25 +46,26 @@ public class CreateNewUserController {
     @FXML
     private ChoiceBox<String> riotRegionChoiceBox, languageChoiceBox;
     @FXML
-    private Button testAPIKeyButton;
+    private Button testAPIKeyButton, helpButton, cancelButton, doneButton;
+    @FXML
+    private Label createNewProfileLabel, profileNameLabel, profilePasswordLabel, riotAPIKeyLabel, riotRegionLabel, languageLabel;
+    @FXML
+    private Tooltip testAPIKeyButtonTooltip;
 
     public CreateNewUserController() {
         //Constructor
     }
 
     public void initialize() {
-        alertFactory = new AlertFactory();
         if (progressIndicator.isVisible()) {
             progressIndicator.setVisible(false);
         }
         profileNameTextField.setText("");
-        profileNameTextField.setPromptText("New profile name");
         profilePasswordField.setText("");
-        profilePasswordField.setPromptText("Password");
         riotAPIKeyTextField.setText("");
-        riotAPIKeyTextField.setPromptText("Your Riot API-key");
         centerAccordion.setExpandedPane(requiredInformationPane);
         Platform.runLater(() -> {
+            alertFactory = new AlertFactory(mainApp.getTextBundle());
             for (Region region : Region.values()) {
                 riotRegionChoiceBox.getItems().add(region.name().replace("_", " "));
             }
@@ -107,7 +108,7 @@ public class CreateNewUserController {
     public void handleTestAPIKey(ActionEvent actionEvent) {
         Platform.runLater(() -> {
             progressIndicator.setVisible(true);
-            testAPIKeyButton.setText("Testing key...");
+            testAPIKeyButton.setText(textBundle.getString("button.testingAPIKey"));
             testAPIKeyButton.setDisable(true);
         });
         new Thread(() -> {
@@ -133,7 +134,7 @@ public class CreateNewUserController {
             }
             Platform.runLater(() -> {
                 progressIndicator.setVisible(false);
-                testAPIKeyButton.setText("Test API-key");
+                testAPIKeyButton.setText(textBundle.getString("button.testAPIKey"));
                 testAPIKeyButton.setDisable(false);
             });
         }).start();

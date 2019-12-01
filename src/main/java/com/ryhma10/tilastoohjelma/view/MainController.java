@@ -73,8 +73,8 @@ public class MainController {
     public void initialize() {
         Platform.runLater(() -> {
             System.out.println("MainController: Initialize");
-            alertFactory = new AlertFactory();
-            this.currentProfile = mainApp.getProfile();
+            alertFactory = new AlertFactory(textBundle);
+            currentProfile = mainApp.getProfile();
             profileNameLabel.setText(currentProfile.getProfileName());
             try {
                 Orianna.loadConfiguration("apiconfig.json");

@@ -19,7 +19,7 @@
     <bottom>
         <BorderPane fx:id="bottomBorderPane" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <left>
-                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleHelp" text="Help" BorderPane.alignment="CENTER">
+                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleHelp" text="%button.help" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
                         <Insets left="14.0" right="14.0" />
                     </BorderPane.margin>
@@ -28,9 +28,9 @@
             <right>
                 <ButtonBar fx:id="bottomButtonBar" prefHeight="40.0" prefWidth="250.0" BorderPane.alignment="CENTER">
                     <buttons>
-                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
-                        <Button fx:id="applyButton" mnemonicParsing="false" onAction="#handleApply" text="Apply" />
-                        <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="Save" />
+                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="%button.cancel" />
+                        <Button fx:id="applyButton" mnemonicParsing="false" onAction="#handleApply" text="%button.apply" />
+                        <Button fx:id="saveButton" defaultButton="true" mnemonicParsing="false" onAction="#handleSave" text="%button.save" />
                     </buttons>
                     <padding>
                         <Insets right="14.0" />
@@ -42,7 +42,7 @@
     <center>
         <TabPane fx:id="settingsTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <tabs>
-                <Tab fx:id="apiAndUserInterfaceTab" text="API &amp; User Interface">
+                <Tab fx:id="apiAndUserInterfaceTab" text="%tab.apiAndUserInterface">
                     <content>
                         <BorderPane fx:id="apiAndUserInterfaceBorderPane" prefHeight="200.0" prefWidth="200.0">
                             <center>
@@ -57,33 +57,33 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label fx:id="changeAPIKeyLabel" text="Change Riot API-key:">
+                                        <Label fx:id="changeAPIKeyLabel" text="%label.changeRiotAPIKey">
                                             <GridPane.margin>
                                                 <Insets left="14.0" right="3.0" />
                                             </GridPane.margin>
                                         </Label>
                                         <BorderPane fx:id="apiKeyBorderPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                             <center>
-                                                <TextField fx:id="apiKeyTextField" BorderPane.alignment="CENTER">
+                                                <TextField fx:id="apiKeyTextField" promptText="%promptText.yourRiotAPIKey" BorderPane.alignment="CENTER">
                                                     <BorderPane.margin>
                                                         <Insets left="3.0" />
                                                     </BorderPane.margin>
                                                 </TextField>
                                             </center>
                                             <right>
-                                                <Button fx:id="testAPIKeyButton" mnemonicParsing="false" text="Test API-key" BorderPane.alignment="CENTER">
+                                                <Button fx:id="testAPIKeyButton" mnemonicParsing="false" text="%button.testAPIKey" BorderPane.alignment="CENTER">
                                                     <BorderPane.margin>
                                                         <Insets left="14.0" right="14.0" />
                                                     </BorderPane.margin>
                                                 </Button>
                                             </right>
                                         </BorderPane>
-                                        <Label fx:id="changeRegionLabel" text="Change LoL region:" GridPane.rowIndex="1">
+                                        <Label fx:id="changeRegionLabel" text="%label.changeRegion" GridPane.rowIndex="1">
                                             <GridPane.margin>
                                                 <Insets left="14.0" right="3.0" />
                                             </GridPane.margin>
                                         </Label>
-                                        <Label fx:id="changeLanguageLabel" text="Change language:" GridPane.rowIndex="2">
+                                        <Label fx:id="changeLanguageLabel" text="%label.changeLanguage" GridPane.rowIndex="2">
                                             <GridPane.margin>
                                                 <Insets left="14.0" right="3.0" />
                                             </GridPane.margin>
@@ -97,7 +97,7 @@
                                                 </ChoiceBox>
                                             </left>
                                             <center>
-                                                <CheckBox fx:id="makeRegionDefaultCheckBox" mnemonicParsing="false" text="Make default for profile" BorderPane.alignment="CENTER">
+                                                <CheckBox fx:id="makeRegionDefaultCheckBox" mnemonicParsing="false" text="%checkBox.makeDefaultForProfile" BorderPane.alignment="CENTER">
                                                     <BorderPane.margin>
                                                         <Insets left="3.0" />
                                                     </BorderPane.margin>
@@ -113,7 +113,7 @@
                                                 </ChoiceBox>
                                             </left>
                                             <center>
-                                                <CheckBox fx:id="makeLanguageDefaultCheckBox" mnemonicParsing="false" text="Make default for profile" BorderPane.alignment="CENTER">
+                                                <CheckBox fx:id="makeLanguageDefaultCheckBox" mnemonicParsing="false" text="%checkBox.makeDefaultForProfile" BorderPane.alignment="CENTER">
                                                     <BorderPane.margin>
                                                         <Insets left="3.0" />
                                                     </BorderPane.margin>
@@ -129,7 +129,7 @@
                         </BorderPane>
                     </content>
                 </Tab>
-                <Tab fx:id="profileTab" text="Profile">
+                <Tab fx:id="profileTab" text="%tab.profile">
                     <content>
                         <BorderPane fx:id="profileBorderPane" prefHeight="200.0" prefWidth="200.0">
                             <center>
@@ -145,21 +145,21 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label fx:id="changeProfilePasswordLabel" text="Change profile password:">
+                                        <Label fx:id="changeProfilePasswordLabel" text="%label.changePassword">
                                             <GridPane.margin>
                                                 <Insets left="14.0" right="3.0" />
                                             </GridPane.margin>
                                         </Label>
                                         <BorderPane fx:id="changePasswordBorderPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                             <right>
-                                                <Button fx:id="showOrHidePasswordButton" mnemonicParsing="false" text="Show" BorderPane.alignment="CENTER">
+                                                <Button fx:id="showOrHidePasswordButton" mnemonicParsing="false" onAction="#handleShowOrHide" text="%button.show" BorderPane.alignment="CENTER">
                                                     <BorderPane.margin>
                                                         <Insets left="14.0" right="14.0" />
                                                     </BorderPane.margin>
                                                 </Button>
                                             </right>
                                             <center>
-                                                <PasswordField fx:id="profilePasswordField" BorderPane.alignment="CENTER">
+                                                <PasswordField fx:id="profilePasswordField" promptText="%promptText.newPassword" BorderPane.alignment="CENTER">
                                                     <BorderPane.margin>
                                                         <Insets left="3.0" />
                                                     </BorderPane.margin>
@@ -168,21 +168,21 @@
                                         </BorderPane>
                                         <BorderPane fx:id="confirmPasswordBorderPane" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                             <right>
-                                                <Button fx:id="hiddenShowOrHidePasswordButton" mnemonicParsing="false" text="Show" visible="false" BorderPane.alignment="CENTER">
+                                                <Button fx:id="hiddenShowOrHidePasswordButton" disable="true" mnemonicParsing="false" onAction="#handleShowOrHide" text="%button.show" visible="false" BorderPane.alignment="CENTER">
                                                     <BorderPane.margin>
                                                         <Insets left="14.0" right="14.0" />
                                                     </BorderPane.margin>
                                                 </Button>
                                             </right>
                                             <center>
-                                                <PasswordField fx:id="confirmProfilePasswordField" BorderPane.alignment="CENTER">
+                                                <PasswordField fx:id="confirmProfilePasswordField" promptText="%promptText.retypeNewPassword" BorderPane.alignment="CENTER">
                                                     <BorderPane.margin>
                                                         <Insets left="3.0" />
                                                     </BorderPane.margin>
                                                 </PasswordField>
                                             </center>
                                         </BorderPane>
-                                        <Label fx:id="confirmProfilePasswordLabel" text="Confirm password:" GridPane.rowIndex="1">
+                                        <Label fx:id="confirmProfilePasswordLabel" text="%label.confirmNewPassword" GridPane.rowIndex="1">
                                             <GridPane.margin>
                                                 <Insets left="14.0" right="3.0" />
                                             </GridPane.margin>

@@ -46,10 +46,11 @@ public class LoginController {
     }
 
     public void initialize() {
-        alertFactory = new AlertFactory();
         if (progressIndicator.isVisible()) {
             progressIndicator.setVisible(false);
         }
+        profileNameField.setText("");
+        passwordField.setText("");
         Platform.runLater(() -> {
             if (languageList == null) {
                 for (int i = 0; i < mainApp.getLanguageDirLength(); i++) {
@@ -71,22 +72,7 @@ public class LoginController {
                 }
             }
             setSelectedLanguageMenuItem();
-            fileMenu.setText(textBundle.getString("file"));
-            languageMenu.setText(textBundle.getString("language"));
-            helpMenu.setText(textBundle.getString("help"));
-            menuItemCreateNewProfile.setText(textBundle.getString("createNewProfile"));
-            menuItemExit.setText(textBundle.getString("exit"));
-            menuItemAbout.setText(textBundle.getString("aboutProgram"));
-            labelUseExistingProfile.setText(textBundle.getString("useExistingProfile"));
-            labelNoProfileYet.setText(textBundle.getString("noProfileYet") + ":");
-            labelProfileName.setText(textBundle.getString("profileName") + ":");
-            labelProfilePassword.setText(textBundle.getString("password") + ":");
-            loginButton.setText(textBundle.getString("login"));
-            createNewProfileButton.setText(textBundle.getString("createNewProfile"));
-            profileNameField.setText("");
-            profileNameField.setPromptText(textBundle.getString("profileName"));
-            passwordField.setText("");
-            passwordField.setPromptText(textBundle.getString("password"));
+            alertFactory = new AlertFactory(textBundle);
         });
     }
 
@@ -125,7 +111,7 @@ public class LoginController {
     @FXML
     public void handleLogin(ActionEvent actionEvent) throws IOException {
         if(profileNameField.getText().length() > 0 && passwordField.getText().length() > 3) {
-            loginButton.setText(textBundle.getString("loggingIn"));
+            loginButton.setText(textBundle.getString("button.loggingIn"));
             new Thread(() -> {
                 progressIndicator.setVisible(true);
                 ModelAccessObject modelAccessObject1 = new ModelAccessObject();
@@ -160,7 +146,7 @@ public class LoginController {
                             break;
                     }
                     progressIndicator.setVisible(false);
-                    loginButton.setText(textBundle.getString("login"));
+                    loginButton.setText(textBundle.getString("button.login"));
                 });
             }).start();
         }
@@ -176,8 +162,6 @@ public class LoginController {
         if ((!mainApp.getDefaultProperties().getProperty("languageINFO").equals(clickedItem.getId().substring(0,2))) && (!mainApp.getDefaultProperties().getProperty("countryINFO").equals(clickedItem.getId().substring(3,5)))) {
             mainApp.getDefaultProperties().setProperty("languageINFO", clickedItem.getId().substring(0,2));
             mainApp.getDefaultProperties().setProperty("countryINFO", clickedItem.getId().substring(3,5));
-            //System.out.println(mainApp.getDefaultProperties().getProperty("language"));
-            //System.out.println(mainApp.getDefaultProperties().getProperty("country"));
             try {
                 mainApp.getDefaultProperties().store(new FileOutputStream(mainApp.getApplicationDefaultConfigFilePath()), null);
             } catch (IOException e) {
