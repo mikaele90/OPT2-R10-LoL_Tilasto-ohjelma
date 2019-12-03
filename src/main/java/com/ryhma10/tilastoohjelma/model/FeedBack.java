@@ -5,7 +5,9 @@ public class FeedBack {
 	//Esitellään tarvittavat muuttujat.
 	long kills, assists, deaths, cs, gold, wards, riotid;
 	double kda, gamelength, cspermin, dmgdealt, dmgpermin, gpm;
-	String rank, champion, winlose, result, KDAevaluation, DMGevaluation, wardevaluation, csevaluation,dmgevaluation, champion1, champion2, champion3, champion4, enemy1, enemy2, enemy3,enemy4,enemy5;
+	String rank,winstreakscore, champion, winlose, result, KDAevaluation,csfeedback, kdafeedback,wardfeedback, DMGevaluation,
+	wardevaluation, csevaluation,dmgevaluation, champion1, champion2, champion3, champion4, enemy1,
+	enemy2, enemy3,enemy4,enemy5;
 	boolean winloss;
 	
 	
@@ -185,7 +187,7 @@ public class FeedBack {
 	}
 	
 	//Metodi palautteen hankkimiseksi kda:n perusteella.
-	public String getKDAfeedback() {
+	public String getKDAevaluation() {
 		
 		if(kda < 1.5) {
 		KDAevaluation = "Poor KDA";
@@ -249,4 +251,89 @@ public class FeedBack {
 		}
 		return dmgevaluation;
 	}
+	
+	public String getKDAfeedback() {
+		if (KDAevaluation == "Poor KDA") {
+			kdafeedback = "You need to play safer especially in the early stages of the game. A poor kda is usually the result of bad positioning in teamfights or lack of game knowledge while laning.";
+		}
+		else if(KDAevaluation == "Average KDA") {
+			kdafeedback = "Your kda in this game is average which means you didn't nescessarily play poorly but you could improve by being more aggressive in the laning phase which results in minor leads that snowball to the later stages of the game.";
+		}
+		else if(KDAevaluation == "Good KDA") {
+			kdafeedback = "You have managed a good kda evaluation in this game which means your mistakes were minor or you got fed early, keep playing the same way and focus on your macro to get even more fed.";
+		}
+		else if(KDAevaluation == "Insane KDA") {
+			kdafeedback = "This game your kda is among smurf accounts, check your replay and look to replicate this performance in the future.";
+		}
+		return kdafeedback;
+	}
+	
+	public String getWardfeedback() {
+		if(wardevaluation == "poor") {
+			wardfeedback = "You place too little vision wards, average players place atleast 2 vision wards per game. This also helps with your teams success.";
+		}
+		else if(wardevaluation == "average") {
+			wardfeedback = "Your warding this game was average meaning you do as well as any other player in your rank, try placing a couple more wards for optimal vision.";
+		}
+		else if(wardevaluation == "good") {
+			wardfeedback = "Your ward score is good, keep it up and see your winrate steadily climb.";
+		}
+		else if(wardevaluation == "Too many") {
+			wardfeedback = "You purchased an insane amount of vision wards this game, excluding you playing a support this isn't an optimal way to spend your gold so aim to buy 4 to 9 vision wards per game.";
+		}
+		return wardfeedback;
+	}
+	public String getCSfeedback() {
+		if(csevaluation == "poor") {
+			csfeedback = "Your creepscore in this game is considered poor by average player standards, try going into custom games and work on your mechanics by first cs:ing without an opponent and once you get to 90cs/10 minutes add a bot to play againsts.";
+		}
+		else if(csevaluation == "good") {
+			csfeedback = "You did a good job cs:ing this game but there is still room for improvement, your biggest improvement in this area comes from studying and knowing your matchup. Try to play more games and in those games focus on your positioning in lane to make perfecting your cs game easier.";
+		}
+		else if(csevaluation == "excellent") {
+			csfeedback = "Excellent, your cs numbers are on par with challenger level players! Try to maintain this level in every game you play and you will see a steady climb in your rank.";
+		}
+		return csfeedback;
+	}
+	public String getWinstreakscore() {
+		if(csevaluation == "poor" && wardevaluation == "poor") {
+			winstreakscore = "0: This is the lowest score possible which indicates that you need to work on all aspects of your gameplay, work on your basics like cs:ing, positioning and warding more.";
+		}
+		else if(csevaluation == "good" && wardevaluation == "poor") {
+			winstreakscore = "2: Your cs:ing is on an average level but you need to work on your vision game, use 75 gold everytime you back to base and buy some wards";
+		}
+		else if (csevaluation == "excellent" && wardevaluation == "poor") {
+			winstreakscore = "4: Your farming game was on point but your vision needs working on, train in custom games and see your rank rise.";
+		}
+		else if (csevaluation == "poor" && wardevaluation == "average") {
+			winstreakscore = "2: Your farming was really bad but your vision game was on par with an average player, go to custom games and work on your cs:ing.";
+		}
+		else if (csevaluation == "poor" && wardevaluation == "good") {
+			winstreakscore = "3: Your farming this game was decent but your warding and positioning need to be worked on, your wardscore is too low to merit a better score.";
+		}
+		else if (csevaluation == "poor" && wardevaluation == "Too many") {
+			winstreakscore = "2: You bought way too many wards this game and cs:ed badly, you must be playing a support.";
+		}
+		else if (csevaluation == "good" && wardevaluation == "average") {
+			winstreakscore = "6: You were on par with average players this game which means you need to work on small things, we suggest improving your cs:ing by learning matchups and perfecting your mechanics in normal games.";
+		}
+		else if (csevaluation == "good" && wardevaluation == "good") {
+			winstreakscore = "8: Better than average, try getting a ward or two more in your next game to achieve a higher ranking on ourn scale.";
+		}
+		
+		else if (csevaluation == "good" && wardevaluation == "Too many") {
+			winstreakscore = "7: Your cs:ing was on point but you use way too much money on wards, aim for 4 to 10 wards per game based on gamelength to optimize your vision game.";
+		}
+		else if (csevaluation == "excellent" && wardevaluation == "average") {
+			winstreakscore = "9: Your cs:ing was on par with challenger players. Good job! Now just place a few more vision wards in your next games to perfect your vision game.";
+		}
+		else if (csevaluation == "excellent" && wardevaluation == "good") {
+			winstreakscore = "10: Excellent job, play like this every game and you will rank up!";
+		}
+		else if (csevaluation == "excellent" && wardevaluation == "Too many") {
+			winstreakscore = "8: Your cs:ing was excellent but you bought too many wards. This many wards should only be bought in 50+ minute games.";
+		}
+		return winstreakscore;
 }
+}
+

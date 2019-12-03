@@ -22,24 +22,40 @@ public class IndividualGameController {
 	private MainApp mainApp;
     private Stage igstage;
 	
-	
-	@FXML private Label champplayed;
-	@FXML private Label mr;
-	@FXML private Label kda;
-	@FXML private Label gpm;
-	@FXML private Label cs;
-	@FXML private Label wp;
-	@FXML private Label dd;
-	@FXML private Label r;
-	@FXML private Label champ1;
-	@FXML private Label champ2;
-	@FXML private Label champ3;
-	@FXML private Label champ4;
-	@FXML private Label enemy1;
-	@FXML private Label enemy2;
-	@FXML private Label enemy3;
-	@FXML private Label enemy4;
-	@FXML private Label enemy5;
+    @FXML
+	private Label mr;
+	@FXML 
+	private Label champplayed;
+	@FXML
+	private Label kda;
+	@FXML
+	private Label gpm;
+	@FXML
+	private Label cs;
+	@FXML
+	private Label wp;
+	@FXML
+	private Label dd;
+	@FXML
+	private Label r;
+	@FXML
+	private Label champ1;
+	@FXML
+	private Label champ2;
+	@FXML
+	private Label champ3;
+	@FXML
+	private Label champ4;
+	@FXML
+	private Label enemy1;
+	@FXML
+	private Label enemy2;
+	@FXML
+	private Label enemy3;
+	@FXML
+	private Label enemy4;
+	@FXML
+	private Label enemy5;
 	
 	public IndividualGameController() {}
 	

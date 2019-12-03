@@ -34,8 +34,8 @@
             <Label text="K/D/A:" GridPane.rowIndex="2" />
             <Label text="GPM:" GridPane.rowIndex="3" />
             <Label text="CS Score:" GridPane.rowIndex="4" />
-            <Label fx:id="champplayed" text="Label" GridPane.columnIndex="1" />
-            <Label fx:id="mr" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="mr" text="Label" GridPane.columnIndex="1" />
+            <Label fx:id="champplayed" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label fx:id="kda" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label fx:id="gpm" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Label fx:id="cs" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
@@ -49,9 +49,9 @@
       </GridPane>
       <ButtonBar layoutX="447.0" layoutY="475.0" prefHeight="40.0" prefWidth="330.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Exit" />
+          <Button mnemonicParsing="false" onAction="#handleBack" text="Back" />
             <Button mnemonicParsing="false" text="Advanced stats" />
-            <Button mnemonicParsing="false" text="Feedback" />
+            <Button mnemonicParsing="false" onAction="#handleFeedback" text="Feedback" />
         </buttons>
       </ButtonBar>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
