@@ -43,6 +43,9 @@ public class FeedBackController {
 		
 	}
 	
+	/**
+	 * Method for initializing the Feedback window when the used opens it
+	 */
 	public void initialize() {
 		kdatext.setText(fb.getKDAfeedback());
 		wardtext.setText(fb.getWardfeedback());
@@ -53,19 +56,35 @@ public class FeedBackController {
 		});
 	}
 	
+	/**
+	 * Method for setting the main application
+	 * @param mainApp
+	 */
 	public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
     
+	/**
+	 * Method for setting the Feedback stage
+	 * @param feedBackStage
+	 */
     public void setFeedBackStage(Stage feedBackStage) {
         this.feedBackStage = feedBackStage;
     }
     
+    /**
+     * Method for when the "Back" button is pressed
+     * @throws IOException
+     */
     @FXML
     private void handleBack() throws IOException {
 	    feedBackStage.close();
     }
-
+    
+    /**
+     * Method for when the "Profile" button is pressed
+     * @throws IOException
+     */
     @FXML
     private void handleProfile() throws IOException {
 	    mainApp.showProfileWindow();

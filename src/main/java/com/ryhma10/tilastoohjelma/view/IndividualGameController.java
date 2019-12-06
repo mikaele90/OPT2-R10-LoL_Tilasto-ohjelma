@@ -59,15 +59,26 @@ public class IndividualGameController {
 	
 	public IndividualGameController() {}
 	
+	/**
+	 * Setter for main application
+	 * @param mainApp
+	 */
 	public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
     
+	/**
+	 * Setter for Individual game stage
+	 * @param igstage
+	 */
     public void setIGStage(Stage igstage) {
     	
         this.igstage = igstage;
     }
 	
+    /**
+     * Method for initializing the individual game stage when it's called
+     */
 	public void initialize() {
 		champplayed.setText(fb.getChamp());
 		mr.setText(fb.getResult());
@@ -92,11 +103,19 @@ public class IndividualGameController {
 		
 	}
 	
+	/**
+	 * Action handler for when the "Back" button is pressed
+	 */
 	public void handleBack() {
 		igstage.close();
 		
 	}
 	
+	/**
+	 * Action handler for when the "Feedback" button is pressed
+	 * @param event
+	 * @throws IOException
+	 */
 	public void handleFeedback(ActionEvent event) throws IOException{
 		mainApp.showFeedBackWindow();
 		igstage.close();

@@ -16,12 +16,12 @@
             </buttons>
         </ButtonBar>
       <Label layoutX="74.0" layoutY="112.0" text="About KDA:" />
-      <TextArea layoutX="160.0" layoutY="112.0" prefHeight="80.0" prefWidth="685.0" />
-      <TextArea layoutX="160.0" layoutY="204.0" prefHeight="80.0" prefWidth="685.0" />
+      <TextArea fx:id="kdatext" layoutX="160.0" layoutY="112.0" prefHeight="80.0" prefWidth="685.0" />
+      <TextArea fx:id="wardtext" layoutX="160.0" layoutY="204.0" prefHeight="80.0" prefWidth="685.0" />
       <Label layoutX="74.0" layoutY="204.0" text="About warding:" />
-      <TextArea layoutX="160.0" layoutY="296.0" prefHeight="80.0" prefWidth="685.0" />
+      <TextArea fx:id="cstext" layoutX="160.0" layoutY="296.0" prefHeight="80.0" prefWidth="685.0" />
       <Label layoutX="74.0" layoutY="296.0" text="About farming" />
       <Label layoutX="74.0" layoutY="390.0" text="Score:" />
-      <TextArea layoutX="160.0" layoutY="390.0" prefHeight="80.0" prefWidth="685.0" />
+      <TextArea fx:id="scoretext" layoutX="160.0" layoutY="390.0" prefHeight="80.0" prefWidth="685.0" />
     </children>
 </AnchorPane>

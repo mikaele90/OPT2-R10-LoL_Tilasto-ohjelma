@@ -68,7 +68,10 @@ public class FeedBack {
 	
 	
 	
-	//Konstruktorissa annetaan matsin tiedot ja lasketaan kda.
+	/**
+	 * Constructor to analyse the data gathered from the database.
+	 * @param riotid riotid is placed into the constructor to tell the constructor which specific game  it needs to get information from
+	 */
 	public FeedBack (long riotid) {
 		this.riotid = riotid;
 		ModelAccessObject mao = new ModelAccessObject();
@@ -104,89 +107,169 @@ public class FeedBack {
 		
 		
 	}
+	
+	/**
+	 * Get method to get the GPM value as a String
+	 * @return gpmtostring
+	 */
 	public String getGPMToString() {
 		String gpmtostring = Double.toString(gpm);
 		return gpmtostring;
 	}
 	
+	/**
+	 * Get method for the rank of the player
+	 * @return  rank
+	 */
 	public String getRank() {
 		return rank;
 	}
 	
+	/**
+	 * Get method for the players CS per minute value
+	 * @return cspermin
+	 */
 	public double getCspermin() {
 		return cspermin;
 	}
 	
+	/**
+	 * Get method for the wards a player has bought in a game
+	 * @return wards
+	 */
 	public long getWards() {
 		return wards;
 	}
-				
+	
+	/**
+	 * Get method for the match result
+	 * @return winlose
+	 */
 	public String getResult() {
 		return winlose;
 	}
 	
+	/**
+	 * Get method for damage done by the player in a specific game
+	 * @return ddtostring
+	 */
 	public String getDdToString() {
 		String ddtostring = Double.toString(dmgdealt);
 		return ddtostring;
 	}
 	
+	/**
+	 * Get method for players wards bought in a different format
+	 * @return wardstostring
+	 */
 	public String getWardsToString() {
 		String wardstostring = Long.toString(wards);
 		return wardstostring;
 	}
 	
+	/**
+	 * Get method for players creep score in a String format
+	 * @return cstostring
+	 */
 	public String getCStoString() {
 		String cstostring = Long.toString(cs);
 		return cstostring;
 	}
 	
+	/**
+	 * Get method for a players kills death assist ratio in a String format
+	 * @return kdatostring
+	 */
 	public String getKDAToString() {
 		String kdatostring = Double.toString(kda);
 		return kdatostring;
 		
 	}
 	
+	/**
+	 * Get method for the champion played.
+	 * @return champion
+	 */
 	public String getChamp() {
 		return champion;
 	}
 	
+	/**
+	 * Get method for teammate number 1 champion played
+	 * @return champion1
+	 */
 	public String getChamp1() {
 		return champion1;
 	}
 	
+	/**
+	 * Get method for teammate number 2 champion played
+	 * @return champion2
+	 */
 	public String getChamp2() {
 		return champion2;
 	}
 	
+	/**
+	 * Get method for teammate number 3 champion played
+	 * @return champion3
+	 */
 	public String getChamp3() {
 		return champion3;
 	}
 	
+	/**
+	 * Get method for teammate number 4 champion played
+	 * @return champio4
+	 */
 	public String getChamp4() {
 		return champion4;
 	}
 	
+	/**
+	 * Get method for enemy number 1 champion played
+	 * @return enemy1
+	 */
 	public String getEnemy1() {
 		return enemy1;
 	}
 	
+	/**
+	 * Get method for enemy number 2 champion played
+	 * @return enemy2
+	 */
 	public String getEnemy2() {
-		return enemy1;
+		return enemy2;
 	}
 	
+	/**
+	 * Get method for enemy number 3 champion played
+	 * @return enemy3
+	 */
 	public String getEnemy3() {
-		return enemy1;
+		return enemy3;
 	}
 	
+	/**
+	 * Get method for enemy number 4 champion played
+	 * @return enemy4
+	 */
 	public String getEnemy4() {
 		return enemy4;
 	}
 	
+	/**
+	 * Get method for enemy number 5 champion played
+	 * @return enemy5
+	 */
 	public String getEnemy5() {
 		return enemy5;
 	}
 	
-	//Metodi palautteen hankkimiseksi kda:n perusteella.
+	/**
+	 * Get method for the kill death assist ratio evaluation as a String
+	 * @return KDAevaluation
+	 */
 	public String getKDAevaluation() {
 		
 		if(kda < 1.5) {
@@ -206,7 +289,10 @@ public class FeedBack {
 		
 		}
 	
-	//Tehdään analyysi wardien käytöstä keskiarvojen perusteella.
+	/**
+	 * Get method for the ward evaluation of the player in a String format
+	 * @return wardevaluation
+	 */
 	public String getWardEvaluation() {
 		if(wards < 2) {
 			wardevaluation = "poor";
@@ -222,7 +308,10 @@ public class FeedBack {
 		}
 	return wardevaluation;
 }	
-	//Tehdään analyysi creepscoren perusteella.
+	/**
+	 * Get method for evaluatin creep score in a String format
+	 * @return csevaluation
+	 */
 	public String getCSevaluation() {
 		if (cspermin < 6) {
 			csevaluation = "poor";
@@ -236,6 +325,11 @@ public class FeedBack {
 		return csevaluation;
 	}
 	
+	
+	/**
+	 * Get method for evaluating the damage done by the player in a String format
+	 * @return dmgevaluation
+	 */
 	public String getDMGevaluation() {
 		if(dmgpermin < 600) {
 			dmgevaluation = "poor";
@@ -252,6 +346,10 @@ public class FeedBack {
 		return dmgevaluation;
 	}
 	
+	/**
+	 * Get method for getting feedback based on kda evaluation for the match
+	 * @return kdafeedback
+	 */
 	public String getKDAfeedback() {
 		if (KDAevaluation == "Poor KDA") {
 			kdafeedback = "You need to play safer especially in the early stages of the game. A poor kda is usually the result of bad positioning in teamfights or lack of game knowledge while laning.";
@@ -268,6 +366,10 @@ public class FeedBack {
 		return kdafeedback;
 	}
 	
+	/**
+	 * Get method for getting feedback based on ward evaluation in the game
+	 * @return wardfeedback
+	 */
 	public String getWardfeedback() {
 		if(wardevaluation == "poor") {
 			wardfeedback = "You place too little vision wards, average players place atleast 2 vision wards per game. This also helps with your teams success.";
@@ -283,6 +385,11 @@ public class FeedBack {
 		}
 		return wardfeedback;
 	}
+	
+	/**
+	 * Get method for getting feedback based on creepscore evaluation
+	 * @return csfeedback
+	 */
 	public String getCSfeedback() {
 		if(csevaluation == "poor") {
 			csfeedback = "Your creepscore in this game is considered poor by average player standards, try going into custom games and work on your mechanics by first cs:ing without an opponent and once you get to 90cs/10 minutes add a bot to play againsts.";
@@ -295,6 +402,11 @@ public class FeedBack {
 		}
 		return csfeedback;
 	}
+	
+	/**
+	 * Get method for getting your score on the individual game based on all other analysis
+	 * @return winstreakscore
+	 */
 	public String getWinstreakscore() {
 		if(csevaluation == "poor" && wardevaluation == "poor") {
 			winstreakscore = "0: This is the lowest score possible which indicates that you need to work on all aspects of your gameplay, work on your basics like cs:ing, positioning and warding more.";
