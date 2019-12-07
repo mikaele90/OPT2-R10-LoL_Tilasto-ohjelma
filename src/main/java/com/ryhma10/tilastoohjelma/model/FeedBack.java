@@ -70,7 +70,7 @@ public class FeedBack {
 	
 	/**
 	 * Constructor to analyse the data gathered from the database.
-	 * @param riotid riotid is placed into the constructor to tell the constructor which specific game  it needs to get information from
+	 * @param riotid is placed into the constructor to tell the constructor which specific game  it needs to get information from
 	 */
 	public FeedBack (long riotid) {
 		this.riotid = riotid;
@@ -104,9 +104,7 @@ public class FeedBack {
 		enemy4 = champions.getEnemyChampion1();
 		enemy5 = champions.getEnemyChampion1();
 		 
-		
-		
-	}
+}
 	
 	/**
 	 * Get method to get the GPM value as a String
