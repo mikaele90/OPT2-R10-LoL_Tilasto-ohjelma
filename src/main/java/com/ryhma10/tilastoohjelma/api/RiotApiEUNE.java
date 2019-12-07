@@ -13,7 +13,7 @@ import com.merakianalytics.orianna.types.core.staticdata.Item;
 import com.merakianalytics.orianna.types.core.summoner.Summoner;
 import com.merakianalytics.orianna.types.core.summoner.Summoners;
 
-public class RiotApi {
+public class RiotApiEUNE {
 	
 	// RiotApi-luokan getMatchHistory()-metodin palauttavan listan elementtien sijainnit:
 	
@@ -31,43 +31,84 @@ public class RiotApi {
 				// 11 = GoldEarned
 				// 12 = MatchResult
 				// 13 = Player's Team Color
-				// 14-19 = Empty
+				// 14 = Creep Score
+				// 15 = Wards Placed
+				// 16 = Position
+				// 17-19 = Empty
 				// 20-29 = Items, leftover slots Empty
 				// 30-39 = Blue Team Champions, leftover slots Empty
 				// 40-49 = Red Team Champions, leftover slots Empty
 				// 50 = QueueType
 	
+	
 	Match currentMatch;
 	public static String wantedPlayer;
-	static String playerName, playerRank, matchDate, playerTeam, championPlayed, otherPlayers, itemName, matchResult, queueType;
-	static long matchId, matchDuration, matchKills, matchDeaths, matchAssists, damageDealt, damageTaken, goldEarned;
+	static String playerName, playerRank, matchDate, playerTeam, championPlayed, otherPlayers, itemName, matchResult, queueType, playedPosition, playerId;
+	static long matchId, matchDuration, matchKills, matchDeaths, matchAssists, damageDealt, damageTaken, goldEarned, creepScore, wardsPlaced;
 	static String blueTeam = "BLUE";
 	static String redTeam = "RED";
-	static String emptyObject = "This is an empty object";
+	static String emptyObject = "Empty";
 	static int historySize;
 	
 	ApiData[][] matchArray;
 	ApiKey key = new ApiKey();
 	
+	
+	/**
+	 * Method to set the player name whose match history the user wants to search
+	 * @param name
+	 */
 	public void setWantedPlayer(String name) {
 		wantedPlayer = name;
 	}
 	
+	
+	/**
+	 * Method to set how many matches to get from user's match history
+	 * @param size
+	 */
 	public void setMatchListSize(int size) {
 		historySize = size;
 	}
 	
+	
+	/**
+	 * Method to return the size of the match list
+	 * @return historySize
+	 */
 	public int getMatchListSize() {
 		return historySize;
 	}
 	
+	
+	/**
+	 * Method to return the player id
+	 * @return playerId
+	 */
+	public String getPlayerId() {
+		return playerId;
+	}
+	
+	
+	/**
+	 * Method to set the correct API Key for Orianna Framework
+	 */
 	public void setKey() {
 		Orianna.setRiotAPIKey(key.getKey());
 	}
     
+	
+	/**
+	 * Method to search the wanted players match history, filtering relevant information from each match
+	 * and returning the match list as a 2d array
+	 * @return matchArray
+	 * @throws InterruptedException
+	 */
 	public ApiData[][] getMatchHistory() throws InterruptedException {
 		List<Summoner> summoners = Summoners.named(wantedPlayer).withRegion(Region.EUROPE_NORTH_EAST).get();
 		playerName = summoners.get(0).getName();
+		playerId = summoners.get(0).getAccountId();
+		if(summoners.get(0).getAccountId() != null) {
 		MatchHistory history = MatchHistory.forSummoner(summoners.get(0)).get();
         ArrayList<Long> historyArrayList = new ArrayList<Long>();
         matchArray = new ApiData[historySize][51];
@@ -75,13 +116,13 @@ public class RiotApi {
             Long matchId = (history.get(i).getId());
             historyArrayList.add(matchId);
         }
-        int l = 0; // Match
+        int l = 0; // Match pointer
         for (Long m : historyArrayList) {
             currentMatch = Match.withId(m).withRegion(Region.EUROPE_NORTH_EAST).get();
             int participants = 0;
-            int k = 20; // Items
-            int n = 30; // Blue team
-            int o = 40; // Red team
+            int k = 20; // Items pointer
+            int n = 30; // Blue team pointer
+            int o = 40; // Red team pointer
             for (final Participant player : currentMatch.getParticipants()) {
             	if (currentMatch.getParticipants().get(participants).getSummoner().getName().equals(playerName)) {
             		if(player.getSummoner().getLeague(Queue.RANKED_SOLO) == null) {
@@ -89,7 +130,6 @@ public class RiotApi {
             		} else {
             			playerRank = player.getSummoner().getLeaguePosition(Queue.RANKED_SOLO).getTier()+" "+player.getSummoner().getLeaguePosition(Queue.RANKED_SOLO).getDivision();
             		}
-            		//System.out.println(player.getStats());
             		matchId = currentMatch.getId();
             		matchDate = currentMatch.getCreationTime().toDate().toString();
             		matchDuration = currentMatch.getDuration().getStandardSeconds();
@@ -101,6 +141,9 @@ public class RiotApi {
                 	damageTaken = player.getStats().getDamageTaken();
                 	goldEarned = player.getStats().getGoldEarned();
                 	playerTeam = player.getTeam().getSide().name();
+                	creepScore = player.getStats().getCreepScore();
+                	wardsPlaced = player.getStats().getWardsPlaced();
+                	playedPosition = player.getLane().toString();
                 	if (player.getTeam().isWinner() == false) {
                 		matchResult = "Loss";
                 	} else {
@@ -148,7 +191,16 @@ public class RiotApi {
                 	matchArray[l][13] = new TeamColor(playerTeam);
                 	//System.out.println(((TeamColor) matchArray[l][13]).getTeamColor());
                 	Thread.sleep(100);
-                	for (int empty = 14; empty < 20; empty++) {
+                	matchArray[l][14] = new CreepScore(creepScore);
+                	//System.out.println(((CreepScore) matchArray[l][14]).getCreepScore());
+                	Thread.sleep(100);
+                	matchArray[l][15] = new WardsPlaced(wardsPlaced);
+                	//System.out.println(((WardsPlaced) matchArray[l][15]).getWardsPlaced());
+                	Thread.sleep(100);
+                	matchArray[l][16] = new Position(playedPosition);
+                	//System.out.println(((Position) matchArray[l][16]).getPosition());
+                	Thread.sleep(100);
+                	for (int empty = 17; empty < 20; empty++) {
                 		matchArray[l][empty] = new EmptyObject(emptyObject);
                 	}
                 	for(final Item items : currentMatch.getParticipants().get(participants).getItems()) {
@@ -192,7 +244,12 @@ public class RiotApi {
             }
             l++;
             Thread.sleep(3000);
+		}
+        System.out.println("Match history acquired!");
+		} else {
+
         }
         return matchArray;
 	}
 }
+
