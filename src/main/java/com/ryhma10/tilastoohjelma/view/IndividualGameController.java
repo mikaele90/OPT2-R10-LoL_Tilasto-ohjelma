@@ -117,7 +117,6 @@ public class IndividualGameController {
 	 */
 	public void handleFeedback(ActionEvent event) throws IOException{
 		mainApp.showFeedBackWindow();
-		igstage.close();
 	}
 
 	public long getRiotId() {
