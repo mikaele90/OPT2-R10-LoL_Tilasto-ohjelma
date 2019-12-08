@@ -99,10 +99,10 @@ public class FeedBack {
 		champion3 = champions.getChampion3();
 		champion4 = champions.getChampion4();
 		enemy1 = champions.getEnemyChampion1();
-		enemy2 = champions.getEnemyChampion1();
-		enemy3 = champions.getEnemyChampion1();
-		enemy4 = champions.getEnemyChampion1();
-		enemy5 = champions.getEnemyChampion1();
+		enemy2 = champions.getEnemyChampion2();
+		enemy3 = champions.getEnemyChampion3();
+		enemy4 = champions.getEnemyChampion4();
+		enemy5 = champions.getEnemyChampion5();
 
 }
 	
