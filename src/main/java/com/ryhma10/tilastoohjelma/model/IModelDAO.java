@@ -9,7 +9,6 @@ public interface IModelDAO{
 	public abstract boolean createGamedata(String name, Gamedata gamedata, Item item, Team team, Additional additional);
 	public abstract List<Gamedata> readGames();
 	public abstract double gpmCalculus(double time, double gold);
-	//public abstract boolean deleteGame(int gameid);
 	public abstract boolean addProfile(SoftwareProfile profile);
 	public abstract String createProfile(String profileName, String profilePassword, String defaultRegion, String defaultLanguage, String defaultRiotAccount, String riotAPIKey);
 	public abstract String loginProfile(String profileName, String profilePassword);
@@ -21,6 +20,11 @@ public interface IModelDAO{
 	public abstract Team readTeamComposition(long riotid);
 	public abstract Gamedata readOneGame(long riotid);
 	public abstract boolean checkGame(long riotid);
+	public abstract boolean deleteProfile();
+	public abstract boolean deleteGamedata();
+	public abstract boolean deleteItem();
+	public abstract boolean deleteTeam();
+	public abstract boolean deleteAdditonal();
 
 }
   

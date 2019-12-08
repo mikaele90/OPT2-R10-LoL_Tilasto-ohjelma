@@ -32,6 +32,11 @@ public class ModelTest{
 	
 	@BeforeAll
 	static void addNeeded() {
+		modelDAO.deleteAdditonal();
+		modelDAO.deleteTeam();
+		modelDAO.deleteItem();
+		modelDAO.deleteGamedata();
+		modelDAO.deleteProfile();
 		modelDAO.addProfile(p1);
 		modelDAO.addProfile(p2);
 		modelDAO.createGamedata("junit1", g1, i1, t1, a1);
