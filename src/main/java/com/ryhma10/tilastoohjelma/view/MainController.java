@@ -3,21 +3,24 @@ package com.ryhma10.tilastoohjelma.view;
 import com.merakianalytics.orianna.Orianna;
 import com.merakianalytics.orianna.types.common.Region;
 import com.ryhma10.tilastoohjelma.MainApp;
-import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
-import com.ryhma10.tilastoohjelma.model.Gamedata;
-import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+import com.ryhma10.tilastoohjelma.api.AcquireData;
+import com.ryhma10.tilastoohjelma.api.ApiData;
+import com.ryhma10.tilastoohjelma.model.*;
 import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController {
@@ -30,47 +33,38 @@ public class MainController {
     private String profileName;
     private SoftwareProfile currentProfile;
     private ResourceBundle textBundle;
+    private long selectedRiotId;
 
     @FXML
-    private Label profileNameLabel;
+    private Label profileNameLabel, welcomeLabel, fetchGamesStatusLabel;
     @FXML
-    private TableView<Gamedata> tableView;
+    private ProgressIndicator progressIndicator;
     @FXML
-    private TableColumn<Gamedata, Integer> gameIdColumn;
+    private TableView<GamedataWrapper> tableView;
     @FXML
-    private TableColumn<Gamedata, String> championColumn;
+    private TableColumn<GamedataWrapper, Integer> column1;
     @FXML
-    private TableColumn<Gamedata, Integer> killsColumn;
+    private TableColumn<GamedataWrapper, Long> column2;
     @FXML
-    private TableColumn<Gamedata, Integer> deathsColumn;
+    private TableColumn<GamedataWrapper, String> column3;
     @FXML
-    private TableColumn<Gamedata, Integer> assistsColumn;
+    private TableColumn<GamedataWrapper, String> column4;
     @FXML
-    private TableColumn<Gamedata, String> winLoseColumn;
+    private TableColumn<GamedataWrapper, String> column5;
     @FXML
-    private TableColumn<Gamedata, String> positionColumn;
+    private TableColumn<GamedataWrapper, String> column6;
     @FXML
-    private TableColumn<Gamedata, Double> gpmColumn;
-    @FXML
-    private TableColumn<Gamedata, String> slot1Column;
-    @FXML
-    private TableColumn<Gamedata, String> slot2Column;
-    @FXML
-    private TableColumn<Gamedata, String> slot3Column;
-    @FXML
-    private TableColumn<Gamedata, String> slot4Column;
-    @FXML
-    private TableColumn<Gamedata, String> slot5Column;
-    @FXML
-    private TableColumn<Gamedata, String> slot6Column;
-    @FXML
-    private TableColumn<Gamedata, String> profileNameColumn;
+    private TableColumn<GamedataWrapper, Integer> column7;
 
     public MainController() {
         //Default constructor
     }
 
     public void initialize() {
+        progressIndicator.setProgress(1.0);
+        progressIndicator.setDisable(true);
+        fetchGamesStatusLabel.setText("Status: Ready");
+        fetchGamesStatusLabel.setDisable(true);
         Platform.runLater(() -> {
             System.out.println("MainController: Initialize");
             alertFactory = new AlertFactory(textBundle);
@@ -100,32 +94,32 @@ public class MainController {
                 System.out.println("TextRes locale: " + textBundle.getLocale().toString());
             }
             mainApp.setMainController(this);
+            modelAccessObject = new ModelAccessObject();
             secondaryInitialize();
         });
     }
 
     public void secondaryInitialize() {
-        //dataAccessObject = new DataAccessObject();
-        //List<Gamedata> gamedataList = modelAccessObject.readSpesificGames(mainApp.getProfile().getName());
-        //ObservableList<Gamedata> observableGamedataList = FXCollections.observableArrayList(gamedataList);
+        List<Gamedata> gamedataList = modelAccessObject.readSpecificProfilesGames(currentProfile.getProfileName());
+        List<GamedataWrapper> gamedataWrapperList = new ArrayList<GamedataWrapper>();
+        int i = 0;
+        for (Gamedata gamedata : gamedataList) {
+            Additional additionalGamedata = modelAccessObject.readAdditionalData(gamedata.getRiotid());
+            gamedataWrapperList.add(new GamedataWrapper(gamedata.getGameid(), gamedata.getRiotid(), additionalGamedata.getDate(), gamedata.getIngameName(), gamedata.getChampion(), gamedata.getWinlose(), currentProfile.getProfileId()));
+            GamedataWrapper gdw = gamedataWrapperList.get(i);
+            System.out.println(gdw.getProfileId());
+            i++;
+        }
+        ObservableList<GamedataWrapper> observableGamedataWrapperList = FXCollections.observableArrayList(gamedataWrapperList);
 
-        gameIdColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Integer>("gameid"));
-        championColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("champion"));
-        killsColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Integer>("kills"));
-        deathsColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Integer>("deaths"));
-        assistsColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Integer>("assits"));
-        winLoseColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("winlose"));
-        positionColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("positio"));
-        gpmColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, Double>("gpm"));
-        slot1Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot1"));
-        slot2Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot2"));
-        slot3Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot3"));
-        slot4Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot4"));
-        slot5Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot5"));
-        slot6Column.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("slot6"));
-        profileNameColumn.setCellValueFactory(new PropertyValueFactory<Gamedata, String>("pname"));
-
-        //tableView.setItems(observableGamedataList);
+        column1.setCellValueFactory(new PropertyValueFactory<>("gameId"));
+        column2.setCellValueFactory(new PropertyValueFactory<>("riotId"));
+        column3.setCellValueFactory(new PropertyValueFactory<>("date"));
+        column4.setCellValueFactory(new PropertyValueFactory<>("result"));
+        column5.setCellValueFactory(new PropertyValueFactory<>("champion"));
+        column6.setCellValueFactory(new PropertyValueFactory<>("summoner"));
+        column7.setCellValueFactory(new PropertyValueFactory<>("profileId"));
+        tableView.setItems(observableGamedataWrapperList);
     }
 
     public void setTexts() {
@@ -162,6 +156,63 @@ public class MainController {
     public void handleMainHelp(ActionEvent actionEvent) {
         System.out.println("Not yet implemented");
         //TODO
+    }
+
+    public void startFetchingGames(ArrayList<Long> gameIdArrayList, String summonerName, ModelAccessObject modelAccessObject) {
+        System.out.println("startFetchingGames()");
+        Platform.runLater(() -> {
+            progressIndicator.setDisable(false);
+            progressIndicator.setProgress(0.0);
+            fetchGamesStatusLabel.setText("Status: Fetching games...");
+            fetchGamesStatusLabel.setDisable(false);
+        });
+        AcquireData acquireData = new AcquireData();
+        acquireData.setCurrentProfile(currentProfile);
+        acquireData.setHistorySize(gameIdArrayList.size());
+        acquireData.setPlayerName(summonerName);
+        ApiData[][] apiDataArray = acquireData.getData(gameIdArrayList);
+        Gamedata gamedata;
+        Additional additional;
+        Item item;
+        Team team;
+        for(int i = 0; i < acquireData.getSize(); i++) {
+            gamedata = new Gamedata(acquireData.getMatchId(apiDataArray, i), acquireData.getPlayerName(apiDataArray, i),
+                    acquireData.getChampionPlayed(apiDataArray, i), acquireData.getMatchKills(apiDataArray, i), acquireData.getMatchDeaths(apiDataArray, i),
+                    acquireData.getMatchAssists(apiDataArray, i), acquireData.getMatchResult(apiDataArray, i),
+                    acquireData.getPosition(apiDataArray, i), acquireData.getPlayerRank(apiDataArray, i));
+            additional = new Additional(acquireData.getDamageDealt(apiDataArray, i), acquireData.getDamageTaken(apiDataArray, i),
+                    acquireData.getQueueType(apiDataArray, i), acquireData.getGoldEarned(apiDataArray, i), acquireData.getMatchDuration(apiDataArray, i),
+                    acquireData.getMatchDate(apiDataArray, i), acquireData.getWardsPlaced(apiDataArray, i), acquireData.getCreepScore(apiDataArray, i));
+            String[] items = acquireData.getItemNames(apiDataArray, i);
+            item = new Item(items[0], items[1], items[2], items[3], items[4], items[5], items[6]);
+            String[] blue = acquireData.getBlueTeamChampions(apiDataArray, i);
+            String[] red = acquireData.getRedTeamChampions(apiDataArray, i);
+            if (acquireData.getTeamColor(apiDataArray, i).equalsIgnoreCase("BLUE")) {
+                team = new Team(blue[0], blue[1], blue[2], blue[3], red[0], red[1], red[2], red[3], red[4]);
+            }
+            else {
+                team = new Team(red[0], red[1], red[2], red[3], blue[0], blue[1], blue[2], blue[3], blue[4]);
+            }
+            modelAccessObject.createGamedata(currentProfile.getProfileName(), gamedata, item, team, additional);
+            secondaryInitialize();
+        }
+    }
+
+    public void handleTableViewClicked(MouseEvent mouseEvent) {
+        tableView.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.isPrimaryButtonDown() && event.getClickCount() == 2) {
+                    try {
+                        selectedRiotId = tableView.getSelectionModel().getSelectedItem().getRiotId();
+                        System.out.println(selectedRiotId);
+                        mainApp.showIGWindow(selectedRiotId);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     public void printProfileData() {
@@ -215,5 +266,12 @@ public class MainController {
         this.textBundle = textBundle;
     }
 
+    public long getSelectedRiotId() {
+        return selectedRiotId;
+    }
+
+    public void setSelectedRiotId(long selectedRiotId) {
+        this.selectedRiotId = selectedRiotId;
+    }
 
 }

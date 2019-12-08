@@ -67,6 +67,12 @@ public class AlertFactory {
                 alertToReturn.setHeaderText(textBundle.getString("alert.headerText.loginUserInputError"));
                 alertToReturn.setContentText(textBundle.getString("alert.contentText.loginUserInputError"));
                 break;
+            case "Input:UserInputError":
+                alertToReturn.setAlertType(Alert.AlertType.ERROR);
+                alertToReturn.setTitle("Error");
+                alertToReturn.setHeaderText("Unable to fetch games");
+                alertToReturn.setContentText("No summoner name given. The name has to at least 1 character long.");
+                break;
             case "About application":
                 alertToReturn.setAlertType(Alert.AlertType.INFORMATION);
                 alertToReturn.setTitle(textBundle.getString("alert.title.aboutApp"));

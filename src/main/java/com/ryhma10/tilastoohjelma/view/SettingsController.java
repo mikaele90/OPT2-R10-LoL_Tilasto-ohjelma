@@ -1,7 +1,9 @@
 package com.ryhma10.tilastoohjelma.view;
 
 import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.OriannaException;
 import com.merakianalytics.orianna.types.common.Region;
+import com.merakianalytics.orianna.types.core.status.ShardStatus;
 import com.ryhma10.tilastoohjelma.MainApp;
 import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
 import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
@@ -57,12 +59,12 @@ public class SettingsController {
      * Initializes the Settings-window.
      */
     public void initialize() {
-        alertFactory = new AlertFactory(textBundle);
         tabSingleSelectionModel = settingsTabPane.getSelectionModel();
         tabSingleSelectionModel.select(apiAndUserInterfaceTab);
         profilePasswordField.setText("");
         confirmProfilePasswordField.setText("");
         Platform.runLater(() -> {
+            alertFactory = new AlertFactory(textBundle);
             if (buttonList == null) {
                 makeButtonList();
             }
@@ -102,7 +104,7 @@ public class SettingsController {
      * @return String of the result-variable. Can have three values:
      * "Nothing changed": No settings have been changed.
      * "Settings changed": At least one of the settings have been changed.
-     * "Fail": Only happens when trying to change the password and the given passwords do not match.
+     * "Fail": Only happens when trying to change the password and the given passwords does not match.
      */
     public String updateSettings() {
         boolean dbUpdateRequired = false;
@@ -201,8 +203,10 @@ public class SettingsController {
                 break;
             case "Fail":
                 Platform.runLater(() -> {
+                    String passwordMemory = profilePasswordField.getText();
                     initialize();
                     updateTexts();
+                    profilePasswordField.setText(passwordMemory);
                     tabSingleSelectionModel.select(profileTab);
                 });
                 break;
@@ -225,6 +229,46 @@ public class SettingsController {
         else {
             tabSingleSelectionModel.select(profileTab);
         }
+    }
+
+    /**
+     * Tests the String inputted into the API-Key TextField.
+     * @param actionEvent Interacting with the button, defined in Settings.fxml.
+     */
+    @FXML
+    public void handleTestAPIKey(ActionEvent actionEvent) {
+        testAPIKeyButton.setText(textBundle.getString("button.testingAPIKey"));
+        for (Button button : buttonList) {
+            button.setDisable(true);
+        }
+        new Thread(() -> {
+            Orianna.setRiotAPIKey(apiKeyTextField.getText());
+            ShardStatus status;
+            try {
+                status = ShardStatus.withRegion(Region.NORTH_AMERICA).get();
+                if (status.exists()) {
+                    Platform.runLater(() -> {
+                        Alert apiKeySuccessAlert = alertFactory.createAlert("APIKeyTest:Pass");
+                        apiKeySuccessAlert.show();
+                    });
+                }
+                else {
+                    System.out.println("Unknown error. Status: " + status.exists());
+                }
+            } catch (OriannaException oe) {
+                System.out.println(oe.getClass().getSimpleName());
+                Platform.runLater(() -> {
+                    Alert apiKeyFailAlert = alertFactory.createAlert("APIKeyTest:Fail");
+                    apiKeyFailAlert.show();
+                });
+            }
+            Platform.runLater(() -> {
+                testAPIKeyButton.setText(textBundle.getString("button.testAPIKey"));
+                for (Button button : buttonList) {
+                    button.setDisable(false);
+                }
+            });
+        }).start();
     }
 
     /**

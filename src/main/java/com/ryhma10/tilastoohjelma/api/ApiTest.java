@@ -7,6 +7,6 @@ public class ApiTest {
 	public static void main(String[] args) {
 		
 		FromApiToDatabase shieeet = new FromApiToDatabase();
-		shieeet.getDataFromEUW();
+		shieeet.storeData(null);
 	}
 }

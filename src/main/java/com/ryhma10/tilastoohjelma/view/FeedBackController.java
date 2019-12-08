@@ -47,11 +47,11 @@ public class FeedBackController {
 	 * Method for initializing the Feedback window when the used opens it
 	 */
 	public void initialize() {
-		kdatext.setText(fb.getKDAfeedback());
-		wardtext.setText(fb.getWardfeedback());
-		cstext.setText(fb.getCSfeedback());
-		scoretext.setText(fb.getWinstreakscore());
 		Platform.runLater(() -> {
+			kdatext.setText(fb.getKDAfeedback());
+			wardtext.setText(fb.getWardfeedback());
+			cstext.setText(fb.getCSfeedback());
+			scoretext.setText(fb.getWinstreakscore());
 			this.mainController = mainApp.getMainController();
 		});
 	}

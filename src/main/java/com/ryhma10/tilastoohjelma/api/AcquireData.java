@@ -1,5 +1,10 @@
 package com.ryhma10.tilastoohjelma.api;
 
+import com.merakianalytics.orianna.types.common.Region;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+
+import java.util.ArrayList;
+
 public class AcquireData {
 	
 	// RiotApi-luokan getMatchHistory()-metodin palauttavan listan elementtien sijainnit:
@@ -30,7 +35,8 @@ public class AcquireData {
 	static String queueType = "RANKED_SOLO";
 	String playerName, playerId;
 	int historySize;
-	
+	SoftwareProfile currentProfile;
+
 	
 	/**
 	 * Method to set player name
@@ -57,51 +63,35 @@ public class AcquireData {
 		}
 	}
 
-	
-	/**
-	 * Method to get player's EUW server match history and match information through RiotAPI by setting the correct API key,
-	 * setting the wanted player's name, setting how many matches to get, executing RiotApi class'
-	 * getMatchHistory() method and return the received information as a 2d array
-	 * @return data
-	 */
-	public ApiData[][] getDataEUW() {
-		ApiData[][] data = null;
-		RiotApiEUW api = new RiotApiEUW();
-		api.setKey();
-		api.setWantedPlayer(playerName);
-		api.setMatchListSize(historySize);
-		size = api.getMatchListSize();
-		try {
-			data = api.getMatchHistory();
-			playerId = api.getPlayerId();
-			if(api.getPlayerId() == null) {
-
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return data;
+	public void setCurrentProfile(SoftwareProfile currentProfile) {
+		this.currentProfile = currentProfile;
 	}
-	
-	
+
 	/**
 	 * Method to get player's EUNE server match history and match information through RiotAPI by setting the correct API key,
 	 * setting the wanted player's name, setting how many matches to get, executing RiotApi class'
 	 * getMatchHistory() method and return the received information as a 2d array
 	 * @return data
 	 */
-	public ApiData[][] getDataEUNE() {
+	public ApiData[][] getData(ArrayList<Long> matchIds) {
 		ApiData[][] data = null;
-		RiotApiEUNE api = new RiotApiEUNE();
-		api.setKey();
+		RiotApi api = new RiotApi();
+		if (currentProfile != null) {
+			api.setKeyFromProfile(currentProfile.getRiotAPIKey());
+		}
+		else {
+			api.setCurrentRegion(Region.EUROPE_NORTH_EAST);
+			api.setKey();
+		}
 		api.setWantedPlayer(playerName);
 		api.setMatchListSize(historySize);
 		size = api.getMatchListSize();
 		try {
-			data = api.getMatchHistory();
-			playerId = api.getPlayerId();
-			if(api.getPlayerId() == null) {
-
+			if (matchIds != null) {
+				data = api.getMatchHistory(matchIds);
+			}
+			else {
+				data = api.getMatchHistory(null);
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();

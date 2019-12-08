@@ -78,11 +78,11 @@ public class FeedBack {
 		Gamedata stats = mao.readOneGame(riotid);
 		Additional morestats = mao.readAdditionalData(riotid);
 		Team champions = mao.readTeamComposition(riotid);
-		
+
 		kills = stats.getKills();
 		assists = stats.getAssist();
 		deaths = stats.getDeaths();
-		kda = (kills+assists)/deaths;
+		kda = ((double)kills+(double)assists)/deaths;
 		champion = stats.getChampion();
 		winlose = stats.getWinlose();
 		rank = stats.getRank();
@@ -103,7 +103,7 @@ public class FeedBack {
 		enemy3 = champions.getEnemyChampion1();
 		enemy4 = champions.getEnemyChampion1();
 		enemy5 = champions.getEnemyChampion1();
-		 
+
 }
 	
 	/**

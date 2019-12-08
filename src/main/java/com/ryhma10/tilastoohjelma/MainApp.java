@@ -22,7 +22,7 @@ public class MainApp extends Application {
     private AnchorPane loginWindow;
     private BorderPane createNewUserWindow;
     private AnchorPane mainWindow;
-    private AnchorPane inputWindow;
+    private BorderPane inputWindow;
     private AnchorPane feedBackWindow;
     private AnchorPane profileWindow;
     private AnchorPane IGWindow;
@@ -44,6 +44,7 @@ public class MainApp extends Application {
     private String loginWindowTitle;
     private String createNewUserWindowTitle;
     private String mainWindowTitle;
+    private String inputWindowTitle;
     private String settingsWindowTitle;
 
     public MainApp() {
@@ -79,7 +80,9 @@ public class MainApp extends Application {
             //Set window titles using defaultconfig
             this.loginWindowTitle = textBundle.getString("windowTitle.login");
             this.createNewUserWindowTitle = textBundle.getString("windowTitle.createNewUser");
+            this.mainWindowTitle = textBundle.getString("windowTitle.main");
             this.settingsWindowTitle = textBundle.getString("windowTitle.settings");
+            this.inputWindowTitle = textBundle.getString("windowTitle.input");
         }catch (Exception e) {
             System.out.println("TextBundle: file not found");
             e.printStackTrace();
@@ -150,7 +153,7 @@ public class MainApp extends Application {
         mainStage.show();
     }
     
-    public void showIGWindow() throws IOException {
+    public void showIGWindow(long riotId) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/IndividualGame.fxml"));
         IGWindow = (AnchorPane)loader.load();
@@ -165,15 +168,15 @@ public class MainApp extends Application {
         IndividualGameController igcontroller = loader.getController();
         igcontroller.setMainApp(this);
         igcontroller.setIGStage(IGStage);
+        igcontroller.setRiotId(riotId);
 
         IGStage.showAndWait();
     }
 
 
     public void showInputWindow() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/Input.fxml"));
-        inputWindow = (AnchorPane)loader.load();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Input.fxml"), textBundle);
+        inputWindow = (BorderPane)loader.load();
 
         Stage inputStage = new Stage();
         inputStage.setTitle("Input your in-game statistics");
@@ -185,6 +188,8 @@ public class MainApp extends Application {
         InputController inputController = loader.getController();
         inputController.setMainApp(this);
         inputController.setInputStage(inputStage);
+        inputController.setTextBundle(textBundle);
+        inputStage.setTitle(textBundle.getString("windowTitle.input"));
 
         inputStage.showAndWait();
     }
