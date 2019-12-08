@@ -15,7 +15,7 @@ public class ModelTest{
 
 
 	static ModelAccessObject modelDAO = new ModelAccessObject();
-	private static SoftwareProfile p1 = new SoftwareProfile("junit1", "test1", null, null, null, null);;
+	private static SoftwareProfile p1 = new SoftwareProfile("junit1", "test1", null, null, null, null);
 	private static SoftwareProfile p2 = new SoftwareProfile("junit2", "test2", null, null, null, null);
 	private static Gamedata g1 = new Gamedata(11, "testPlayer1", "Elise", 6, 2, 7 , "win", "jungle","bronze");
 	private static Gamedata g2 = new Gamedata (12, "testPlayer2", "Lux", 3, 5, 10 , "win", "support","bronze");
@@ -40,14 +40,6 @@ public class ModelTest{
 		modelDAO.createGamedata("junit1", g3, i3, t3, a3);
 	}
 
-//	@Test
-//	public void testAddProfiletoDb() {
-//		p1 = new SoftwareProfile("junit1", "test1", null, null, null, null);
-//		p2 = new SoftwareProfile("junit2", "test2", null, null, null, null);
-//		assertEquals(true, modelDAO.addProfile(p1), "Profile adding failed");
-//		assertEquals(true, modelDAO.addProfile(p2), "Profile adding failed");
-//	}
-
 
 	@Test
 	public void testReadProfile() {
@@ -55,14 +47,6 @@ public class ModelTest{
 		assertEquals("junit2", testProfile.getProfileName(), "wrong name");
 		assertEquals("test2", testProfile.getProfilePassword(), "wrong password");
 	}
-
-
-//	@Test
-//	public void testAddGamedata() {
-//		assertEquals(true, modelDAO.createGamedata("junit1", g1, i1, t1, a1), "Gamedata 1 insert failed");
-//		assertEquals(true, modelDAO.createGamedata("junit2", g2, i2, t2, a2), "Gamedata 2 insert failed");
-//		assertEquals(true, modelDAO.createGamedata("junit1", g3, i3, t3, a3), "Gamedata 3 insert failed");
-//	}
 
 
 	@Test

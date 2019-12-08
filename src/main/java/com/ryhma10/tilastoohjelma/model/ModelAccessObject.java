@@ -287,26 +287,6 @@ public class ModelAccessObject implements IModelDAO {
 		}
 		return success;
 	}
-	
-	//toimii...
-	// tätä tuskin tarvitaan...
-		@SuppressWarnings("unchecked")
-		@Override
-		public List<Item> readGamesWithItems() {
-			Transaction transaction = null;
-			try (Session session = factory.openSession()){
-				transaction = session.beginTransaction();
-				
-				List<Item> results = session.createQuery("Select i FROM Item as i JOIN i.gamedata as g where g.gameid = 1").getResultList();
-				
-				session.getTransaction().commit();
-				session.close();
-				return results;
-			}catch(Exception e) {
-				transaction.rollback();
-				throw e;
-				}	
-		}
 		
 		//hakee tietokannasta tietyn pelin spesifikaatio datat vaatii parametriksi riotId:n
 		@SuppressWarnings("unchecked")

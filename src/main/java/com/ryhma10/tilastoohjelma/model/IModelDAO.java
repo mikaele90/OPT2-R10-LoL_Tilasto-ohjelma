@@ -17,7 +17,6 @@ public interface IModelDAO{
 	public abstract boolean updateProfile(SoftwareProfile currentProfile, boolean updateDefaultRegion, boolean updateDefaultLanguage);
 	public abstract List<Item> readItems();
 	public abstract List<Gamedata> readSpecificProfilesGames(String name);
-	public abstract List<Item> readGamesWithItems();
 	public abstract Additional readAdditionalData(long riotid);
 	public abstract Team readTeamComposition(long riotid);
 	public abstract Gamedata readOneGame(long riotid);
