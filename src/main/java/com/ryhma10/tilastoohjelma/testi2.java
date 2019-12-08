@@ -32,12 +32,6 @@ public class testi2 {
 			System.out.println(tulos.getSoftwareProfile().getProfileName() + " " + tulos.getChampion() + " " + tulos.getItem().getSlot1());
 		}
 		
-		List<Item> results = modelDAO.readGamesWithItems();
-		for(Item result : results) {
-			System.out.println(result.getSlot1() + " " + result.getGamedata().getChampion() + " " + result.getGamedata().getSoftwareProfile().getProfileName());
-		}
-		
-		
 		Additional additionalinfo = modelDAO.readAdditionalData(55);
 		System.out.println(additionalinfo.getDamagedealt() + " " + additionalinfo.getDamagetaken() + " " + additionalinfo.getGold() + " " + additionalinfo.getDuration());
 		

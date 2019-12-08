@@ -2,28 +2,28 @@ package model;
 
 import org.junit.jupiter.api.Test;
 
-import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
+import com.ryhma10.tilastoohjelma.model.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginTest {
 	
 	static ModelAccessObject modelDAO = new ModelAccessObject();
-
-    @Test
-    public void testProfileName() {
-         //TODO, redo
-    }
+	private SoftwareProfile p5;
+	private Gamedata g5 = new Gamedata(55, "testPlayer5", "Elise", 6, 2, 7 , "win", "jungle","bronze");
+	private Item i5 = new Item("Raptor Cloak","Void Staff","Oracle Lens","Sheen","Relic Shield","Zephyr", null);
+	private Team t5 = new Team("Volibear", "Veigar", "Taric", "Zed", "Nasus", "Pyke", "Sona", "Teemo", "Olaf");
+	private Additional a5 = new Additional(8, 7, "gamemode", 16000, 160,"date", 4, 5);
     
-//	@Test
-//	public void testAddProfiletoDb() {
-//		p1 = new SoftwareProfile("junit1", "test1", null, null, null, null);
-//		assertEquals(true, modelDAO.addProfile(p1), "Profile adding failed");
-//	}
+	@Test
+	public void testAddProfiletoDb() {
+		p5 = new SoftwareProfile("junit5", "test5", null, null, null, null);
+		assertEquals(true, modelDAO.addProfile(p5), "Profile adding failed");
+	}
     
-//	@Test
-//	public void testAddGamedata() {
-//		assertEquals(true, modelDAO.createGamedata("junit1", g1, i1, t1, a1), "Gamedata 1 insert failed");
-//	}
-
+	@Test
+	public void testAddGamedata() {
+		assertEquals(true, modelDAO.createGamedata("junit5", g5, i5, t5, a5), "Gamedata 5 insert failed");
+	}
 }

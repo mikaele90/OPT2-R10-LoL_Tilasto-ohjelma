@@ -32,7 +32,6 @@ public class ModelTest{
 	
 	@BeforeAll
 	static void addNeeded() {
-		System.out.println("tapahtuuko mitään");
 		modelDAO.addProfile(p1);
 		modelDAO.addProfile(p2);
 		modelDAO.createGamedata("junit1", g1, i1, t1, a1);
