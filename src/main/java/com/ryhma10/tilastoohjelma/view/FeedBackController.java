@@ -26,8 +26,7 @@ public class FeedBackController {
 	
 	 private MainApp mainApp;
 	 private Stage feedBackStage;
-	 Gamedata gd = new Gamedata();
-	 FeedBack fb = new FeedBack(gd.getRiotid());
+	 FeedBack fb;
 	 private MainController mainController;
 	 
 	@FXML
@@ -49,9 +48,13 @@ public class FeedBackController {
 	public void initialize() {
 		Platform.runLater(() -> {
 			kdatext.setText(fb.getKDAfeedback());
+			kdatext.setWrapText(true);
 			wardtext.setText(fb.getWardfeedback());
+			wardtext.setWrapText(true);
 			cstext.setText(fb.getCSfeedback());
+			cstext.setWrapText(true);
 			scoretext.setText(fb.getWinstreakscore());
+			scoretext.setWrapText(true);
 			this.mainController = mainApp.getMainController();
 		});
 	}
@@ -77,7 +80,7 @@ public class FeedBackController {
      * @throws IOException
      */
     @FXML
-    private void handleBack() throws IOException {
+    private void handleBack() {
 	    feedBackStage.close();
     }
     
@@ -89,5 +92,9 @@ public class FeedBackController {
     private void handleProfile() throws IOException {
 	    mainApp.showProfileWindow();
     }
+
+	public void setFb(FeedBack fb) {
+		this.fb = fb;
+	}
 
 }

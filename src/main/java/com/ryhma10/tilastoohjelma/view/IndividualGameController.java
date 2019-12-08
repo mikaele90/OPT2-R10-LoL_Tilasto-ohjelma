@@ -12,10 +12,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class IndividualGameController {
-	Gamedata gd = new Gamedata();
+	Gamedata gd;
 	FeedBack fb;
-	MainApp main = new MainApp();
-	MainController mc = new MainController();
+	MainApp main;
+	MainController mc;
 	private MainApp mainApp;
     private Stage igstage;
 	private long riotId;
@@ -80,7 +80,6 @@ public class IndividualGameController {
      */
 	public void initialize() {
 		Platform.runLater(() -> {
-			this.riotId = riotId;
 			fb = new FeedBack(riotId);
 			champplayed.setText(fb.getChamp());
 			mr.setText(fb.getResult());
@@ -116,7 +115,7 @@ public class IndividualGameController {
 	 * @throws IOException
 	 */
 	public void handleFeedback(ActionEvent event) throws IOException{
-		mainApp.showFeedBackWindow();
+		mainApp.showFeedBackWindow(fb);
 	}
 
 	public long getRiotId() {
@@ -125,6 +124,11 @@ public class IndividualGameController {
 
 	public void setRiotId(long riotId) {
 		this.riotId = riotId;
+	}
+
+
+	public FeedBack getFb() {
+		return fb;
 	}
 
 }

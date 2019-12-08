@@ -1,5 +1,6 @@
 package com.ryhma10.tilastoohjelma;
 
+import com.ryhma10.tilastoohjelma.model.FeedBack;
 import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
 import com.ryhma10.tilastoohjelma.view.*;
 import javafx.application.Application;
@@ -170,7 +171,7 @@ public class MainApp extends Application {
         igcontroller.setIGStage(IGStage);
         igcontroller.setRiotId(riotId);
 
-        IGStage.showAndWait();
+        IGStage.show();
     }
 
 
@@ -191,10 +192,10 @@ public class MainApp extends Application {
         inputController.setTextBundle(textBundle);
         inputStage.setTitle(textBundle.getString("windowTitle.input"));
 
-        inputStage.showAndWait();
+        inputStage.show();
     }
 
-    public void showFeedBackWindow() throws IOException {
+    public void showFeedBackWindow(FeedBack newFeedback) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/FeedBack.fxml"));
         feedBackWindow = (AnchorPane)loader.load();
@@ -209,8 +210,9 @@ public class MainApp extends Application {
         FeedBackController feedBackController = loader.getController();
         feedBackController.setMainApp(this);
         feedBackController.setFeedBackStage(feedBackStage);
+        feedBackController.setFb(newFeedback);
 
-        feedBackStage.showAndWait();
+        feedBackStage.show();
     }
 
     public void showProfileWindow() throws IOException {
@@ -229,7 +231,7 @@ public class MainApp extends Application {
         profileController.setMainApp(this);
         profileController.setProfileStage(profileStage);
 
-        profileStage.showAndWait();
+        profileStage.show();
     }
 
     public void showSettingsWindow() throws IOException {

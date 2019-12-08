@@ -94,8 +94,8 @@ public class InputController  {
     		progressIndicator.setVisible(true);
 		});
     	new Thread(() -> {
-    		matchHistoryIdsFromAPI = null;
-    		matchHistoryIdsFromDb = null;
+    		matchHistoryIdsFromAPI = new ArrayList<Long>();
+    		matchHistoryIdsFromDb = new ArrayList<Long>();
 			System.out.println("Fetching games...\nSummoner: " + summonerName + "\tNumber of games: " + numberOfGames);
 			RiotApi riotApi = new RiotApi();
 			ModelAccessObject modelAccessObject = new ModelAccessObject();
@@ -119,7 +119,6 @@ public class InputController  {
 				}
 				List<Gamedata> matchHistoryFromDb;
 				matchHistoryFromDb = modelAccessObject.readSpecificProfilesGames(currentProfile.getProfileName());
-				System.out.println(matchHistoryFromDb.toString());
 				for (Gamedata game : matchHistoryFromDb) {
 					if (game.getIngameName().equals(summonerName)) {
 						matchHistoryIdsFromDb.add(game.getRiotid());
