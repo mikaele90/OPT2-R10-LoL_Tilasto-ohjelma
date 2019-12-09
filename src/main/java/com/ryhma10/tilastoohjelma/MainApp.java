@@ -154,8 +154,7 @@ public class MainApp extends Application {
     }
     
     public void showIGWindow(long riotId) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/IndividualGame.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/IndividualGame.fxml"), textBundle);
         IGWindow = (AnchorPane)loader.load();
 
         Stage IGStage = new Stage();
@@ -169,6 +168,8 @@ public class MainApp extends Application {
         igcontroller.setMainApp(this);
         igcontroller.setIGStage(IGStage);
         igcontroller.setRiotId(riotId);
+        igcontroller.setTextBundle(textBundle);
+        IGStage.setTitle(textBundle.getString("windowTitle.individualGame"));
 
         IGStage.show();
     }

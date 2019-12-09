@@ -76,6 +76,7 @@ public class SettingsController {
             else {
                 apiKeyTextField.setText(currentProfile.getRiotAPIKey());
             }
+            changeRegionChoiceBox.getItems().clear();
             for (Region region : Region.values()) {
                 changeRegionChoiceBox.getItems().add(region.name().replace("_", " "));
             }
