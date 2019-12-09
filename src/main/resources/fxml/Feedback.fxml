@@ -11,17 +11,17 @@
         <Label layoutX="74.0" layoutY="74.0" text="We have analyzed your in-game stats and have come up with the following conclusions" />
         <ButtonBar layoutX="537.0" layoutY="546.0" prefHeight="40.0" prefWidth="200.0">
             <buttons>
-                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBack" text="Back" />
-                <Button fx:id="profileButton" mnemonicParsing="false" onAction="#handleProfile" text="Profile" />
+                <Button fx:id="backButton" mnemonicParsing="false" onAction="#handleBack" text="%button.Fback" />
+                <Button fx:id="profileButton" mnemonicParsing="false" onAction="#handleProfile" text="%button.Fprofile" />
             </buttons>
         </ButtonBar>
-      <Label layoutX="74.0" layoutY="112.0" text="About KDA:" />
-      <TextArea fx:id="kdatext" layoutX="160.0" layoutY="112.0" prefHeight="80.0" prefWidth="685.0" />
-      <TextArea fx:id="wardtext" layoutX="160.0" layoutY="204.0" prefHeight="80.0" prefWidth="685.0" />
-      <Label layoutX="74.0" layoutY="204.0" text="About warding:" />
-      <TextArea fx:id="cstext" layoutX="160.0" layoutY="296.0" prefHeight="80.0" prefWidth="685.0" />
-      <Label layoutX="74.0" layoutY="296.0" text="About farming" />
-      <Label layoutX="74.0" layoutY="390.0" text="Score:" />
-      <TextArea fx:id="scoretext" layoutX="160.0" layoutY="390.0" prefHeight="80.0" prefWidth="685.0" />
+      <Label layoutX="74.0" layoutY="112.0" text="%label.Aboutkda" />
+      <TextArea fx:id="kdatext" layoutX="160.0" layoutY="112.0" prefHeight="80.0" prefWidth="685.0" promptText="%textArea.kdaFeedback" />
+      <TextArea fx:id="wardtext" layoutX="160.0" layoutY="204.0" prefHeight="80.0" prefWidth="685.0" promptText="%textArea.wardFeedback" />
+      <Label layoutX="74.0" layoutY="204.0" text="%Label.Aboutwards" />
+      <TextArea fx:id="cstext" layoutX="160.0" layoutY="296.0" prefHeight="80.0" prefWidth="685.0" promptText="%textArea.csFeedback" />
+      <Label layoutX="74.0" layoutY="296.0" text="%label.AboutCS" />
+      <Label layoutX="74.0" layoutY="390.0" text="%label.Score" />
+      <TextArea fx:id="scoretext" layoutX="160.0" layoutY="390.0" prefHeight="80.0" prefWidth="685.0" promptText="%textArea.score" />
     </children>
 </AnchorPane>
