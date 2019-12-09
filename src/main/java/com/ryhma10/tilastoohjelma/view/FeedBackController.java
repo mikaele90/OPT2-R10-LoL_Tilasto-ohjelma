@@ -146,7 +146,7 @@ public class FeedBackController {
 	
 	/**
 	 * Method for setting the main application
-	 * @param mainApp
+	 * @param mainApp defines the MainApp object used
 	 */
 	public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
@@ -154,7 +154,7 @@ public class FeedBackController {
     
 	/**
 	 * Method for setting the Feedback stage
-	 * @param feedBackStage
+	 * @param feedBackStage defined the feedBackStage object used
 	 */
     public void setFeedBackStage(Stage feedBackStage) {
         this.feedBackStage = feedBackStage;
@@ -177,7 +177,11 @@ public class FeedBackController {
     private void handleProfile() throws IOException {
 	    mainApp.showProfileWindow();
     }
-
+    
+    /**
+     * Method for setting FeedBack object in this class
+     * @param fb defined the FeedBack object
+     */
 	public void setFb(FeedBack fb) {
 		this.fb = fb;
 	}
