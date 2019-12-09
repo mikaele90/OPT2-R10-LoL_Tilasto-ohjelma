@@ -26,8 +26,12 @@ public class ModelAccessObject implements IModelDAO {
 			}
 	}
 	
-
-	//lukee järjestelmän profiilin (creategamedata hyödyntää tätä)
+	
+	
+	/**
+	 * readProfile method read SoftareProfile data from database, takes in the profile name in String format
+	 * Returns SoftwareProfile object
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public SoftwareProfile readProfile(String profileName) {
@@ -46,10 +50,13 @@ public class ModelAccessObject implements IModelDAO {
 		}
 	}
 	
-	//toimii..
-	//Lisää pelin tietokantaan
-	// vaatii sisäänsä Järjestelmän profiilin nimen, gamedata- , item, team ja additionalolion
-	// mitä kukin olio vaatii sisäänsä näkee kyseisen filun konstruktorista
+	
+	/**
+	 * createGamedata method adds all the gamedata to database. It adds data to Gamedata- , Item-,
+	 * Team-, and Additional tables.
+	 * Method takes in Profile name in String Fromat also objects of gamedata, item, team and additional.
+	 * Returns boolean true or false.
+	 */
 		@Override
 		public boolean createGamedata(String name, Gamedata gamedata, Item item, Team team, Additional additional) {
 			Transaction transaction = null;
@@ -80,10 +87,13 @@ public class ModelAccessObject implements IModelDAO {
 			return totuus;
 		}
 	
-
+	
+	/**
+	 * readGames method lists all the games from database.
+	 * Returns list of Gamedata objects
+	 */
 	@SuppressWarnings( "unchecked")
 	@Override
-	//lukee tietokannan kaikki pelit profiilista riippumatta
 	public List<Gamedata> readGames() {
 		Transaction transaction = null;
 		try (Session session = factory.openSession()){
@@ -101,7 +111,10 @@ public class ModelAccessObject implements IModelDAO {
 	}
 
 	
-	// ei tiedä tarviiko vai heivataanko pois, muuta gpm laskuri mahdollisesti jopa vailinainen semmoinen
+	/**
+	 * gpmCalculus counts simply gold per minute value. It takes in time and gold values
+	 * Returns answer of the calculus
+	 */
 	public double gpmCalculus(double time, double gold) {
 		double result = gold/time;
 		double gpm = (double)Math.round(result);
@@ -110,7 +123,11 @@ public class ModelAccessObject implements IModelDAO {
 		
 	}
 	
-	//hakee tietokannasta yhden profiilin kaikki pelit
+	/**
+	 * readSpecificProfilesGames method returns all the games which were played by same profile.
+	 * Method takes in Profile name in String format.
+	 * Returns list of gamedata objects
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Gamedata> readSpecificProfilesGames(String name) {
@@ -128,7 +145,11 @@ public class ModelAccessObject implements IModelDAO {
 			}
 	}
 	
-
+	/**
+	 * addProfile method add SoftwareProfile data into database.
+	 * Method takes in SoftwareProfile object.
+	 * Return boolean true or false.
+	 */
 	@Override
 	public boolean addProfile(SoftwareProfile profile) {
 		Transaction transaction = null;
@@ -288,7 +309,11 @@ public class ModelAccessObject implements IModelDAO {
 		return success;
 	}
 		
-		//hakee tietokannasta tietyn pelin spesifikaatio datat vaatii parametriksi riotId:n
+		/**
+		 * readAdditionalData method searches single games all the extra data.
+		 * Method takes in riot id.
+		 * Returns additional object.
+		 */
 		@SuppressWarnings("unchecked")
 		public Additional readAdditionalData(long riotid){
 			Transaction transaction = null;
@@ -304,9 +329,11 @@ public class ModelAccessObject implements IModelDAO {
 				}	
 		}
 		
-		//hakee tietokannasta tietyn pelin molempien puolien 
-		//sankarit lukuunottamatta pelaajan omaa koska tämä tieto on normi gamedatassa
-		//vaatii parimetriksi riotId:n
+		/**
+		 * readTeamComposition method searches both own team and enemy team champions from a single game.
+		 * Method takes in riot id
+		 * Return Team object
+		 */
 		@SuppressWarnings("unchecked")
 		public Team readTeamComposition(long riotid){
 			Transaction transaction = null;
@@ -322,8 +349,11 @@ public class ModelAccessObject implements IModelDAO {
 				}	
 		}
 		
-		//hakee yhden pelin gamedata taulun, tästä saa myös itemitkin mikäli haluaa
-		//parametriksi vaatii riotId:n
+		/**
+		 * readOneGame method searches one game specific game from database.
+		 * Method takes in riot id.
+		 * return Gamedata object.
+		 */
 		@Override
 		@SuppressWarnings("rawtypes")
 		public Gamedata readOneGame(long riotid) {
@@ -342,8 +372,10 @@ public class ModelAccessObject implements IModelDAO {
 			}
 		}
 
-		//toimii...
-		//hakee kaikki tavarat tietokannasta ei tietoa onko käyttöä
+		/**
+		 * readItems method lists every single item from database.
+		 * Returns list of Item objects
+		 */
 		@SuppressWarnings("unchecked")
 		@Override
 		public List<Item> readItems() {
@@ -362,7 +394,11 @@ public class ModelAccessObject implements IModelDAO {
 				}
 		}
 		
-		//tarkastaa onko kyseinen peli jo tietokannassa
+		/**
+		 * checkGame method checks from database if gamedata already exists in there.
+		 * Method takes in riot id.
+		 * Return boolean true or false
+		 */
 		@SuppressWarnings("rawtypes")
 		@Override
 		public boolean checkGame(long riotid) {
@@ -386,6 +422,10 @@ public class ModelAccessObject implements IModelDAO {
 			}
 		}
 		
+		/**
+		 * deleteAdditional method deletes all columns from additional table
+		 * Returns booleantrue or false
+		 */
 		public boolean deleteAdditonal() {
 			Transaction transaction = null;
 			boolean truth = false;
@@ -404,6 +444,10 @@ public class ModelAccessObject implements IModelDAO {
 			return truth;	
 		}
 		
+		/**
+		 * deleteTeam method deletes all columns from team table
+		 * Returns boolean true or false
+		 */
 		public boolean deleteTeam() {
 			Transaction transaction = null;
 			boolean truth = false;
@@ -422,6 +466,10 @@ public class ModelAccessObject implements IModelDAO {
 			return truth;	
 		}
 		
+		/**
+		 * deleteitem method deletes all columns from item table
+		 * Returns boolean true or false
+		 */
 		public boolean deleteItem() {
 			Transaction transaction = null;
 			boolean truth = false;
@@ -440,6 +488,10 @@ public class ModelAccessObject implements IModelDAO {
 			return truth;	
 		}
 		
+		/**
+		 * deleteGamedata method deletes all columns from gamedata table
+		 * Returns boolean true or false
+		 */
 		public boolean deleteGamedata() {
 			Transaction transaction = null;
 			boolean truth = false;
@@ -458,6 +510,10 @@ public class ModelAccessObject implements IModelDAO {
 			return truth;	
 		}
 		
+		/**
+		 * deleteProfile method deletes all columns from softwareprofile table
+		 * Returns boolean true or false
+		 */
 		@SuppressWarnings("null")
 		public boolean deleteProfile() {
 			Transaction transaction = null;
