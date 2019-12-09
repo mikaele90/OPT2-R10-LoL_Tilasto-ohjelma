@@ -168,7 +168,16 @@ public class ModelAccessObject implements IModelDAO {
 		return totuus;
 		}
 
-
+	/**
+	 * Creates a SoftwareProfile into the database.
+	 * @param profileName Sets the name of the SoftwareProfile.
+	 * @param profilePassword Sets the password of the SoftwareProfile.
+	 * @param defaultRegion Sets the region of the SoftwareProfile.
+	 * @param defaultLanguage Sets the language of the SoftwareProfile.
+	 * @param defaultRiotAccount Sets the riot account of the SoftwareProfile. Not in use currently.
+	 * @param riotAPIKey Sets the Riot API-key of the SoftwareProfile.
+	 * @return The resulting string.
+	 */
 	@Override
 	public String createProfile(String profileName, String profilePassword, String defaultRegion, String defaultLanguage, String defaultRiotAccount, String riotAPIKey) {
 		SoftwareProfile newProfile;
@@ -209,6 +218,12 @@ public class ModelAccessObject implements IModelDAO {
 		return resultString;
 	}
 
+	/**
+	 * Attempts to login a SoftwareProfile.
+	 * @param profileName The name of the SoftwareProfile.
+	 * @param profilePassword The password of the SoftwareProfile.
+	 * @return The resulting string.
+	 */
 	@Override
 	public String loginProfile(String profileName, String profilePassword) {
 		String resultString;
@@ -242,6 +257,12 @@ public class ModelAccessObject implements IModelDAO {
 		return resultString;
 	}
 
+	/**
+	 * Sets the SoftwareProfile, designed for use with loginProfile-method.
+	 * @param profileName The name of the SoftwareProfile.
+	 * @param profilePassword The password of the SoftwareProfile.
+	 * @return The SoftwareProfile.
+	 */
 	@Override
 	public SoftwareProfile setLoggedInProfile(String profileName, String profilePassword) {
 		SoftwareProfile loggedInProfile = null;
@@ -272,6 +293,13 @@ public class ModelAccessObject implements IModelDAO {
 		return loggedInProfile;
 	}
 
+	/**
+	 * Updates one SoftwareProfile.
+	 * @param currentProfile The currently loaded SoftwareProfile.
+	 * @param updateDefaultRegion If true, updates the SoftwareProfile's defaultRegion.
+	 * @param updateDefaultLanguage If true, updates the SoftwareProfile's defaultLanguage.
+	 * @return True, on success.
+	 */
 	@Override
 	public boolean updateProfile(SoftwareProfile currentProfile, boolean updateDefaultRegion, boolean updateDefaultLanguage) {
 		boolean success = false;

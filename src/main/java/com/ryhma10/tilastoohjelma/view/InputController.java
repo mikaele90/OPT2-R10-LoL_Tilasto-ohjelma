@@ -48,7 +48,7 @@ public class InputController  {
 	private Button cancelButton, fetchGamesButton;
     @FXML
 	private ProgressIndicator progressIndicator;
-    
+
     @FXML
 	private void initialize() {
     	numberOfGamesSpinner.setEditable(true);
