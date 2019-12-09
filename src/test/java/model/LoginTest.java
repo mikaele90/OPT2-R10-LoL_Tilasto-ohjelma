@@ -7,6 +7,7 @@ import com.ryhma10.tilastoohjelma.model.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 public class LoginTest {
@@ -47,5 +48,17 @@ public class LoginTest {
 	@Test
 	public void testAddGamedata() {
 		assertEquals(true, modelDAO.createGamedata("junit5", g5, i5, t5, a5), "Gamedata 5 insert failed");
+	}
+	
+	/**
+	 * After testing empties the database
+	 */
+	@AfterAll
+	static void deleGames() {
+		modelDAO.deleteAdditonal();
+		modelDAO.deleteTeam();
+		modelDAO.deleteItem();
+		modelDAO.deleteGamedata();
+		modelDAO.deleteProfile();
 	}
 }

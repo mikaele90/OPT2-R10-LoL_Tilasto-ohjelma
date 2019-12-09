@@ -186,7 +186,7 @@ public class ModelTest{
 	
 	/**
 	 * Tests reading all items from database
-	 * return is list of Item objecs, checks only one data of each list object
+	 * return is list of Item objects, checks only one data of each list object
 	 */
 	@Test void testReadItems() {
 		List<Item> items = modelDAO.readItems();
@@ -196,5 +196,17 @@ public class ModelTest{
 		assertEquals("Raptor Cloak", item1.getSlot1(), "False answer in item1");
 		assertEquals("Wit's End", item2.getSlot1(), "False answer in item2");
 		assertEquals("Phage", item3.getSlot1(), "False answer in item3");
+	}
+	
+	/**
+	 * After testing empties the database
+	 */
+	@AfterAll
+	static void deleGames() {
+		modelDAO.deleteAdditonal();
+		modelDAO.deleteTeam();
+		modelDAO.deleteItem();
+		modelDAO.deleteGamedata();
+		modelDAO.deleteProfile();
 	}
 }
