@@ -293,7 +293,7 @@ public class FeedBack {
 		if(wards <= 2) {
 			wardevaluation = "poor";
 		}
-		else if(wards > 3 && wards < 10) {
+		else if(wards > 3 && wards <= 10) {
 			wardevaluation = "good";
 		}
 		else if(wards==3) {
