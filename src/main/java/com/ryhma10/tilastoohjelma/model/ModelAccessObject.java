@@ -416,7 +416,7 @@ public class ModelAccessObject implements IModelDAO {
 				else {
 					return false;
 				}
-			}catch(Exception e) {
+			}catch(Exception e) { 
 				transaction.rollback();
 				throw e;
 			}
