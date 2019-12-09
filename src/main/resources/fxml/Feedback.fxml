@@ -16,12 +16,12 @@
             </buttons>
         </ButtonBar>
       <Label layoutX="74.0" layoutY="112.0" text="%label.Aboutkda" />
-      <TextArea fx:id="kdatext" layoutX="160.0" layoutY="112.0" prefHeight="80.0" prefWidth="685.0" promptText="%textArea.kdaFeedback" />
-      <TextArea fx:id="wardtext" layoutX="160.0" layoutY="204.0" prefHeight="80.0" prefWidth="685.0" promptText="%textArea.wardFeedback" />
-      <Label layoutX="74.0" layoutY="204.0" text="%Label.Aboutwards" />
-      <TextArea fx:id="cstext" layoutX="160.0" layoutY="296.0" prefHeight="80.0" prefWidth="685.0" promptText="%textArea.csFeedback" />
+      <TextArea fx:id="kdatext" editable="false" layoutX="160.0" layoutY="112.0" prefHeight="80.0" prefWidth="685.0" promptText="~" text="~" wrapText="true" />
+      <TextArea fx:id="wardtext" editable="false" layoutX="160.0" layoutY="204.0" prefHeight="80.0" prefWidth="685.0" promptText="~" text="~" wrapText="true" />
+      <Label layoutX="74.0" layoutY="204.0" text="%label.Aboutwards" />
+      <TextArea fx:id="cstext" editable="false" layoutX="160.0" layoutY="296.0" prefHeight="80.0" prefWidth="685.0" promptText="~" text="~" wrapText="true" />
       <Label layoutX="74.0" layoutY="296.0" text="%label.AboutCS" />
       <Label layoutX="74.0" layoutY="390.0" text="%label.Score" />
-      <TextArea fx:id="scoretext" layoutX="160.0" layoutY="390.0" prefHeight="80.0" prefWidth="685.0" promptText="%textArea.score" />
+      <TextArea fx:id="scoretext" editable="false" layoutX="160.0" layoutY="390.0" prefHeight="80.0" prefWidth="685.0" promptText="~" text="~" wrapText="true" />
     </children>
 </AnchorPane>

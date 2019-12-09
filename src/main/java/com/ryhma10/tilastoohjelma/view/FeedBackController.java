@@ -28,7 +28,7 @@ public class FeedBackController {
 	 private Stage feedBackStage;
 	 FeedBack fb;
 	 private MainController mainController;
-	 private ResourceBundle textBundle;
+	private ResourceBundle textBundle;
 	 
 	@FXML
 	private TextArea kdatext;
@@ -50,95 +50,72 @@ public class FeedBackController {
 		Platform.runLater(() -> {
 			if(fb.getKDAevaluation().equals("poor KDA")) {
 				kdatext.setText(textBundle.getString("textArea.kdaFeedback.poor"));
-				kdatext.setWrapText(true);
 			}
 			else if(fb.getKDAevaluation().equals("Average KDA")) {
 				kdatext.setText(textBundle.getString("textArea.kdaFeedback.average"));
-				kdatext.setWrapText(true);
 			}
 			else if(fb.getKDAevaluation().equals("Good KDA")) {
 				kdatext.setText(textBundle.getString("textArea.kdaFeedback.good"));
-				kdatext.setWrapText(true);
 			}
 			else if(fb.getKDAevaluation().equals("Insane KDA")) {
 				kdatext.setText(textBundle.getString("textArea.kdaFeedback.insane"));
-				kdatext.setWrapText(true);
 			}
 			if(fb.getWardEvaluation().equals("poor")) {
 				wardtext.setText(textBundle.getString("textArea.wardFeedback.poor"));
-				wardtext.setWrapText(true);
 			}
 			else if(fb.getWardEvaluation().equals("average")) {
 				wardtext.setText(textBundle.getString("textArea.wardFeedback.average"));
-				wardtext.setWrapText(true);
 			}
 			else if(fb.getWardEvaluation().equals("good")) {
 				wardtext.setText(textBundle.getString("textArea.wardFeedback.good"));
-				wardtext.setWrapText(true);
 			}
 			else if(fb.getWardEvaluation().equals("Too many")) {
 				wardtext.setText(textBundle.getString("textArea.wardFeedback.toomany"));
-				wardtext.setWrapText(true);
 			}
 			if(fb.getCSevaluation().equals("poor")) {
 				cstext.setText(textBundle.getString("textArea.csFeedback.poor"));
-				cstext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("good")) {
 				cstext.setText(textBundle.getString("textArea.csFeedback.good"));
-				cstext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("excellent")) {
 				cstext.setText(textBundle.getString("textArea.csFeedback.excellent"));
-				cstext.setWrapText(true);
 			}
 			if(fb.getCSevaluation().equals("poor") && fb.getWardEvaluation().equals("poor")) {
 				scoretext.setText(textBundle.getString("textArea.score.0"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("good") && fb.getWardEvaluation().equals("poor")) {
 				scoretext.setText(textBundle.getString("textArea.score.1"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("excellent") && fb.getWardEvaluation().equals("poor")) {
 				scoretext.setText(textBundle.getString("textArea.score.2"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("poor") && fb.getWardEvaluation().equals("average")) {
 				scoretext.setText(textBundle.getString("textArea.score.3"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("poor") && fb.getWardEvaluation().equals("good")) {
 				scoretext.setText(textBundle.getString("textArea.score.4"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("poor") && fb.getWardEvaluation().equals("Too many")) {
 				scoretext.setText(textBundle.getString("textArea.score.5"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("good") && fb.getWardEvaluation().equals("average")) {
 				scoretext.setText(textBundle.getString("textArea.score.6"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("good") && fb.getWardEvaluation().equals("good")) {
 				scoretext.setText(textBundle.getString("textArea.score.7"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("poor") && fb.getWardEvaluation().equals("Too many")) {
 				scoretext.setText(textBundle.getString("textArea.score.8"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("excellent") && fb.getWardEvaluation().equals("average")) {
 				scoretext.setText(textBundle.getString("textArea.score.9"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("excellent") && fb.getWardEvaluation().equals("good")) {
 				scoretext.setText(textBundle.getString("textArea.score.10"));
-				scoretext.setWrapText(true);
 			}
 			else if(fb.getCSevaluation().equals("excellent") && fb.getWardEvaluation().equals("Too many")) {
 				scoretext.setText(textBundle.getString("textArea.score.11"));
-				scoretext.setWrapText(true);
 			}
 			this.mainController = mainApp.getMainController();
 		});
@@ -184,6 +161,14 @@ public class FeedBackController {
      */
 	public void setFb(FeedBack fb) {
 		this.fb = fb;
+	}
+
+	/**
+	 * Setter for the textBundle-variable.
+	 * @param textBundle A ResourceBundle.
+	 */
+	public void setTextBundle(ResourceBundle textBundle) {
+		this.textBundle = textBundle;
 	}
 
 }
