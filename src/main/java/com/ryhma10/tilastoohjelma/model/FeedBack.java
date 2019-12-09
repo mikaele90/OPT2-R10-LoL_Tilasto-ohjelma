@@ -393,7 +393,7 @@ public class FeedBack {
 	public String getCSfeedback() {
 		switch (csevaluation) {
 			case "poor":
-				csfeedback = "Your creepscore in this game is considered poor by average player standards, try going into custom games and work on your mechanics by first cs:ing without an opponent and once you get to 90cs/10 minutes add a bot to play againsts.";
+				csfeedback = "Your creepscore in this game is considered poor by average player standards, try going into custom games and work on your mechanics by first cs:ing without an opponent and once you get to 90cs/10 minutes add a bot to play against.";
 				break;
 			case "good":
 				csfeedback = "You did a good job cs:ing this game but there is still room for improvement, your biggest improvement in this area comes from studying and knowing your matchup. Try to play more games and in those games focus on your positioning in lane to make perfecting your cs game easier.";
