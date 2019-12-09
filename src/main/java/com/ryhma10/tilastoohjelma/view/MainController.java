@@ -252,13 +252,20 @@ public class MainController {
             }
         });
         slaveThread = new Thread(() -> {
+            slaveThread.setPriority(1);
+            String statusHelper = fetchGamesStatusLabel.getText();
             while (masterThread.isAlive()) {
-                long l = gameIdArrayList.size() * 95;
-                if (progressIndicator.getProgress() < 0.99) {
-                    progressIndicator.setProgress(progressIndicator.getProgress()+0.01);
-                }
+                long sleepTime = gameIdArrayList.size() * 95;
+                Platform.runLater(() -> {
+                    if (progressIndicator.getProgress() < 0.98) {
+                        progressIndicator.setProgress(progressIndicator.getProgress()+0.01);
+                        if (!statusHelper.equalsIgnoreCase(fetchGamesStatusLabel.getText())) {
+                            fetchGamesStatusLabel.setText(textBundle.getString("label.statusFetchingGames"));
+                        }
+                    }
+                });
                 try {
-                    Thread.sleep(l);
+                    Thread.sleep(sleepTime);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
