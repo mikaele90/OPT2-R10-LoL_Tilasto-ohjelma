@@ -49,7 +49,7 @@ public class SettingsController {
     private PasswordField profilePasswordField, confirmProfilePasswordField;
 
     /**
-     * Empty constructor
+     * Default constructor
      */
     public SettingsController() {
         //Default Constructor

@@ -49,7 +49,10 @@ public class InputController  {
     @FXML
 	private ProgressIndicator progressIndicator;
 
-    @FXML
+	/**
+	 * Initializes the window
+	 */
+	@FXML
 	private void initialize() {
     	numberOfGamesSpinner.setEditable(true);
     	spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE, defaultNumberOfGames);
@@ -63,12 +66,19 @@ public class InputController  {
 			currentRegionLabel.setText(currentProfile.getDefaultRegion().replace("_", " "));
 		});
 	}
-    
+
+	/**
+	 * Default constructor
+	 */
     public InputController() {
     	//Constructor
     }
 
-    @FXML
+	/**
+	 * Checks whether user inputs are ok for continuation and fires the prepareFetchingGames-method.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 */
+	@FXML
 	public void handleFetchGames(ActionEvent actionEvent) {
     	try {
     		int numberOfGames = Integer.parseInt(numberOfGamesSpinner.editorProperty().getValue().getText());
@@ -89,6 +99,11 @@ public class InputController  {
 		}
 	}
 
+	/**
+	 * Prepares a list of games to fetch from the API. Fires up the startFetchingGames-method in the MainController-class.
+	 * @param summonerName The name of the wanted summoner (player).
+	 * @param numberOfGames The number of games to fetch.
+	 */
 	private void prepareFetchingGames(String summonerName, int numberOfGames) {
     	Platform.runLater(() -> {
     		progressIndicator.setVisible(true);
@@ -153,37 +168,66 @@ public class InputController  {
 		}).start();
 	}
 
+	/**
+	 * Closes the inputStage.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 */
 	@FXML
 	public void handleCancel(ActionEvent actionEvent) {
     	inputStage.close();
 	}
 
+	/**
+	 * Opens the settings-window and closes the inputStage.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 * @throws IOException on failed load of Settings.fxml.
+	 */
 	@FXML
 	public void handleSettings(ActionEvent actionEvent) throws IOException {
     	mainApp.showSettingsWindow();
     	inputStage.close();
 	}
 
+	/**
+	 * Shows a help-dialog. Not yet implemented.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 */
 	@FXML
 	public void handleHelp(ActionEvent actionEvent) {
     	//TODO
 		System.out.println("Not yet implemented");
 	}
 
+	/**
+	 * Shows an Alert as defined in the AlertFactory-class.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 */
 	@FXML
 	public void handleAbout(ActionEvent actionEvent) {
     	Alert aboutAlert = alertFactory.createAlert("About application");
     	aboutAlert.show();
 	}
 
+	/**
+	 * Sets the currently in use ResourceBundle.
+	 * @param textBundle A ResourceBundle.
+	 */
 	public void setTextBundle(ResourceBundle textBundle) {
 		this.textBundle = textBundle;
 	}
 
+	/**
+	 * Sets the MainApp.
+	 * @param mainApp The MainApp.
+	 */
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
 
+	/**
+	 * Sets the Stage.
+	 * @param inputStage The Stage to set.
+	 */
 	public void setInputStage(Stage inputStage) {
 		this.inputStage = inputStage;
 	}

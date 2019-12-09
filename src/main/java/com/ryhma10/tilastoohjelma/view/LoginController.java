@@ -41,10 +41,16 @@ public class LoginController {
     @FXML
     private MenuItem menuItemCreateNewProfile, menuItemExit, menuItemAbout;
 
+    /**
+     * Default constructor
+     */
     public LoginController() {
         //Constructor
     }
 
+    /**
+     * Initializes the window
+     */
     public void initialize() {
         if (progressIndicator.isVisible()) {
             progressIndicator.setVisible(false);
@@ -76,14 +82,27 @@ public class LoginController {
         });
     }
 
+    /**
+     * Setter for the MainApp.
+     * @param mainApp The MainApp.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
+    /**
+     * Setter for the loginStage-variable.
+     * @param loginStage A Stage.
+     */
     public void setLoginStage(Stage loginStage) {
         this.loginStage = loginStage;
     }
 
+    /**
+     * Detects if Enter-key is pressed.
+     * @param keyEvent Any KeyEvent.
+     * @throws IOException On exception.
+     */
     @FXML
     public void onEnter(KeyEvent keyEvent) throws IOException {
         if(keyEvent.getCode().equals(KeyCode.ENTER)) {
@@ -92,22 +111,41 @@ public class LoginController {
         }
     }
 
+    /**
+     * Shows an Alert as defined by AlertFactory.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     */
     @FXML
     public void handleAboutApplication(ActionEvent actionEvent) {
         Alert aboutAlert = alertFactory.createAlert("About application");
         aboutAlert.showAndWait();
     }
 
+    /**
+     * Shows the createNewUser-window.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     * @throws IOException On failed load of CreateNewUser.fxml.
+     */
     @FXML
     public void handleCreateNewProfile(ActionEvent actionEvent) throws IOException {
         mainApp.showCreateNewUserWindow();
     }
 
+    /**
+     * Exits the application.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     */
     @FXML
     public void handleExit(ActionEvent actionEvent) {
         System.exit(0);
     }
 
+    /**
+     * Attempts to login a SoftwareProfile into the application. On success, opens the main-window.
+     * Loads a ResourceBundle based on the SoftwareProfile's defaultLanguage.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     * @throws IOException On failed load of Main.fxml.
+     */
     @FXML
     public void handleLogin(ActionEvent actionEvent) throws IOException {
         if(profileNameField.getText().length() > 0 && passwordField.getText().length() > 3) {
@@ -157,6 +195,10 @@ public class LoginController {
 
     }
 
+    /**
+     * Change the language of the defaultconfig.properties file and updates the UI. Only affects windows pre-login.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     */
     public void handleChangeLanguage(ActionEvent actionEvent) {
         CheckMenuItem clickedItem = (CheckMenuItem)actionEvent.getTarget();
         if ((!mainApp.getDefaultProperties().getProperty("languageINFO").equals(clickedItem.getId().substring(0,2))) && (!mainApp.getDefaultProperties().getProperty("countryINFO").equals(clickedItem.getId().substring(3,5)))) {
@@ -184,6 +226,9 @@ public class LoginController {
         setSelectedLanguageMenuItem();
     }
 
+    /**
+     * Sets the check-mark in the language-menu.
+     */
     private void setSelectedLanguageMenuItem() {
         for (CheckMenuItem language : languageList) {
             if (language.getId().equals(textBundle.getString("localeINFO"))) {
@@ -195,10 +240,18 @@ public class LoginController {
         }
     }
 
+    /**
+     * Getter for the ResourceBundle in the textBundle-variable.
+     * @return The ResourceBundle.
+     */
     public ResourceBundle getTextBundle() {
         return textBundle;
     }
 
+    /**
+     * Setter for the textBundle-variable.
+     * @param textBundle A ResourceBundle.
+     */
     public void setTextBundle(ResourceBundle textBundle) {
         this.textBundle = textBundle;
     }

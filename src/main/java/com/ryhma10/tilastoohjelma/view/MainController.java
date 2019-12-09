@@ -64,10 +64,16 @@ public class MainController {
     @FXML
     private TableColumn<GamedataWrapper, Integer> column7;
 
+    /**
+     * Default constructor.
+     */
     public MainController() {
         //Default constructor
     }
 
+    /**
+     * Initializes the main-window.
+     */
     public void initialize() {
         System.out.println("MainController: Initialize");
         progressIndicator.setProgress(1.0);
@@ -107,6 +113,9 @@ public class MainController {
         });
     }
 
+    /**
+     * Initializes the TableView.
+     */
     public void secondaryInitialize() {
         List<Gamedata> gamedataList = modelAccessObject.readSpecificProfilesGames(currentProfile.getProfileName());
         List<GamedataWrapper> gamedataWrapperList = new ArrayList<GamedataWrapper>();
@@ -130,6 +139,9 @@ public class MainController {
         tableView.setItems(observableGamedataWrapperList);
     }
 
+    /**
+     * Sets the texts on language change.
+     */
     public void setTexts() {
         Platform.runLater(() -> {
             welcomeLabel.setText(textBundle.getString("label.welcome"));
@@ -163,38 +175,71 @@ public class MainController {
         });
     }
 
+    /**
+     * Shows the input-window.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     * @throws IOException On failed load of Input.fxml.
+     */
     @FXML
     public void handleAddGames(ActionEvent actionEvent) throws IOException {
         mainApp.showInputWindow();
     }
 
+    /**
+     * Shows the profile-window.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     * @throws IOException On failed load of Profile.fxml.
+     */
     @FXML
     public void handleProfileOverview(ActionEvent actionEvent) throws IOException {
         mainApp.showProfileWindow();
     }
 
+    /**
+     * Shows an Alert as defined in AlertFactory.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     */
     @FXML
     public void handleAbout(ActionEvent actionEvent) {
         Alert aboutAlert = alertFactory.createAlert("About application");
         aboutAlert.showAndWait();
     }
 
+    /**
+     * Shows the settings-window.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     * @throws IOException On failed load of Settings.fxml.
+     */
     @FXML
     public void handleSettings(ActionEvent actionEvent) throws IOException {
         mainApp.showSettingsWindow();
     }
 
+    /**
+     * Exits the application.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     */
     @FXML
     public void handleExit(ActionEvent actionEvent) {
         System.exit(0);
     }
 
+    /**
+     * Shows a help-dialog. Not yet implemented.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     */
     @FXML
     public void handleMainHelp(ActionEvent actionEvent) {
         System.out.println("Not yet implemented");
         //TODO
     }
 
+    /**
+     * Starts fetching the games from the API and once done, exports them to the database.
+     * @param gameIdArrayList The list of games to fetch from the API.
+     * @param summonerName The player name to use.
+     * @param modelAccessObject A ModelAccessObject.
+     */
     public void startFetchingGames(ArrayList<Long> gameIdArrayList, String summonerName, ModelAccessObject modelAccessObject) {
         System.out.println("startFetchingGames(" + gameIdArrayList.toString() + ", " + summonerName + ", " + modelAccessObject.toString() + ")");
         Platform.runLater(() -> {
@@ -271,6 +316,10 @@ public class MainController {
         masterThread.start();
     }
 
+    /**
+     * Detects double left-clicks and selects the column from the table and shows the individualGame-window.
+     * @param mouseEvent Interacting with the mouse.
+     */
     public void handleTableViewClicked(MouseEvent mouseEvent) {
         tableView.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -288,6 +337,9 @@ public class MainController {
         });
     }
 
+    /**
+     * A helper-method that prints information about the currently loaded SoftwareProfile.
+     */
     public void printProfileData() {
         if (currentProfile.getRiotAPIKey() != null) {
             System.out.println("Riot API Key found: " + currentProfile.getRiotAPIKey());
@@ -303,46 +355,89 @@ public class MainController {
         }
     }
 
+    /**
+     * Getter for the current SoftwareProfile.
+     * @return The SoftwareProfile.
+     */
     public SoftwareProfile getCurrentProfile() {
         return currentProfile;
     }
 
+    /**
+     * Setter for the currentProfile-variable.
+     * @param currentProfile A SoftwareProfile.
+     */
     public void setCurrentProfile(SoftwareProfile currentProfile) {
         this.currentProfile = currentProfile;
     }
 
+    /**
+     * Refreshes the TableView.
+     */
     public void refreshMainScene() {
         secondaryInitialize();
     }
 
+    /**
+     * Setter for the MainApp.
+     * @param mainApp The MainApp.
+     */
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
     }
 
+    /**
+     * Setter for the mainStage.
+     * @param mainStage The Stage.
+     */
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
     }
 
+    /**
+     * Getter for the currentProfile's name.
+     * @return The name.
+     */
     public String getProfileName() {
         return profileName;
     }
 
+    /**
+     * Text-setter for the profileNameLabel.
+     * @param profileName The name.
+     */
     public void setProfileNameLabel(String profileName) {
         profileNameLabel.setText(profileName);
     }
 
+    /**
+     * Getter for the current ResourceBundle.
+     * @return The ResourceBundle.
+     */
     public ResourceBundle getTextBundle() {
         return textBundle;
     }
 
+    /**
+     * Setter for the ResourceBundle.
+     * @param textBundle A ResourceBundle.
+     */
     public void setTextBundle(ResourceBundle textBundle) {
         this.textBundle = textBundle;
     }
 
+    /**
+     * Getter for the selectedRiotId-variable.
+     * @return The selectedRiotId-variable.
+     */
     public long getSelectedRiotId() {
         return selectedRiotId;
     }
 
+    /**
+     * Setter for the selectedRiotId-variable.
+     * @param selectedRiotId The long to set.
+     */
     public void setSelectedRiotId(long selectedRiotId) {
         this.selectedRiotId = selectedRiotId;
     }
