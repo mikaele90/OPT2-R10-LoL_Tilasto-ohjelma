@@ -34,9 +34,17 @@ public class MainController {
     private SoftwareProfile currentProfile;
     private ResourceBundle textBundle;
     private long selectedRiotId;
+    private Thread masterThread;
+    private Thread slaveThread;
 
     @FXML
     private Label profileNameLabel, welcomeLabel, fetchGamesStatusLabel;
+    @FXML
+    private Button addNewGamesButton, profileOverviewButton;
+    @FXML
+    private Menu actionsMenu, editMenu, helpMenu;
+    @FXML
+    private MenuItem addGamesMenuItem, profileMenuItem, exitMenuItem, settingsMenuItem, helpMenuItem, aboutMenuItem;
     @FXML
     private ProgressIndicator progressIndicator;
     @FXML
@@ -61,12 +69,12 @@ public class MainController {
     }
 
     public void initialize() {
+        System.out.println("MainController: Initialize");
         progressIndicator.setProgress(1.0);
         progressIndicator.setDisable(true);
-        fetchGamesStatusLabel.setText("Status: Ready");
-        fetchGamesStatusLabel.setDisable(true);
         Platform.runLater(() -> {
-            System.out.println("MainController: Initialize");
+            fetchGamesStatusLabel.setText(textBundle.getString("label.statusReady"));
+            fetchGamesStatusLabel.setDisable(true);
             alertFactory = new AlertFactory(textBundle);
             currentProfile = mainApp.getProfile();
             profileNameLabel.setText(currentProfile.getProfileName());
@@ -123,7 +131,36 @@ public class MainController {
     }
 
     public void setTexts() {
-
+        Platform.runLater(() -> {
+            welcomeLabel.setText(textBundle.getString("label.welcome"));
+            if (fetchGamesStatusLabel.getText().equals(textBundle.getString("label.statusReady"))) {
+                fetchGamesStatusLabel.setText(textBundle.getString("label.statusReady"));
+            }
+            else if (fetchGamesStatusLabel.getText().equals(textBundle.getString("label.statusFetchingGames"))) {
+                fetchGamesStatusLabel.setText(textBundle.getString("label.statusFetchingGames"));
+            }
+            else {
+                fetchGamesStatusLabel.setText(textBundle.getString("label.statusStandby"));
+            }
+            addNewGamesButton.setText(textBundle.getString("button.addGames"));
+            profileOverviewButton.setText(textBundle.getString("button.profileOverview"));
+            actionsMenu.setText(textBundle.getString("menu.actions"));
+            editMenu.setText(textBundle.getString("menu.edit"));
+            helpMenu.setText(textBundle.getString("menu.help"));
+            aboutMenuItem.setText(textBundle.getString("menuItem.about"));
+            helpMenuItem.setText(textBundle.getString("menuItem.help"));
+            settingsMenuItem.setText(textBundle.getString("menuItem.settings"));
+            addGamesMenuItem.setText(textBundle.getString("menuItem.addGames"));
+            profileMenuItem.setText(textBundle.getString("menuItem.profileOverview"));
+            exitMenuItem.setText(textBundle.getString("menuItem.exit"));
+            column1.setText(textBundle.getString("tableColumn.id"));
+            column2.setText(textBundle.getString("tableColumn.riotId"));
+            column3.setText(textBundle.getString("tableColumn.date"));
+            column4.setText(textBundle.getString("tableColumn.result"));
+            column5.setText(textBundle.getString("tableColumn.champion"));
+            column6.setText(textBundle.getString("tableColumn.summoner"));
+            column7.setText(textBundle.getString("tableColumn.profileId"));
+        });
     }
 
     @FXML
@@ -159,43 +196,79 @@ public class MainController {
     }
 
     public void startFetchingGames(ArrayList<Long> gameIdArrayList, String summonerName, ModelAccessObject modelAccessObject) {
-        System.out.println("startFetchingGames()");
+        System.out.println("startFetchingGames(" + gameIdArrayList.toString() + ", " + summonerName + ", " + modelAccessObject.toString() + ")");
         Platform.runLater(() -> {
             progressIndicator.setDisable(false);
             progressIndicator.setProgress(0.0);
-            fetchGamesStatusLabel.setText("Status: Fetching games...");
+            fetchGamesStatusLabel.setText(textBundle.getString("label.statusFetchingGames"));
             fetchGamesStatusLabel.setDisable(false);
+            while (progressIndicator.getProgress() < 0.09) {
+                progressIndicator.setProgress(progressIndicator.getProgress()+0.01);
+            }
         });
-        AcquireData acquireData = new AcquireData();
-        acquireData.setCurrentProfile(currentProfile);
-        acquireData.setHistorySize(gameIdArrayList.size());
-        acquireData.setPlayerName(summonerName);
-        ApiData[][] apiDataArray = acquireData.getData(gameIdArrayList);
-        Gamedata gamedata;
-        Additional additional;
-        Item item;
-        Team team;
-        for(int i = 0; i < acquireData.getSize(); i++) {
-            gamedata = new Gamedata(acquireData.getMatchId(apiDataArray, i), acquireData.getPlayerName(apiDataArray, i),
-                    acquireData.getChampionPlayed(apiDataArray, i), acquireData.getMatchKills(apiDataArray, i), acquireData.getMatchDeaths(apiDataArray, i),
-                    acquireData.getMatchAssists(apiDataArray, i), acquireData.getMatchResult(apiDataArray, i),
-                    acquireData.getPosition(apiDataArray, i), acquireData.getPlayerRank(apiDataArray, i));
-            additional = new Additional(acquireData.getDamageDealt(apiDataArray, i), acquireData.getDamageTaken(apiDataArray, i),
-                    acquireData.getQueueType(apiDataArray, i), acquireData.getGoldEarned(apiDataArray, i), acquireData.getMatchDuration(apiDataArray, i),
-                    acquireData.getMatchDate(apiDataArray, i), acquireData.getWardsPlaced(apiDataArray, i), acquireData.getCreepScore(apiDataArray, i));
-            String[] items = acquireData.getItemNames(apiDataArray, i);
-            item = new Item(items[0], items[1], items[2], items[3], items[4], items[5], items[6]);
-            String[] blue = acquireData.getBlueTeamChampions(apiDataArray, i);
-            String[] red = acquireData.getRedTeamChampions(apiDataArray, i);
-            if (acquireData.getTeamColor(apiDataArray, i).equalsIgnoreCase("BLUE")) {
-                team = new Team(blue[0], blue[1], blue[2], blue[3], red[0], red[1], red[2], red[3], red[4]);
+        slaveThread = new Thread(() -> {
+            while (masterThread.isAlive()) {
+                long l = gameIdArrayList.size() * 95;
+                if (progressIndicator.getProgress() < 0.99) {
+                    progressIndicator.setProgress(progressIndicator.getProgress()+0.01);
+                }
+                try {
+                    Thread.sleep(l);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            else {
-                team = new Team(red[0], red[1], red[2], red[3], blue[0], blue[1], blue[2], blue[3], blue[4]);
+        });
+        masterThread = new Thread(() -> {
+            slaveThread.start();
+            AcquireData acquireData = new AcquireData();
+            acquireData.setCurrentProfile(currentProfile);
+            acquireData.setHistorySize(gameIdArrayList.size());
+            acquireData.setPlayerName(summonerName);
+            ApiData[][] apiDataArray = acquireData.getData(gameIdArrayList);
+            Gamedata gamedata;
+            Additional additional;
+            Item item;
+            Team team;
+            for(int i = 0; i < acquireData.getSize(); i++) {
+                gamedata = new Gamedata(acquireData.getMatchId(apiDataArray, i), acquireData.getPlayerName(apiDataArray, i),
+                        acquireData.getChampionPlayed(apiDataArray, i), acquireData.getMatchKills(apiDataArray, i), acquireData.getMatchDeaths(apiDataArray, i),
+                        acquireData.getMatchAssists(apiDataArray, i), acquireData.getMatchResult(apiDataArray, i),
+                        acquireData.getPosition(apiDataArray, i), acquireData.getPlayerRank(apiDataArray, i));
+                additional = new Additional(acquireData.getDamageDealt(apiDataArray, i), acquireData.getDamageTaken(apiDataArray, i),
+                        acquireData.getQueueType(apiDataArray, i), acquireData.getGoldEarned(apiDataArray, i), acquireData.getMatchDuration(apiDataArray, i),
+                        acquireData.getMatchDate(apiDataArray, i), acquireData.getWardsPlaced(apiDataArray, i), acquireData.getCreepScore(apiDataArray, i));
+                String[] items = acquireData.getItemNames(apiDataArray, i);
+                item = new Item(items[0], items[1], items[2], items[3], items[4], items[5], items[6]);
+                String[] blue = acquireData.getBlueTeamChampions(apiDataArray, i);
+                String[] red = acquireData.getRedTeamChampions(apiDataArray, i);
+                try {
+                    if (acquireData.getTeamColor(apiDataArray, i).equalsIgnoreCase("BLUE")) {
+                        team = new Team(blue[0], blue[1], blue[2], blue[3], red[0], red[1], red[2], red[3], red[4]);
+                    }
+                    else {
+                        team = new Team(red[0], red[1], red[2], red[3], blue[0], blue[1], blue[2], blue[3], blue[4]);
+                    }
+                } catch (NullPointerException npe) {
+                    break;
+                }
+                modelAccessObject.createGamedata(currentProfile.getProfileName(), gamedata, item, team, additional);
+                secondaryInitialize();
             }
-            modelAccessObject.createGamedata(currentProfile.getProfileName(), gamedata, item, team, additional);
-            secondaryInitialize();
-        }
+            Platform.runLater(() -> {
+                while(progressIndicator.getProgress() < 1.0) {
+                    progressIndicator.setProgress(progressIndicator.getProgress()+0.01);
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                fetchGamesStatusLabel.setText(textBundle.getString("label.statusReady"));
+            });
+        });
+        masterThread.start();
     }
 
     public void handleTableViewClicked(MouseEvent mouseEvent) {

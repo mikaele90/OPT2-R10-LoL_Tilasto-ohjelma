@@ -385,5 +385,96 @@ public class ModelAccessObject implements IModelDAO {
 				throw e;
 			}
 		}
+		
+		public boolean deleteAdditonal() {
+			Transaction transaction = null;
+			boolean truth = false;
+			
+			try(Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				String hql = "delete Additional";
+				Query query = session.createQuery(hql);
+				query.executeUpdate();
+				session.getTransaction().commit();
+				truth = true;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}
+			return truth;	
+		}
+		
+		public boolean deleteTeam() {
+			Transaction transaction = null;
+			boolean truth = false;
+			
+			try(Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				String hql = "delete Team";
+				Query query = session.createQuery(hql);
+				query.executeUpdate();
+				session.getTransaction().commit();
+				truth = true;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}
+			return truth;	
+		}
+		
+		public boolean deleteItem() {
+			Transaction transaction = null;
+			boolean truth = false;
+			
+			try(Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				String hql = "delete Item";
+				Query query = session.createQuery(hql);
+				query.executeUpdate();
+				session.getTransaction().commit();
+				truth = true;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}
+			return truth;	
+		}
+		
+		public boolean deleteGamedata() {
+			Transaction transaction = null;
+			boolean truth = false;
+			
+			try(Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				String hql = "delete Gamedata";
+				Query query = session.createQuery(hql);
+				query.executeUpdate();
+				session.getTransaction().commit();
+				truth = true;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}
+			return truth;	
+		}
+		
+		@SuppressWarnings("null")
+		public boolean deleteProfile() {
+			Transaction transaction = null;
+			boolean truth = false;
+			
+			try(Session session = factory.openSession()){
+				transaction = session.beginTransaction();
+				String hql = "delete SoftwareProfile";
+				Query query = session.createQuery(hql);
+				query.executeUpdate();
+				session.getTransaction().commit();
+				truth = true;
+			}catch(Exception e) {
+				transaction.rollback();
+				throw e;
+				}
+			return truth;	
+		}
 
 }

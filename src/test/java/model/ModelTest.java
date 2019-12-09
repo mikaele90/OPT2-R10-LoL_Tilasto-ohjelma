@@ -30,8 +30,16 @@ public class ModelTest{
 	private static Additional a2= new Additional(16, 45,"gamemode", 14000, 120,"date", 16, 10);
 	private static Additional a3 = new Additional(8, 7, "gamemode", 10000, 180,"date", 7, 3);
 	
+	/**
+	 * Empties database and then adds two profile and three gamedatas to database
+	 */
 	@BeforeAll
 	static void addNeeded() {
+		modelDAO.deleteAdditonal();
+		modelDAO.deleteTeam();
+		modelDAO.deleteItem();
+		modelDAO.deleteGamedata();
+		modelDAO.deleteProfile();
 		modelDAO.addProfile(p1);
 		modelDAO.addProfile(p2);
 		modelDAO.createGamedata("junit1", g1, i1, t1, a1);
@@ -39,7 +47,11 @@ public class ModelTest{
 		modelDAO.createGamedata("junit1", g3, i3, t3, a3);
 	}
 
-
+	
+	/**
+	 * Test reading profiledata from database
+	 * returns profiledata
+	 */
 	@Test
 	public void testReadProfile() {
 		SoftwareProfile testProfile = modelDAO.readProfile("junit2");
@@ -47,7 +59,10 @@ public class ModelTest{
 		assertEquals("test2", testProfile.getProfilePassword(), "wrong password");
 	}
 
-
+	/**
+	 * Test gpm calcultaor
+	 * return number in double format
+	 */
 	@Test
 	public void testCountGpm() {
 		double gold = 23000;
@@ -56,6 +71,10 @@ public class ModelTest{
 
 	}
 	
+	/**
+	 * Tests reading one line from Additional table
+	 * return Additional object and test check all the values
+	 */
 	@Test
 	public void testReadAdditionalData() {
 		Additional additionalResult = modelDAO.readAdditionalData(13);
@@ -70,6 +89,10 @@ public class ModelTest{
 		
 	}
 	
+	/**
+	 * Tests reading one line from Team table
+	 * return Team object and test check all the values
+	 */
 	@Test
 	public void testReadTeam() {
 		Team teamResult = modelDAO.readTeamComposition(12);
@@ -85,6 +108,10 @@ public class ModelTest{
 		
 	}
 	
+	/**
+	 * Tests reading one line from Gamedata table
+	 * return gamedata object and test check all the values
+	 */
 	@Test void testOneGameReading() {
 		Gamedata testGamedata = modelDAO.readOneGame(11);
 		assertEquals("testPlayer1", testGamedata.getIngameName(), "Ingame name is wrong");
@@ -111,18 +138,30 @@ public class ModelTest{
 		assertEquals(null, testGamedata.getSoftwareProfile().getDefaultLanguage(), "Profiles language is wrong");
 	}
 	
+	/**
+	 * Test if a game is in the database
+	 * returns boolean
+	 */
 	@Test void testCheckGameTrue() {
 		boolean checkGameTrue = modelDAO.checkGame(13);
 		assertEquals(true, checkGameTrue, "True Checker give false answer");
 		
 	}
 	
+	/**
+	 * * Test if a game is in the database
+	 * returns boolean
+	 */
 	@Test void testCheckGameFalse() {
 		boolean checkGameFalse = modelDAO.checkGame(0);
 		assertEquals(false, checkGameFalse, "False checker give false answer");
 		
 	}
 	
+	/**
+	 * Tests reading all games from database
+	 * return list of Gamedata, tester checks only champion data of each object
+	 */
 	@Test void testReadGames() {
 		List<Gamedata> games = modelDAO.readGames();
 		Gamedata game1 = games.get(0);
@@ -133,6 +172,10 @@ public class ModelTest{
 		assertEquals("Nami", game3.getChampion(), "False answer about game3");
 	}
 	
+	/**
+	 * Tests reading all the games from database which belongs to one account
+	 * return List of gamdata objects and tester check one value of each object
+	 */
 	@Test void testReadSpecificProfileGames() {
 		List<Gamedata> games2 = modelDAO.readSpecificProfilesGames("junit1");
 		Gamedata gamee1 = games2.get(0);
@@ -141,7 +184,10 @@ public class ModelTest{
 		assertEquals("Nami", gamee2.getChampion(), "False answer about game2");
 	}
 	
-	
+	/**
+	 * Tests reading all items from database
+	 * return is list of Item objecs, checks only one data of each list object
+	 */
 	@Test void testReadItems() {
 		List<Item> items = modelDAO.readItems();
 		Item item1 = items.get(0);

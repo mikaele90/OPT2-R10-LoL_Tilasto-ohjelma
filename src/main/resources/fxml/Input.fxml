@@ -15,20 +15,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <BorderPane fx:id="inputBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="500.0" stylesheets="@../styles/Styles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ryhma10.tilastoohjelma.view.InputController">
    <top>
       <MenuBar fx:id="inputMenuBar" BorderPane.alignment="CENTER">
         <menus>
-          <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+          <Menu fx:id="editMenu" mnemonicParsing="false" text="%menu.edit">
             <items>
-              <MenuItem fx:id="settingsMenuItem" mnemonicParsing="false" onAction="#handleSettings" text="Settings" />
+              <MenuItem fx:id="settingsMenuItem" mnemonicParsing="false" onAction="#handleSettings" text="%menuItem.settings" />
             </items>
           </Menu>
-          <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+          <Menu fx:id="helpMenu" mnemonicParsing="false" text="%menu.help">
             <items>
-                  <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="Help" />
-              <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAbout" text="About" />
+                <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleHelp" text="%menuItem.help" />
+                <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAbout" text="%menuItem.about" />
             </items>
           </Menu>
         </menus>
@@ -37,8 +36,8 @@
    <center>
       <GridPane fx:id="inputGridPane" BorderPane.alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.3333740234375" minWidth="10.0" prefWidth="150.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="332.6666259765625" minWidth="10.0" prefWidth="322.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="231.3333740234375" minWidth="10.0" prefWidth="158.6666259765625" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="332.6666259765625" minWidth="10.0" prefWidth="313.3333740234375" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -46,15 +45,15 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="leagueOfLegendsRegionLabel" text="League of Legends region:" />
-            <Label fx:id="summonerNameLabel" text="Summoner name:" GridPane.rowIndex="1" />
-            <Label fx:id="numberOfGamesLabel" text="Number of games to fetch:" GridPane.rowIndex="2" />
+            <Label fx:id="leagueOfLegendsRegionLabel" text="%label.leagueOfLegendsRegion" />
+            <Label fx:id="summonerNameLabel" text="%label.summonerName" GridPane.rowIndex="1" />
+            <Label fx:id="numberOfGamesLabel" text="%label.numberOfGames" GridPane.rowIndex="2" />
             <Label fx:id="currentRegionLabel" text="theCurrentRegion" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="3.0" />
                </GridPane.margin>
             </Label>
-            <TextField fx:id="summonerNameTextField" promptText="The summoner name with which to fetch games" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="summonerNameTextField" promptText="%promptText.summonerNameToFetch" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="3.0" />
                </GridPane.margin>
@@ -75,8 +74,8 @@
          <right>
             <HBox fx:id="inputBottomRightHBox" alignment="CENTER_LEFT" prefHeight="50.0" spacing="14.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
-                  <Button fx:id="fetchGamesButton" defaultButton="true" mnemonicParsing="false" onAction="#handleFetchGames" text="Fetch games" />
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancel" text="%button.cancel" />
+                  <Button fx:id="fetchGamesButton" defaultButton="true" mnemonicParsing="false" onAction="#handleFetchGames" text="%button.fetchGames" />
                   <ProgressIndicator fx:id="progressIndicator" prefHeight="40.0" prefWidth="40.0" />
                </children>
                <padding>

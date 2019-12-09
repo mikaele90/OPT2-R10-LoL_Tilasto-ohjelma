@@ -15,8 +15,8 @@
    <children>
       <GridPane layoutX="14.0" layoutY="185.0" prefHeight="290.0" prefWidth="299.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.0" minWidth="10.0" prefWidth="158.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.3333740234375" minWidth="10.0" prefWidth="141.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -29,29 +29,29 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Champion played:" GridPane.rowIndex="1" />
-            <Label text="Match result:" />
-            <Label text="K/D/A:" GridPane.rowIndex="2" />
-            <Label text="GPM:" GridPane.rowIndex="3" />
-            <Label text="CS Score:" GridPane.rowIndex="4" />
-            <Label fx:id="mr" text="Label" GridPane.columnIndex="1" />
-            <Label fx:id="champplayed" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="kda" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="gpm" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="cs" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label text="Wards placed" GridPane.rowIndex="5" />
-            <Label text="Damage dealt:" GridPane.rowIndex="6" />
-            <Label fx:id="wp" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label fx:id="dd" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Label text="Rank:" GridPane.rowIndex="7" />
-            <Label fx:id="r" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label text="%label.championPlayed" GridPane.rowIndex="1" />
+            <Label text="%label.matchResult" />
+            <Label text="%label.kda" GridPane.rowIndex="2" />
+            <Label text="%label.gpm" GridPane.rowIndex="3" />
+            <Label text="%label.csScore" GridPane.rowIndex="4" />
+            <Label fx:id="mr" text="%label.nan" GridPane.columnIndex="1" />
+            <Label fx:id="champplayed" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="kda" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="gpm" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="cs" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="%label.wardsPlaced" GridPane.rowIndex="5" />
+            <Label text="%label.damageDealt" GridPane.rowIndex="6" />
+            <Label fx:id="wp" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label fx:id="dd" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label text="%label.rank" GridPane.rowIndex="7" />
+            <Label fx:id="r" text="%label.noRank" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
       </GridPane>
       <ButtonBar layoutX="447.0" layoutY="475.0" prefHeight="40.0" prefWidth="330.0">
         <buttons>
-          <Button mnemonicParsing="false" onAction="#handleBack" text="Back" />
-            <Button mnemonicParsing="false" text="Advanced stats" />
-            <Button mnemonicParsing="false" onAction="#handleFeedback" text="Feedback" />
+          <Button mnemonicParsing="false" onAction="#handleBack" text="%button.back" />
+            <Button mnemonicParsing="false" text="%button.advancedStats" />
+            <Button mnemonicParsing="false" onAction="#handleFeedback" text="%button.feedback" />
         </buttons>
       </ButtonBar>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
@@ -91,13 +91,13 @@
                   <Image url="@../../../../../Desktop/Picturesforproject/lee-sin-muay-thai.png" />
                </image>
             </ImageView>
-            <Label fx:id="champ1" text="KDA" GridPane.columnIndex="1" />
-            <Label fx:id="champ2" text="KDA" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="champ3" text="KDA" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="champ4" text="KDA" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="champ1" text="%label.nan" GridPane.columnIndex="1" />
+            <Label fx:id="champ2" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="champ3" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="champ4" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="3" />
          </children>
       </GridPane>
-      <Label layoutX="265.0" layoutY="30.0" prefHeight="40.0" prefWidth="128.0" text="Your team">
+      <Label layoutX="265.0" layoutY="30.0" prefHeight="40.0" prefWidth="160.0" text="%label.yourTeam">
          <font>
             <Font size="18.0" />
          </font>
@@ -135,11 +135,11 @@
                   <Image url="@../../../../../Desktop/Picturesforproject/twisted-fate-classic.png" />
                </image>
             </ImageView>
-            <Label fx:id="enemy1" text="KDA" GridPane.columnIndex="1" />
-            <Label fx:id="enemy2" text="KDA" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="enemy3" text="KDA" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="enemy4" text="KDA" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label fx:id="enemy5" text="KDA" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label fx:id="enemy1" text="%label.nan" GridPane.columnIndex="1" />
+            <Label fx:id="enemy2" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="enemy3" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="enemy4" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="enemy5" text="%label.nan" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <ImageView fitHeight="59.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../Desktop/Picturesforproject/jhin-classic.png" />
@@ -147,7 +147,7 @@
             </ImageView>
          </children>
       </GridPane>
-      <Label layoutX="465.0" layoutY="30.0" prefHeight="40.0" prefWidth="120.0" text="Enemy team">
+      <Label layoutX="465.0" layoutY="30.0" prefHeight="40.0" prefWidth="160.0" text="%label.enemyTeam">
          <font>
             <Font size="18.0" />
          </font>

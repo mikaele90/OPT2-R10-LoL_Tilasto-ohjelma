@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class IndividualGameController {
 	Gamedata gd;
@@ -19,6 +20,7 @@ public class IndividualGameController {
 	private MainApp mainApp;
     private Stage igstage;
 	private long riotId;
+	private ResourceBundle textBundle;
 	
     @FXML
 	private Label mr;
@@ -82,13 +84,23 @@ public class IndividualGameController {
 		Platform.runLater(() -> {
 			fb = new FeedBack(riotId);
 			champplayed.setText(fb.getChamp());
-			mr.setText(fb.getResult());
+			if (fb.getResult().equalsIgnoreCase("Win")) {
+				mr.setText(textBundle.getString("label.win"));
+			}
+			else if (fb.getResult().equalsIgnoreCase("Loss")) {
+				mr.setText(textBundle.getString("label.loss"));
+			}
 			kda.setText(fb.getKDAToString());
 			gpm.setText(fb.getGPMToString());
 			cs.setText(fb.getCStoString());
 			wp.setText(fb.getWardsToString());
 			dd.setText(fb.getDdToString());
-			r.setText(fb.getRank());
+			if (fb.getRank().equalsIgnoreCase("No Rank")) {
+				r.setText(textBundle.getString("label.noRank"));
+			}
+			else {
+				r.setText(fb.getRank());
+			}
 			champ1.setText(fb.getChamp1());
 			champ2.setText(fb.getChamp2());
 			champ3.setText(fb.getChamp3());
@@ -126,9 +138,12 @@ public class IndividualGameController {
 		this.riotId = riotId;
 	}
 
-
 	public FeedBack getFb() {
 		return fb;
+	}
+
+	public void setTextBundle(ResourceBundle textBundle) {
+		this.textBundle = textBundle;
 	}
 
 }

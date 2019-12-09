@@ -128,8 +128,12 @@ public class MainApp extends Application {
     }
 
     public void showMainWindow(SoftwareProfile profile) throws IOException {
-        System.out.println("user: " + profile.getProfileName());
-        //System.out.println("psw: " + profile.getProfilePassword());
+        if (profile.getDefaultLanguage() != null) {
+            currentLocale = Locale.forLanguageTag(profile.getDefaultLanguage().replace("_", "-"));
+            currentLanguage = currentLocale.getLanguage();
+            currentCountry = currentLocale.getCountry();
+            textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"), textBundle);
         mainWindow = (AnchorPane)loader.load();
 
@@ -143,20 +147,14 @@ public class MainApp extends Application {
         MainController mainController = loader.getController();
         mainController.setMainApp(this);
         mainController.setMainStage(mainStage);
-        if (profile.getDefaultLanguage() != null) {
-            currentLocale = Locale.forLanguageTag(profile.getDefaultLanguage().replace("_", "-"));
-            currentLanguage = currentLocale.getLanguage();
-            currentCountry = currentLocale.getCountry();
-            textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
-        }
+
         mainController.setTextBundle(textBundle);
         mainStage.setTitle(textBundle.getString("windowTitle.main"));
         mainStage.show();
     }
     
     public void showIGWindow(long riotId) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/IndividualGame.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/IndividualGame.fxml"), textBundle);
         IGWindow = (AnchorPane)loader.load();
 
         Stage IGStage = new Stage();
@@ -170,6 +168,8 @@ public class MainApp extends Application {
         igcontroller.setMainApp(this);
         igcontroller.setIGStage(IGStage);
         igcontroller.setRiotId(riotId);
+        igcontroller.setTextBundle(textBundle);
+        IGStage.setTitle(textBundle.getString("windowTitle.individualGame"));
 
         IGStage.show();
     }
