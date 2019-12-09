@@ -272,10 +272,10 @@ public class FeedBack {
 		if(kda < 1.5) {
 		KDAevaluation = "Poor KDA";
 		}
-		else if(kda > 1.5 &&  kda<3) {
+		else if(kda >= 1.5 &&  kda<3) {
 			KDAevaluation = "Average KDA";
 		}
-		else if(kda>3 && kda < 5) {
+		else if(kda >= 3 && kda <= 5) {
 			KDAevaluation = "Good KDA";
 		}
 		else if(kda>5){
@@ -312,10 +312,10 @@ public class FeedBack {
 		if (cspermin < 6) {
 			csevaluation = "poor";
 		}
-		else if(cspermin > 6 && cspermin < 8 ) {
+		else if(cspermin >= 6 && cspermin < 8 ) {
 			csevaluation = "good";
 		}
-		else if(cspermin > 8){
+		else if(cspermin >= 8){
 			csevaluation = "excellent";
 		}
 		return csevaluation;
