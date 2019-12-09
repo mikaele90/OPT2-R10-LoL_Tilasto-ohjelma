@@ -29,8 +29,9 @@ public class ModelAccessObject implements IModelDAO {
 	
 	
 	/**
-	 * readProfile method read SoftareProfile data from database, takes in the profile name in String format
-	 * Returns SoftwareProfile object
+	 * readProfile method read SoftareProfile data from database.
+	 * @param Takes in the profile name in String format.
+	 * @return SoftwareProfile object
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -54,8 +55,12 @@ public class ModelAccessObject implements IModelDAO {
 	/**
 	 * createGamedata method adds all the gamedata to database. It adds data to Gamedata- , Item-,
 	 * Team-, and Additional tables.
-	 * Method takes in Profile name in String Fromat also objects of gamedata, item, team and additional.
-	 * Returns boolean true or false.
+	 * @param Sets SoftwareProfile by profiles name parameter in String format
+	 * @param Sets Gamedata teable via Gamedata object
+	 * @param Sets Item table via Item object
+	 * @param Sets Team table via Team object
+	 * @param Sets Additional table via Additional object
+	 * @return boolean true or false.
 	 */
 		@Override
 		public boolean createGamedata(String name, Gamedata gamedata, Item item, Team team, Additional additional) {
@@ -90,7 +95,7 @@ public class ModelAccessObject implements IModelDAO {
 	
 	/**
 	 * readGames method lists all the games from database.
-	 * Returns list of Gamedata objects
+	 * @return list of Gamedata objects
 	 */
 	@SuppressWarnings( "unchecked")
 	@Override
@@ -112,8 +117,10 @@ public class ModelAccessObject implements IModelDAO {
 
 	
 	/**
-	 * gpmCalculus counts simply gold per minute value. It takes in time and gold values
-	 * Returns answer of the calculus
+	 * gpmCalculus counts simply gold per minute value.
+	 * @param Takes in time as double format
+	 * @param Takes in gold value in double format.
+	 * @return Answer of the calculus in double format.
 	 */
 	public double gpmCalculus(double time, double gold) {
 		double result = gold/time;
@@ -125,8 +132,8 @@ public class ModelAccessObject implements IModelDAO {
 	
 	/**
 	 * readSpecificProfilesGames method returns all the games which were played by same profile.
-	 * Method takes in Profile name in String format.
-	 * Returns list of gamedata objects
+	 * @param Method takes in Profile name in String format.
+	 * @return list of gamedata objects
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -147,8 +154,8 @@ public class ModelAccessObject implements IModelDAO {
 	
 	/**
 	 * addProfile method add SoftwareProfile data into database.
-	 * Method takes in SoftwareProfile object.
-	 * Return boolean true or false.
+	 * @param Method takes in SoftwareProfile object and saves it to the database.
+	 * @return boolean true or false.
 	 */
 	@Override
 	public boolean addProfile(SoftwareProfile profile) {
@@ -339,8 +346,8 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * readAdditionalData method searches single games all the extra data.
-		 * Method takes in riot id.
-		 * Returns additional object.
+		 * @param Method takes in riot id and searches with it from the database.
+		 * @return Additional object.
 		 */
 		@SuppressWarnings("unchecked")
 		public Additional readAdditionalData(long riotid){
@@ -359,8 +366,8 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * readTeamComposition method searches both own team and enemy team champions from a single game.
-		 * Method takes in riot id
-		 * Return Team object
+		 * @param Method takes in riot id
+		 * @return Team object
 		 */
 		@SuppressWarnings("unchecked")
 		public Team readTeamComposition(long riotid){
@@ -379,8 +386,8 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * readOneGame method searches one game specific game from database.
-		 * Method takes in riot id.
-		 * return Gamedata object.
+		 * @param Method takes in riot id.
+		 * @return Gamedata object.
 		 */
 		@Override
 		@SuppressWarnings("rawtypes")
@@ -402,7 +409,7 @@ public class ModelAccessObject implements IModelDAO {
 
 		/**
 		 * readItems method lists every single item from database.
-		 * Returns list of Item objects
+		 * @return List of Item objects
 		 */
 		@SuppressWarnings("unchecked")
 		@Override
@@ -424,8 +431,8 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * checkGame method checks from database if gamedata already exists in there.
-		 * Method takes in riot id.
-		 * Return boolean true or false
+		 * @param Method takes in riot id.
+		 * @return boolean true or false
 		 */
 		@SuppressWarnings("rawtypes")
 		@Override
@@ -452,7 +459,7 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * deleteAdditional method deletes all columns from additional table
-		 * Returns booleantrue or false
+		 * @return boolean true or false
 		 */
 		public boolean deleteAdditonal() {
 			Transaction transaction = null;
@@ -474,7 +481,7 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * deleteTeam method deletes all columns from team table
-		 * Returns boolean true or false
+		 * @return boolean true or false
 		 */
 		public boolean deleteTeam() {
 			Transaction transaction = null;
@@ -495,8 +502,8 @@ public class ModelAccessObject implements IModelDAO {
 		}
 		
 		/**
-		 * deleteitem method deletes all columns from item table
-		 * Returns boolean true or false
+		 * deleteItem method deletes all columns from item table
+		 * @return boolean true or false
 		 */
 		public boolean deleteItem() {
 			Transaction transaction = null;
@@ -518,7 +525,7 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * deleteGamedata method deletes all columns from gamedata table
-		 * Returns boolean true or false
+		 * @return boolean true or false
 		 */
 		public boolean deleteGamedata() {
 			Transaction transaction = null;
@@ -540,7 +547,7 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * deleteProfile method deletes all columns from softwareprofile table
-		 * Returns boolean true or false
+		 * @return boolean true or false
 		 */
 		@SuppressWarnings("null")
 		public boolean deleteProfile() {
