@@ -172,8 +172,9 @@ public class SettingsController {
         if (result.equals("Settings changed")) {
             mainController.setCurrentProfile(currentProfile);
             mainApp.setProfile(currentProfile);
-            mainController.initialize();
+            mainController.setTextBundle(this.textBundle);
             mainController.printProfileData();
+            mainController.setTexts();
         }
         return result;
     }

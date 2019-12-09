@@ -128,8 +128,12 @@ public class MainApp extends Application {
     }
 
     public void showMainWindow(SoftwareProfile profile) throws IOException {
-        System.out.println("user: " + profile.getProfileName());
-        //System.out.println("psw: " + profile.getProfilePassword());
+        if (profile.getDefaultLanguage() != null) {
+            currentLocale = Locale.forLanguageTag(profile.getDefaultLanguage().replace("_", "-"));
+            currentLanguage = currentLocale.getLanguage();
+            currentCountry = currentLocale.getCountry();
+            textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
+        }
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"), textBundle);
         mainWindow = (AnchorPane)loader.load();
 
@@ -143,12 +147,7 @@ public class MainApp extends Application {
         MainController mainController = loader.getController();
         mainController.setMainApp(this);
         mainController.setMainStage(mainStage);
-        if (profile.getDefaultLanguage() != null) {
-            currentLocale = Locale.forLanguageTag(profile.getDefaultLanguage().replace("_", "-"));
-            currentLanguage = currentLocale.getLanguage();
-            currentCountry = currentLocale.getCountry();
-            textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
-        }
+
         mainController.setTextBundle(textBundle);
         mainStage.setTitle(textBundle.getString("windowTitle.main"));
         mainStage.show();

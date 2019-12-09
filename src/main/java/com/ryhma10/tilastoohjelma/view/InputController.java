@@ -131,7 +131,11 @@ public class InputController  {
 				Collection<Long> helperCollection = matchHistoryIdsFromDb;
 				helperArrayList.removeAll(helperCollection);
 				for (int i = 0; i < numberOfGames; i++) {
-					finalIdArrayList.add(helperArrayList.get(i));
+					try {
+						finalIdArrayList.add(helperArrayList.get(i));
+					} catch (IndexOutOfBoundsException ioobe) {
+						break;
+					}
 				}
 			}
 			else {
@@ -157,6 +161,7 @@ public class InputController  {
 	@FXML
 	public void handleSettings(ActionEvent actionEvent) throws IOException {
     	mainApp.showSettingsWindow();
+    	inputStage.close();
 	}
 
 	@FXML

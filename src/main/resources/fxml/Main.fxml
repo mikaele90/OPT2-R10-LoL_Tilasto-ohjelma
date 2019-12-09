@@ -36,31 +36,34 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Label fx:id="welcomeLabel" text="Welcome">
+                                        <Label fx:id="welcomeLabel" text="%label.welcome">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                             <GridPane.margin>
-                                                <Insets />
+                                                <Insets left="25.0" />
                                             </GridPane.margin>
                                             <padding>
-                                                <Insets bottom="15.0" left="25.0" right="10.0" top="20.0" />
+                                                <Insets bottom="15.0" top="20.0" />
                                             </padding>
                                         </Label>
-                                        <Label fx:id="profileNameLabel" text="user" GridPane.columnIndex="1">
+                                        <Label fx:id="profileNameLabel" text="~" GridPane.columnIndex="1">
                                             <font>
                                                 <Font size="18.0" />
                                             </font>
                                             <padding>
                                                 <Insets bottom="15.0" top="20.0" />
                                             </padding>
+                                 <GridPane.margin>
+                                    <Insets left="8.0" />
+                                 </GridPane.margin>
                                         </Label>
                                     </children>
                                     <VBox.margin>
                                         <Insets top="30.0" />
                                     </VBox.margin>
                                 </GridPane>
-                                <Button fx:id="addNewGamesButton" minHeight="32.0" minWidth="145.0" mnemonicParsing="false" onAction="#handleAddGames" prefHeight="40.0" prefWidth="160.0" text="Add games...">
+                                <Button fx:id="addNewGamesButton" minHeight="32.0" minWidth="145.0" mnemonicParsing="false" onAction="#handleAddGames" prefHeight="40.0" prefWidth="160.0" text="%button.addGames">
                                     <padding>
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
@@ -68,7 +71,7 @@
                                         <Insets left="25.0" top="50.0" />
                                     </VBox.margin>
                                 </Button>
-                                <Button fx:id="profileOverviewButton" minHeight="32.0" minWidth="145.0" mnemonicParsing="false" onAction="#handleProfileOverview" prefHeight="40.0" prefWidth="160.0" text="Profile overview">
+                                <Button fx:id="profileOverviewButton" minHeight="32.0" minWidth="145.0" mnemonicParsing="false" onAction="#handleProfileOverview" prefHeight="40.0" prefWidth="160.0" text="%button.profileOverview">
                                     <padding>
                                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </padding>
@@ -79,22 +82,22 @@
                             </children></VBox>
                         <MenuBar fx:id="mainMenuBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <menus>
-                                <Menu fx:id="actionsMenu" mnemonicParsing="false" text="Actions">
+                                <Menu fx:id="actionsMenu" mnemonicParsing="false" text="%menu.actions">
                                     <items>
-                                        <MenuItem fx:id="addGamesMenuItem" mnemonicParsing="false" onAction="#handleAddGames" text="Add games..." />
-                                        <MenuItem fx:id="profileMenuItem" mnemonicParsing="false" onAction="#handleProfileOverview" text="Profile overview" />
-                                        <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#handleExit" text="Exit" />
+                                        <MenuItem fx:id="addGamesMenuItem" mnemonicParsing="false" onAction="#handleAddGames" text="%menuItem.addGames" />
+                                        <MenuItem fx:id="profileMenuItem" mnemonicParsing="false" onAction="#handleProfileOverview" text="%menuItem.profileOverview" />
+                                        <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" onAction="#handleExit" text="%menuItem.exit" />
                                     </items>
                                 </Menu>
-                        <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+                        <Menu fx:id="editMenu" mnemonicParsing="false" text="%menu.edit">
                            <items>
-                                        <MenuItem fx:id="settingsMenuItem" mnemonicParsing="false" onAction="#handleSettings" text="Settings" />
+                                        <MenuItem fx:id="settingsMenuItem" mnemonicParsing="false" onAction="#handleSettings" text="%menuItem.settings" />
                            </items>
                         </Menu>
-                                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                                <Menu fx:id="helpMenu" mnemonicParsing="false" text="%menu.help">
                                     <items>
-                                        <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleMainHelp" text="Help" />
-                                        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAbout" text="About" />
+                                        <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#handleMainHelp" text="%menuItem.help" />
+                                        <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#handleAbout" text="%menuItem.about" />
                                     </items>
                                 </Menu>
                             </menus>
@@ -107,13 +110,13 @@
                      <bottom>
                               <TableView fx:id="tableView" onMousePressed="#handleTableViewClicked" prefHeight="556.0" BorderPane.alignment="CENTER">
                                   <columns>
-                                      <TableColumn fx:id="column1" prefWidth="43.0" text="Id" />
-                                      <TableColumn fx:id="column2" prefWidth="78.33331298828125" text="Riot Id" />
-                                      <TableColumn fx:id="column3" prefWidth="130.0" text="Date" />
-                                      <TableColumn fx:id="column4" prefWidth="53.666748046875" text="Result" />
-                                      <TableColumn fx:id="column5" prefWidth="177.0" text="Champion" />
-                              <TableColumn fx:id="column6" prefWidth="157.6666259765625" text="Summoner" />
-                                      <TableColumn fx:id="column7" prefWidth="55.3333740234375" text="Profile Id" />
+                                      <TableColumn fx:id="column1" prefWidth="43.0" text="%tableColumn.id" />
+                                      <TableColumn fx:id="column2" prefWidth="78.33331298828125" text="%tableColumn.riotId" />
+                                      <TableColumn fx:id="column3" prefWidth="130.0" text="%tableColumn.date" />
+                                      <TableColumn fx:id="column4" prefWidth="53.666748046875" text="%tableColumn.result" />
+                                      <TableColumn fx:id="column5" prefWidth="177.0" text="%tableColumn.champion" />
+                                      <TableColumn fx:id="column6" prefWidth="157.6666259765625" text="%tableColumn.summoner" />
+                                      <TableColumn fx:id="column7" prefWidth="55.3333740234375" text="%tableColumn.profileId" />
                                   </columns>
                            <BorderPane.margin>
                               <Insets bottom="14.0" />
@@ -127,7 +130,7 @@
                            </BorderPane.margin>
                            <children>
                               <ProgressIndicator fx:id="progressIndicator" disable="true" prefHeight="55.0" prefWidth="50.0" progress="1.0" />
-                              <Label fx:id="fetchGamesStatusLabel" layoutX="50.0" layoutY="15.0" text="Status: Standby...">
+                              <Label fx:id="fetchGamesStatusLabel" layoutX="50.0" layoutY="15.0" text="%label.statusStandby">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
