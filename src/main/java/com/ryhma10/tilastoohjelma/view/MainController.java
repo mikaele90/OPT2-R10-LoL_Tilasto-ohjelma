@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainController {
 
@@ -253,14 +254,16 @@ public class MainController {
         });
         slaveThread = new Thread(() -> {
             slaveThread.setPriority(1);
-            String statusHelper = fetchGamesStatusLabel.getText();
+            AtomicReference<String> statusHelper = new AtomicReference<>(textBundle.getString("label.statusFetchingGames"));
             while (masterThread.isAlive()) {
                 long sleepTime = gameIdArrayList.size() * 95;
                 Platform.runLater(() -> {
                     if (progressIndicator.getProgress() < 0.98) {
                         progressIndicator.setProgress(progressIndicator.getProgress()+0.01);
-                        if (!statusHelper.equalsIgnoreCase(fetchGamesStatusLabel.getText())) {
+                        if (!statusHelper.get().equalsIgnoreCase(fetchGamesStatusLabel.getText())) {
+                            System.out.println("updating");
                             fetchGamesStatusLabel.setText(textBundle.getString("label.statusFetchingGames"));
+                            statusHelper.set(textBundle.getString("label.statusFetchingGames"));
                         }
                     }
                 });
