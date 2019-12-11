@@ -44,7 +44,7 @@ public class FeedBackController {
 	}
 	
 	/**
-	 * Method for initializing the Feedback window when the used opens it
+	 * Method for initializing the Feedback window when the used opens it, it goes through all possible results for the feedback before initializing
 	 */
 	public void initialize() {
 		Platform.runLater(() -> {

@@ -10,7 +10,7 @@ public class FeedBack {
 	enemy2, enemy3, enemy4, enemy5;
 	boolean winloss;
 	
-	
+	/*
 	//Iron statistiikat viime kuukauden keskiarvoilla
 	double ironkda = 1.64;
 	int ironcs = 81; 
@@ -64,6 +64,7 @@ public class FeedBack {
 	int challcs = 101; 
 	int challgold = 10720;
 	int challwards = 1;
+	/
 
 	/**
 	 * Constructor to analyse the data gathered from the database.

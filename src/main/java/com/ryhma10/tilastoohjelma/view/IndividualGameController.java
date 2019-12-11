@@ -129,19 +129,35 @@ public class IndividualGameController {
 	public void handleFeedback(ActionEvent event) throws IOException{
 		mainApp.showFeedBackWindow(fb);
 	}
-
+	
+	/**
+	 * get method for the riotif used to specify the match
+	 * @return the riotid
+	 */
 	public long getRiotId() {
 		return riotId;
 	}
-
+	
+	/**
+	 * setter method for the riotid 
+	 * @param riotId to be set
+	 */
 	public void setRiotId(long riotId) {
 		this.riotId = riotId;
 	}
-
+	
+	/**
+	 * getter for the FeedBack object used to give feedback to the user
+	 * @return feedback object
+	 */
 	public FeedBack getFb() {
 		return fb;
 	}
-
+	
+	/**
+	 * setter for the textbundle used to print messages in finnish and english depending on the language selected
+	 * @param textBundle to be used
+	 */
 	public void setTextBundle(ResourceBundle textBundle) {
 		this.textBundle = textBundle;
 	}

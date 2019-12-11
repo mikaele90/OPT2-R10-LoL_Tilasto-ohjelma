@@ -22,24 +22,42 @@ public class ProfileController {
 	private MainApp mainApp;
 	private Stage profileStage;
 	
+	/**
+	 * Default constructor for ProfileController
+	 */
 	public ProfileController() {
 		
 	}
 	
+	/**
+	 * Set method for the main application
+	 * @param mainApp to be used
+	 */
 	public void setMainApp(MainApp mainApp) {
        this.mainApp = mainApp;
    }
    
+	/**
+	 * set method for the profilestage
+	 * @param profileStage to be used
+	 */
    public void setProfileStage(Stage profileStage) {
        this.profileStage = profileStage;
    }
    
+   /**
+    * Handler for the opening of the input window
+    * @throws IOException
+    */
    @FXML
    private void handleInputNewMatch() throws IOException {
    	    mainApp.showInputWindow();
    	    profileStage.close();
    } 
    
+   /**
+    * Handler for the back button
+    */
    @FXML
    private void handleBack() {
 	   profileStage.close();
