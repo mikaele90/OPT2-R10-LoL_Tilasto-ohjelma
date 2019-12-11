@@ -30,7 +30,7 @@ public class ModelAccessObject implements IModelDAO {
 	
 	/**
 	 * readProfile method read SoftareProfile data from database.
-	 * @param Takes in the profile name in String format.
+	 * @param profileName Takes in the profile name in String format.
 	 * @return SoftwareProfile object
 	 */
 	@SuppressWarnings("rawtypes")
@@ -55,11 +55,11 @@ public class ModelAccessObject implements IModelDAO {
 	/**
 	 * createGamedata method adds all the gamedata to database. It adds data to Gamedata- , Item-,
 	 * Team-, and Additional tables.
-	 * @param Sets SoftwareProfile by profiles name parameter in String format
-	 * @param Sets Gamedata teable via Gamedata object
-	 * @param Sets Item table via Item object
-	 * @param Sets Team table via Team object
-	 * @param Sets Additional table via Additional object
+	 * @param name Sets SoftwareProfile by profiles name parameter in String format
+	 * @param gamedata Sets Gamedata teable via Gamedata object
+	 * @param item Sets Item table via Item object
+	 * @param team Sets Team table via Team object
+	 * @param additional Sets Additional table via Additional object
 	 * @return boolean true or false.
 	 */
 		@Override
@@ -118,8 +118,8 @@ public class ModelAccessObject implements IModelDAO {
 	
 	/**
 	 * gpmCalculus counts simply gold per minute value.
-	 * @param Takes in time as double format
-	 * @param Takes in gold value in double format.
+	 * @param time Takes in time as double format
+	 * @param gold Takes in gold value in double format.
 	 * @return Answer of the calculus in double format.
 	 */
 	public double gpmCalculus(double time, double gold) {
@@ -132,7 +132,7 @@ public class ModelAccessObject implements IModelDAO {
 	
 	/**
 	 * readSpecificProfilesGames method returns all the games which were played by same profile.
-	 * @param Method takes in Profile name in String format.
+	 * @param name Method takes in Profile name in String format.
 	 * @return list of gamedata objects
 	 */
 	@SuppressWarnings("unchecked")
@@ -154,7 +154,7 @@ public class ModelAccessObject implements IModelDAO {
 	
 	/**
 	 * addProfile method add SoftwareProfile data into database.
-	 * @param Method takes in SoftwareProfile object and saves it to the database.
+	 * @param profile Method takes in SoftwareProfile object and saves it to the database.
 	 * @return boolean true or false.
 	 */
 	@Override
@@ -346,7 +346,7 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * readAdditionalData method searches single games all the extra data.
-		 * @param Method takes in riot id and searches with it from the database.
+		 * @param riotid Method takes in riot id and searches with it from the database.
 		 * @return Additional object.
 		 */
 		@SuppressWarnings("unchecked")
@@ -366,7 +366,7 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * readTeamComposition method searches both own team and enemy team champions from a single game.
-		 * @param Method takes in riot id
+		 * @param riotid Method takes in riot id
 		 * @return Team object
 		 */
 		@SuppressWarnings("unchecked")
@@ -386,7 +386,7 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * readOneGame method searches one game specific game from database.
-		 * @param Method takes in riot id.
+		 * @param riotid Method takes in riot id.
 		 * @return Gamedata object.
 		 */
 		@Override
@@ -431,7 +431,7 @@ public class ModelAccessObject implements IModelDAO {
 		
 		/**
 		 * checkGame method checks from database if gamedata already exists in there.
-		 * @param Method takes in riot id.
+		 * @param riotid Method takes in riot id.
 		 * @return boolean true or false
 		 */
 		@SuppressWarnings("rawtypes")

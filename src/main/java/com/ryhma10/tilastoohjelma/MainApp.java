@@ -196,8 +196,7 @@ public class MainApp extends Application {
     }
 
     public void showFeedBackWindow(FeedBack newFeedback) throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(MainApp.class.getResource("/fxml/FeedBack.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Feedback.fxml"), textBundle);
         feedBackWindow = (AnchorPane)loader.load();
 
         Stage feedBackStage = new Stage();
@@ -211,6 +210,8 @@ public class MainApp extends Application {
         feedBackController.setMainApp(this);
         feedBackController.setFeedBackStage(feedBackStage);
         feedBackController.setFb(newFeedback);
+        feedBackController.setTextBundle(textBundle);
+        feedBackStage.setTitle(textBundle.getString("windowTitle.feedback"));
 
         feedBackStage.show();
     }
