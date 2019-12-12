@@ -52,6 +52,11 @@ public class MainApp extends Application {
         //Constructor
     }
 
+    /**
+     * Run when app starts.
+     * @param primaryStage the primaryStage Stage.
+     * @throws Exception on Exception.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
@@ -59,6 +64,9 @@ public class MainApp extends Application {
         showLoginWindow(textBundle);
     }
 
+    /**
+     * Init for MainApp. Loads language-files among other things.
+     */
     public void init() {
         this.applicationDefaultConfigFilePath = "src/main/resources/defaultconfig.properties";
         this.languageDirPath = "src/main/resources/languages";
@@ -91,6 +99,11 @@ public class MainApp extends Application {
         }
     }
 
+    /**
+     * Loads the Login-window.
+     * @param textBundle a ResourceBundle.
+     * @throws IOException on failed load.
+     */
     public void showLoginWindow(ResourceBundle textBundle) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"), textBundle);
         loginWindow = (AnchorPane)loader.load();
@@ -107,6 +120,10 @@ public class MainApp extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Loads the CreateNewUser-window.
+     * @throws IOException on failed load.
+     */
     public void showCreateNewUserWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CreateNewUser.fxml"), textBundle);
         createNewUserWindow = (BorderPane)loader.load();
@@ -127,6 +144,11 @@ public class MainApp extends Application {
         createNewUserStage.show();
     }
 
+    /**
+     * Shows the Main-window.
+     * @param profile a SoftwareProfile.
+     * @throws IOException on failed load.
+     */
     public void showMainWindow(SoftwareProfile profile) throws IOException {
         if (profile.getDefaultLanguage() != null) {
             currentLocale = Locale.forLanguageTag(profile.getDefaultLanguage().replace("_", "-"));
@@ -152,7 +174,12 @@ public class MainApp extends Application {
         mainStage.setTitle(textBundle.getString("windowTitle.main"));
         mainStage.show();
     }
-    
+
+    /**
+     * Loads the IndividualGame-window.
+     * @param riotId a valid id for a game fetched from Riot's API.
+     * @throws IOException on failed load.
+     */
     public void showIGWindow(long riotId) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/IndividualGame.fxml"), textBundle);
         IGWindow = (AnchorPane)loader.load();
@@ -174,7 +201,10 @@ public class MainApp extends Application {
         IGStage.show();
     }
 
-
+    /**
+     * Shows the Input-window.
+     * @throws IOException on failed load.
+     */
     public void showInputWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Input.fxml"), textBundle);
         inputWindow = (BorderPane)loader.load();
@@ -195,6 +225,11 @@ public class MainApp extends Application {
         inputStage.show();
     }
 
+    /**
+     * Loads the Feedback-window.
+     * @param newFeedback a Feedback-object.
+     * @throws IOException on failed load.
+     */
     public void showFeedBackWindow(FeedBack newFeedback) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Feedback.fxml"), textBundle);
         feedBackWindow = (AnchorPane)loader.load();
@@ -216,6 +251,10 @@ public class MainApp extends Application {
         feedBackStage.show();
     }
 
+    /**
+     * Loads the Profile-window. Under construction.
+     * @throws IOException on failed load.
+     */
     public void showProfileWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(MainApp.class.getResource("/fxml/Profile.fxml"));
@@ -235,6 +274,10 @@ public class MainApp extends Application {
         profileStage.show();
     }
 
+    /**
+     * Loads the Settings-window.
+     * @throws IOException on failed load.
+     */
     public void showSettingsWindow() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Settings.fxml"), textBundle);
         settingsWindow = (BorderPane)loader.load();
@@ -255,6 +298,10 @@ public class MainApp extends Application {
         settingsStage.show();
     }
 
+    /**
+     * Returns a List of languages.
+     * @return the List<String>.
+     */
     public List<String> getLanguageArrayList() {
         List<String> languageArrayList = new ArrayList<>();
         Properties propertiesHelper = new Properties();
@@ -270,106 +317,210 @@ public class MainApp extends Application {
         return languageArrayList;
     }
 
+    /**
+     * Checks the number of files in the languages-directory.
+     * @return the number of files.
+     */
     public int checkLangDirLength() {
         return (Objects.requireNonNull(new File(languageDirPath).listFiles())).length;
     }
 
+    /**
+     * Return the primaryStage Stage.
+     * @return the Stage.
+     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
 
+    /**
+     * Return this MainApp.
+     * @return the MainApp.
+     */
     public MainApp getMainApp() {
         return this;
     }
 
+    /**
+     * Sets the settingsWindow-variable.
+     * @param settingsWindow a BorderPane.
+     */
     public void setSettingsWindow(BorderPane settingsWindow) {
         this.settingsWindow = settingsWindow;
     }
 
+    /**
+     * Sets the currentProfile-variable.
+     * @param profile a SoftwareProfile.
+     */
     public void setProfile(SoftwareProfile profile) {
         this.currentProfile = profile;
     }
 
+    /**
+     * Returns the currentProfile-variable.
+     * @return a SoftwareProfile.
+     */
     public SoftwareProfile getProfile() {
         return this.currentProfile;
     }
 
+    /**
+     * Sets the mainController-variable.
+     * @param mainController a MainController.
+     */
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
 
+    /**
+     * Returns the mainController-variable.
+     * @return a MainController.
+     */
     public MainController getMainController() {
         return this.mainController;
     }
 
+    /**
+     * Return the textBundle-variable.
+     * @return a ResourceBundle.
+     */
     public ResourceBundle getTextBundle() {
         return textBundle;
     }
 
+    /**
+     * Sets the textBundle-variable.
+     * @param textBundle a ResourceBundle.
+     */
     public void setTextBundle(ResourceBundle textBundle) {
         this.textBundle = textBundle;
     }
 
+    /**
+     * Returns the currentLocale-variable.
+     * @return a Locale.
+     */
     public Locale getCurrentLocale() {
         return currentLocale;
     }
 
+    /**
+     * Sets the currentLocale-variable.
+     * @param currentLocale a Locale.
+     */
     public void setCurrentLocale(Locale currentLocale) {
         this.currentLocale = currentLocale;
     }
 
+    /**
+     * Returns the currentLanguage-variable.
+     * @return a String.
+     */
     public String getCurrentLanguage() {
         return currentLanguage;
     }
 
+    /**
+     * Sets the currentLanguage-variable.
+     * @param currentLanguage a String of format e.g. "en".
+     */
     public void setCurrentLanguage(String currentLanguage) {
         this.currentLanguage = currentLanguage;
     }
 
+    /**
+     * Return the currentCountry-variable.
+     * @return a String.
+     */
     public String getCurrentCountry() {
         return currentCountry;
     }
 
+    /**
+     * Sets the currentCountry-variable.
+     * @param currentCountry a String of format e.g. "US".
+     */
     public void setCurrentCountry(String currentCountry) {
         this.currentCountry = currentCountry;
     }
 
+    /**
+     * Return the defaultProperties-variable.
+     * @return a Properties.
+     */
     public Properties getDefaultProperties() {
         return defaultProperties;
     }
 
+    /**
+     * Sets the defaultProperties-variable.
+     * @param defaultProperties a Properties.
+     */
     public void setDefaultProperties(Properties defaultProperties) {
         this.defaultProperties = defaultProperties;
     }
 
+    /**
+     * Returns the applicationDefaultConfigFilePath-variable.
+     * @return a String.
+     */
     public String getApplicationDefaultConfigFilePath() {
         return applicationDefaultConfigFilePath;
     }
 
+    /**
+     * Sets the applicationDefaultConfigFilePath-variable.
+     * @param applicationDefaultConfigFilePath a String.
+     */
     public void setApplicationDefaultConfigFilePath(String applicationDefaultConfigFilePath) {
         this.applicationDefaultConfigFilePath = applicationDefaultConfigFilePath;
     }
 
+    /**
+     * Returns the languageDirLength-variable.
+     * @return an Integer.
+     */
     public int getLanguageDirLength() {
         return languageDirLength;
     }
 
+    /**
+     * Sets the languageDirLength-variable.
+     * @param languageDirLength an Integer.
+     */
     public void setLanguageDirLength(int languageDirLength) {
         this.languageDirLength = languageDirLength;
     }
 
+    /**
+     * Returns the languageDirPath-variable.
+     * @return a String.
+     */
     public String getLanguageDirPath() {
         return languageDirPath;
     }
 
+    /**
+     * Sets the languageDirPath-variable.
+     * @param languageDirPath a String.
+     */
     public void setLanguageDirPath(String languageDirPath) {
         this.languageDirPath = languageDirPath;
     }
 
+    /**
+     * Returns the languageDirFiles-List.
+     * @return a List<String>.
+     */
     public List<String> getLanguageDirFiles() {
         return languageDirFiles;
     }
 
+    /**
+     * Sets the languageDirFiles-List.
+     * @param languageDirFiles a List<String>.
+     */
     public void setLanguageDirFiles(List<String> languageDirFiles) {
         this.languageDirFiles = languageDirFiles;
     }
