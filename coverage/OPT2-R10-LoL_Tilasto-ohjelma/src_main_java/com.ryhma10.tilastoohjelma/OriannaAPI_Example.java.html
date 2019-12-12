@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>OriannaAPI_Example.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma</a> &gt; <span class="el_source">OriannaAPI_Example.java</span></div><h1>OriannaAPI_Example.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.Platform;
+import com.merakianalytics.orianna.types.core.championmastery.ChampionMasteries;
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
+import com.merakianalytics.orianna.types.core.championmastery.ChampionMastery;
+
+<span class="nc bnc" id="L12" title="All 2 branches missed.">public class OriannaAPI_Example {</span>
+    public static void main(String[] args) {
+<span class="nc" id="L14">        Orianna.setRiotAPIKey(&quot;YOUR-API-KEY-HERE&quot;);</span>
+<span class="nc" id="L15">        Orianna.setDefaultPlatform(Platform.NORTH_AMERICA);</span>
+
+<span class="nc" id="L17">        Summoner fatalElement = Summoner.named(&quot;FatalElement&quot;).get();</span>
+<span class="nc" id="L18">        ChampionMasteries masteries = fatalElement.getChampionMasteries();</span>
+<span class="nc" id="L19">        List&lt;ChampionMastery&gt; goodWith = masteries.filter((ChampionMastery mastery) -&gt; {</span>
+<span class="nc bnc" id="L20" title="All 4 branches missed.">            assert mastery != null;</span>
+<span class="nc bnc" id="L21" title="All 2 branches missed.">            return mastery.getLevel() &gt;= 6;</span>
+        });
+
+<span class="nc" id="L24">        List&lt;String&gt; names = goodWith.stream().map((ChampionMastery mastery) -&gt; mastery.getChampion().getName()).collect(Collectors.toList());</span>
+<span class="nc" id="L25">        System.out.println(&quot;[&quot; + String.join(&quot;, &quot;, names) + &quot;]&quot;);</span>
+<span class="nc" id="L26">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

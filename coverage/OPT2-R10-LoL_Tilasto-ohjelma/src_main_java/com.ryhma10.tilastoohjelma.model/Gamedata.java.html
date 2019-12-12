@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Gamedata.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.model</a> &gt; <span class="el_source">Gamedata.java</span></div><h1>Gamedata.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.model;
+
+import javax.persistence.*;
+
+
+@Entity
+@Table(name=&quot;gamedata&quot;)
+
+
+public class Gamedata{
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name=&quot;gameid&quot;)
+	private int gameid;
+	
+	@Column(name=&quot;riotid&quot;)
+	private long riotid;
+	
+	@Column(name=&quot;ingameName&quot;)
+	private String ingameName;
+	
+	@Column(name=&quot;champion&quot;)
+	private String champion;
+	
+	@Column(name=&quot;kills&quot;)
+	private long kills;
+	
+	@Column(name=&quot;deaths&quot;)
+	private long deaths;
+
+	@Column(name=&quot;assist&quot;)
+	private long assist;
+	
+	@Column(name=&quot;winlose&quot;)
+	private String winlose;
+
+	@Column(name=&quot;position&quot;)
+	private String position;
+	
+	@Column(name=&quot;rank&quot;)
+	private String rank;
+	
+	@ManyToOne
+	@JoinColumn(name=&quot;profile_id&quot;, nullable=false)
+	private SoftwareProfile SoftwareProfile;
+	
+	@OneToOne(mappedBy = &quot;gamedata&quot;, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Item item;
+	
+	/**
+	 * Empty constructor
+	 */
+<span class="fc" id="L54">	public Gamedata() {</span>
+		
+<span class="fc" id="L56">	}</span>
+	
+	/**
+	 * Constructor to insert Gamedata
+	 * @param riotid Parameter for match id from Riot Api  (parameter type: Long)
+	 * @param ingameName Parameter for player name which player uses in game (parameter type: String)
+	 * @param champion Parameter for name of the champion which was used in the game (parameter type: String)
+	 * @param kills Parameter for kills which were made by the player (parameter type: Long)
+	 * @param deaths Parameter for all the deaths player encountered during the game (parameter type: Long)
+	 * @param assist Parameter for all the assists player made throught the game (parameter type: Long)
+	 * @param winlose Parameter of the end result of the game (parameter type: String)
+	 * @param position Parameter to the players in game position (parameter type: String)
+	 * @param rank Parameter for the players rank (parameter type: String)
+	 */
+<span class="fc" id="L70">	public Gamedata(long riotid, String ingameName, String champion, long kills, long deaths, long assist,</span>
+			String winlose, String position, String rank) {
+<span class="fc" id="L72">		this.riotid = riotid;</span>
+<span class="fc" id="L73">		this.ingameName = ingameName;</span>
+<span class="fc" id="L74">		this.champion = champion;</span>
+<span class="fc" id="L75">		this.kills = kills;</span>
+<span class="fc" id="L76">		this.deaths = deaths;</span>
+<span class="fc" id="L77">		this.assist =assist;</span>
+<span class="fc" id="L78">		this.winlose = winlose;</span>
+<span class="fc" id="L79">		this.position = position;</span>
+<span class="fc" id="L80">		this.rank = rank;</span>
+<span class="fc" id="L81">	}</span>
+	
+	/**
+	 * Getter for the ingame name
+	 * @return players ingame name in String format
+	 */
+	public String getIngameName() {
+<span class="fc" id="L88">		return ingameName;</span>
+	}
+	
+	/**
+	 * Setter for the ingame name
+	 * @param ingameName 
+	 */
+	public void setIngameName(String ingameName) {
+<span class="nc" id="L96">		this.ingameName = ingameName;</span>
+<span class="nc" id="L97">	}</span>
+	/**
+	 * Getter for the Riot game id
+	 * @return RiotId
+	 */
+	public long getRiotid() {
+<span class="fc" id="L103">		return riotid;</span>
+	}
+	
+	/**
+	 * Setter for the Riot game id
+	 * @param riotid
+	 */
+	public void setRiotid(long riotid) {
+<span class="nc" id="L111">		this.riotid = riotid;</span>
+<span class="nc" id="L112">	}</span>
+	
+	/**
+	 * Getter for the Champion name
+	 * @return championName
+	 */
+	public String getChampion() {
+<span class="fc" id="L119">		return champion;</span>
+	}
+	
+	/**
+	 * Setter for the Champion name
+	 * @param champion
+	 */
+	public void setChampion(String champion) {
+<span class="nc" id="L127">		this.champion = champion;</span>
+<span class="nc" id="L128">	}</span>
+	
+	/**
+	 * Getter for the kills
+	 * @return kills
+	 */
+	public long getKills() {
+<span class="fc" id="L135">		return kills;</span>
+	}
+	/**
+	 * 
+	 * @param kills
+	 */
+	public void setKills(long kills) {
+<span class="nc" id="L142">		this.kills = kills;</span>
+<span class="nc" id="L143">	}</span>
+	/**
+	 * Getter for the deaths
+	 * @return deaths
+	 */
+	public long getDeaths() {
+<span class="fc" id="L149">		return deaths;</span>
+	}
+	/**
+	 * Setter for the deaths
+	 * @param deaths
+	 */
+	public void setDeaths(long deaths) {
+<span class="nc" id="L156">		this.deaths = deaths;</span>
+<span class="nc" id="L157">	}</span>
+	/**
+	 * Getter for the assists
+	 * @return
+	 */
+	public long getAssist() {
+<span class="fc" id="L163">		return assist;</span>
+	}
+	/**
+	 * Setter for the assists
+	 * @param assist
+	 */
+	public void setAssist(long assist) {
+<span class="nc" id="L170">		this.assist = assist;</span>
+<span class="nc" id="L171">	}</span>
+	/**
+	 * Getter for the auto incremented game id
+	 * @return
+	 */
+	public int getGameid() {
+<span class="nc" id="L177">		return gameid;</span>
+	}
+	/**
+	 * Setter for game id
+	 * @param gameid
+	 */
+	public void setGameid(int gameid) {
+<span class="nc" id="L184">		this.gameid = gameid;</span>
+<span class="nc" id="L185">	}</span>
+	/**
+	 * Getter for the game result
+	 * @return winlose
+	 */
+	public String getWinlose() {
+<span class="fc" id="L191">		return winlose;</span>
+	}
+	/**
+	 * Setter for the game result
+	 * @param winlose
+	 */
+	public void setWinlose(String winlose) {
+<span class="nc" id="L198">		this.winlose = winlose;</span>
+<span class="nc" id="L199">	}</span>
+	/**
+	 * Getter for the players position
+	 * @return
+	 */
+	public String getPosition() {
+<span class="fc" id="L205">		return position;</span>
+	}
+	
+	/**
+	 * Setter for the players position
+	 * @param position
+	 */
+	public void setPosition(String position) {
+<span class="nc" id="L213">		this.position = position;</span>
+<span class="nc" id="L214">	}</span>
+	
+	/**
+	 * Getter for the players rank
+	 * @return
+	 */
+	public String getRank() {
+<span class="fc" id="L221">		return rank;</span>
+	}
+	
+	/**
+	 * Setter for the players rank
+	 * @param rank
+	 */
+	public void setRank(String rank) {
+<span class="nc" id="L229">		this.rank = rank;</span>
+<span class="nc" id="L230">	}</span>
+	
+	/**
+	 * Gteer for the Profile object
+	 * @return SoftwareProfile profile
+	 */
+	public SoftwareProfile getSoftwareProfile() {
+<span class="fc" id="L237">		return SoftwareProfile;</span>
+	}
+	/**
+	 * Setter for the Profile object
+	 * @param SoftwareProfile
+	 */
+	public void setSoftwareProfile(SoftwareProfile SoftwareProfile) {
+<span class="fc" id="L244">		this.SoftwareProfile = SoftwareProfile;</span>
+<span class="fc" id="L245">	}</span>
+	/**
+	 * Getter for the Item object
+	 * @return Item item
+	 */
+	public Item getItem() {
+<span class="fc" id="L251">		return item;</span>
+	}
+	/**
+	 * Setter for the Item object
+	 * @param item
+	 */
+	public void setItem(Item item) {
+<span class="fc" id="L258">		this.item = item;</span>
+<span class="fc" id="L259">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>MainController.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.view</a> &gt; <span class="el_source">MainController.java</span></div><h1>MainController.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.view;
+
+import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.Region;
+import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.api.AcquireData;
+import com.ryhma10.tilastoohjelma.api.ApiData;
+import com.ryhma10.tilastoohjelma.model.*;
+import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
+
+public class MainController {
+
+    private MainApp mainApp;
+    private Stage mainStage;
+    private LoginController loginController;
+    private AlertFactory alertFactory;
+    private ModelAccessObject modelAccessObject;
+    private String profileName;
+    private SoftwareProfile currentProfile;
+    private ResourceBundle textBundle;
+    private long selectedRiotId;
+    private Thread masterThread;
+    private Thread slaveThread;
+
+    @FXML
+    private Label profileNameLabel, welcomeLabel, fetchGamesStatusLabel;
+    @FXML
+    private Button addNewGamesButton, profileOverviewButton;
+    @FXML
+    private Menu actionsMenu, editMenu, helpMenu;
+    @FXML
+    private MenuItem addGamesMenuItem, profileMenuItem, exitMenuItem, settingsMenuItem, helpMenuItem, aboutMenuItem;
+    @FXML
+    private ProgressIndicator progressIndicator;
+    @FXML
+    private TableView&lt;GamedataWrapper&gt; tableView;
+    @FXML
+    private TableColumn&lt;GamedataWrapper, Integer&gt; column1;
+    @FXML
+    private TableColumn&lt;GamedataWrapper, Long&gt; column2;
+    @FXML
+    private TableColumn&lt;GamedataWrapper, String&gt; column3;
+    @FXML
+    private TableColumn&lt;GamedataWrapper, String&gt; column4;
+    @FXML
+    private TableColumn&lt;GamedataWrapper, String&gt; column5;
+    @FXML
+    private TableColumn&lt;GamedataWrapper, String&gt; column6;
+    @FXML
+    private TableColumn&lt;GamedataWrapper, Integer&gt; column7;
+
+    /**
+     * Default constructor.
+     */
+<span class="nc" id="L71">    public MainController() {</span>
+        //Default constructor
+<span class="nc" id="L73">    }</span>
+
+    /**
+     * Initializes the main-window.
+     */
+    public void initialize() {
+<span class="nc" id="L79">        System.out.println(&quot;MainController: Initialize&quot;);</span>
+<span class="nc" id="L80">        progressIndicator.setProgress(1.0);</span>
+<span class="nc" id="L81">        progressIndicator.setDisable(true);</span>
+<span class="nc" id="L82">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L83">            fetchGamesStatusLabel.setText(textBundle.getString(&quot;label.statusReady&quot;));</span>
+<span class="nc" id="L84">            fetchGamesStatusLabel.setDisable(true);</span>
+<span class="nc" id="L85">            alertFactory = new AlertFactory(textBundle);</span>
+<span class="nc" id="L86">            currentProfile = mainApp.getProfile();</span>
+<span class="nc" id="L87">            profileNameLabel.setText(currentProfile.getProfileName());</span>
+            try {
+<span class="nc" id="L89">                Orianna.loadConfiguration(&quot;apiconfig.json&quot;);</span>
+<span class="nc" id="L90">                System.out.println(&quot;API config loaded&quot;);</span>
+<span class="nc" id="L91">            } catch (Exception e) {</span>
+<span class="nc" id="L92">                System.out.println(&quot;API config not found&quot;);</span>
+            }
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (currentProfile.getRiotAPIKey() != null) {</span>
+<span class="nc" id="L95">                Orianna.setRiotAPIKey(currentProfile.getRiotAPIKey());</span>
+<span class="nc" id="L96">                System.out.println(&quot;Riot API Key found: &quot; + currentProfile.getRiotAPIKey());</span>
+            }
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            if (currentProfile.getDefaultRegion() != null) {</span>
+<span class="nc" id="L99">                Orianna.setDefaultRegion(Region.valueOf(currentProfile.getDefaultRegion()));</span>
+<span class="nc" id="L100">                System.out.println(&quot;Region set to: &quot; + currentProfile.getDefaultRegion());</span>
+            }
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            if (currentProfile.getDefaultRiotAccount() != null) {</span>
+<span class="nc" id="L103">                System.out.println(&quot;Profile default riot account id: &quot; + currentProfile.getDefaultRiotAccount());</span>
+                //TODO IF NEEDED
+                //Set riot account to profile default
+            }
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            if (currentProfile.getDefaultLanguage() != null) {</span>
+<span class="nc" id="L108">                System.out.println(&quot;Profile default language: &quot; + currentProfile.getDefaultLanguage());</span>
+<span class="nc" id="L109">                System.out.println(&quot;TextRes locale: &quot; + textBundle.getLocale().toString());</span>
+            }
+<span class="nc" id="L111">            mainApp.setMainController(this);</span>
+<span class="nc" id="L112">            modelAccessObject = new ModelAccessObject();</span>
+<span class="nc" id="L113">            secondaryInitialize();</span>
+<span class="nc" id="L114">        });</span>
+<span class="nc" id="L115">    }</span>
+
+    /**
+     * Initializes the TableView.
+     */
+    public void secondaryInitialize() {
+<span class="nc" id="L121">        List&lt;Gamedata&gt; gamedataList = modelAccessObject.readSpecificProfilesGames(currentProfile.getProfileName());</span>
+<span class="nc" id="L122">        List&lt;GamedataWrapper&gt; gamedataWrapperList = new ArrayList&lt;GamedataWrapper&gt;();</span>
+<span class="nc" id="L123">        int i = 0;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        for (Gamedata gamedata : gamedataList) {</span>
+<span class="nc" id="L125">            Additional additionalGamedata = modelAccessObject.readAdditionalData(gamedata.getRiotid());</span>
+<span class="nc" id="L126">            gamedataWrapperList.add(new GamedataWrapper(gamedata.getGameid(), gamedata.getRiotid(), additionalGamedata.getDate(), gamedata.getIngameName(), gamedata.getChampion(), gamedata.getWinlose(), currentProfile.getProfileId()));</span>
+<span class="nc" id="L127">            GamedataWrapper gdw = gamedataWrapperList.get(i);</span>
+<span class="nc" id="L128">            System.out.println(gdw.getProfileId());</span>
+<span class="nc" id="L129">            i++;</span>
+        }
+<span class="nc" id="L131">        ObservableList&lt;GamedataWrapper&gt; observableGamedataWrapperList = FXCollections.observableArrayList(gamedataWrapperList);</span>
+
+<span class="nc" id="L133">        column1.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;gameId&quot;));</span>
+<span class="nc" id="L134">        column2.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;riotId&quot;));</span>
+<span class="nc" id="L135">        column3.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;date&quot;));</span>
+<span class="nc" id="L136">        column4.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;result&quot;));</span>
+<span class="nc" id="L137">        column5.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;champion&quot;));</span>
+<span class="nc" id="L138">        column6.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;summoner&quot;));</span>
+<span class="nc" id="L139">        column7.setCellValueFactory(new PropertyValueFactory&lt;&gt;(&quot;profileId&quot;));</span>
+<span class="nc" id="L140">        tableView.setItems(observableGamedataWrapperList);</span>
+<span class="nc" id="L141">    }</span>
+
+    /**
+     * Sets the texts on language change.
+     */
+    public void setTexts() {
+<span class="nc" id="L147">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L148">            welcomeLabel.setText(textBundle.getString(&quot;label.welcome&quot;));</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">            if (fetchGamesStatusLabel.getText().equals(textBundle.getString(&quot;label.statusReady&quot;))) {</span>
+<span class="nc" id="L150">                fetchGamesStatusLabel.setText(textBundle.getString(&quot;label.statusReady&quot;));</span>
+<span class="nc" id="L151">            }</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            else if (fetchGamesStatusLabel.getText().equals(textBundle.getString(&quot;label.statusFetchingGames&quot;))) {</span>
+<span class="nc" id="L153">                fetchGamesStatusLabel.setText(textBundle.getString(&quot;label.statusFetchingGames&quot;));</span>
+<span class="nc" id="L154">            }</span>
+            else {
+<span class="nc" id="L156">                fetchGamesStatusLabel.setText(textBundle.getString(&quot;label.statusStandby&quot;));</span>
+            }
+<span class="nc" id="L158">            addNewGamesButton.setText(textBundle.getString(&quot;button.addGames&quot;));</span>
+<span class="nc" id="L159">            profileOverviewButton.setText(textBundle.getString(&quot;button.profileOverview&quot;));</span>
+<span class="nc" id="L160">            actionsMenu.setText(textBundle.getString(&quot;menu.actions&quot;));</span>
+<span class="nc" id="L161">            editMenu.setText(textBundle.getString(&quot;menu.edit&quot;));</span>
+<span class="nc" id="L162">            helpMenu.setText(textBundle.getString(&quot;menu.help&quot;));</span>
+<span class="nc" id="L163">            aboutMenuItem.setText(textBundle.getString(&quot;menuItem.about&quot;));</span>
+<span class="nc" id="L164">            helpMenuItem.setText(textBundle.getString(&quot;menuItem.help&quot;));</span>
+<span class="nc" id="L165">            settingsMenuItem.setText(textBundle.getString(&quot;menuItem.settings&quot;));</span>
+<span class="nc" id="L166">            addGamesMenuItem.setText(textBundle.getString(&quot;menuItem.addGames&quot;));</span>
+<span class="nc" id="L167">            profileMenuItem.setText(textBundle.getString(&quot;menuItem.profileOverview&quot;));</span>
+<span class="nc" id="L168">            exitMenuItem.setText(textBundle.getString(&quot;menuItem.exit&quot;));</span>
+<span class="nc" id="L169">            column1.setText(textBundle.getString(&quot;tableColumn.id&quot;));</span>
+<span class="nc" id="L170">            column2.setText(textBundle.getString(&quot;tableColumn.riotId&quot;));</span>
+<span class="nc" id="L171">            column3.setText(textBundle.getString(&quot;tableColumn.date&quot;));</span>
+<span class="nc" id="L172">            column4.setText(textBundle.getString(&quot;tableColumn.result&quot;));</span>
+<span class="nc" id="L173">            column5.setText(textBundle.getString(&quot;tableColumn.champion&quot;));</span>
+<span class="nc" id="L174">            column6.setText(textBundle.getString(&quot;tableColumn.summoner&quot;));</span>
+<span class="nc" id="L175">            column7.setText(textBundle.getString(&quot;tableColumn.profileId&quot;));</span>
+<span class="nc" id="L176">        });</span>
+<span class="nc" id="L177">    }</span>
+
+    /**
+     * Shows the input-window.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     * @throws IOException On failed load of Input.fxml.
+     */
+    @FXML
+    public void handleAddGames(ActionEvent actionEvent) throws IOException {
+<span class="nc" id="L186">        mainApp.showInputWindow();</span>
+<span class="nc" id="L187">    }</span>
+
+    /**
+     * Shows the profile-window.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     * @throws IOException On failed load of Profile.fxml.
+     */
+    @FXML
+    public void handleProfileOverview(ActionEvent actionEvent) throws IOException {
+<span class="nc" id="L196">        mainApp.showProfileWindow();</span>
+<span class="nc" id="L197">    }</span>
+
+    /**
+     * Shows an Alert as defined in AlertFactory.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     */
+    @FXML
+    public void handleAbout(ActionEvent actionEvent) {
+<span class="nc" id="L205">        Alert aboutAlert = alertFactory.createAlert(&quot;About application&quot;);</span>
+<span class="nc" id="L206">        aboutAlert.showAndWait();</span>
+<span class="nc" id="L207">    }</span>
+
+    /**
+     * Shows the settings-window.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     * @throws IOException On failed load of Settings.fxml.
+     */
+    @FXML
+    public void handleSettings(ActionEvent actionEvent) throws IOException {
+<span class="nc" id="L216">        mainApp.showSettingsWindow();</span>
+<span class="nc" id="L217">    }</span>
+
+    /**
+     * Exits the application.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     */
+    @FXML
+    public void handleExit(ActionEvent actionEvent) {
+<span class="nc" id="L225">        System.exit(0);</span>
+<span class="nc" id="L226">    }</span>
+
+    /**
+     * Shows a help-dialog. Not yet implemented.
+     * @param actionEvent Interacting with the corresponding button, as defined in Main.fxml.
+     */
+    @FXML
+    public void handleMainHelp(ActionEvent actionEvent) {
+<span class="nc" id="L234">        System.out.println(&quot;Not yet implemented&quot;);</span>
+        //TODO
+<span class="nc" id="L236">    }</span>
+
+    /**
+     * Starts fetching the games from the API and once done, exports them to the database.
+     * @param gameIdArrayList The list of games to fetch from the API.
+     * @param summonerName The player name to use.
+     * @param modelAccessObject A ModelAccessObject.
+     */
+    public void startFetchingGames(ArrayList&lt;Long&gt; gameIdArrayList, String summonerName, ModelAccessObject modelAccessObject) {
+<span class="nc" id="L245">        System.out.println(&quot;startFetchingGames(&quot; + gameIdArrayList.toString() + &quot;, &quot; + summonerName + &quot;, &quot; + modelAccessObject.toString() + &quot;)&quot;);</span>
+<span class="nc" id="L246">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L247">            progressIndicator.setDisable(false);</span>
+<span class="nc" id="L248">            progressIndicator.setProgress(0.0);</span>
+<span class="nc" id="L249">            fetchGamesStatusLabel.setText(textBundle.getString(&quot;label.statusFetchingGames&quot;));</span>
+<span class="nc" id="L250">            fetchGamesStatusLabel.setDisable(false);</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">            while (progressIndicator.getProgress() &lt; 0.09) {</span>
+<span class="nc" id="L252">                progressIndicator.setProgress(progressIndicator.getProgress()+0.01);</span>
+            }
+<span class="nc" id="L254">        });</span>
+<span class="nc" id="L255">        slaveThread = new Thread(() -&gt; {</span>
+<span class="nc" id="L256">            slaveThread.setPriority(1);</span>
+<span class="nc" id="L257">            AtomicReference&lt;String&gt; statusHelper = new AtomicReference&lt;&gt;(textBundle.getString(&quot;label.statusFetchingGames&quot;));</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">            while (masterThread.isAlive()) {</span>
+<span class="nc" id="L259">                long sleepTime = gameIdArrayList.size() * 95;</span>
+<span class="nc" id="L260">                Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">                    if (progressIndicator.getProgress() &lt; 0.98) {</span>
+<span class="nc" id="L262">                        progressIndicator.setProgress(progressIndicator.getProgress()+0.01);</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">                        if (!statusHelper.get().equalsIgnoreCase(fetchGamesStatusLabel.getText())) {</span>
+<span class="nc" id="L264">                            System.out.println(&quot;updating&quot;);</span>
+<span class="nc" id="L265">                            fetchGamesStatusLabel.setText(textBundle.getString(&quot;label.statusFetchingGames&quot;));</span>
+<span class="nc" id="L266">                            statusHelper.set(textBundle.getString(&quot;label.statusFetchingGames&quot;));</span>
+                        }
+                    }
+<span class="nc" id="L269">                });</span>
+                try {
+<span class="nc" id="L271">                    Thread.sleep(sleepTime);</span>
+<span class="nc" id="L272">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L273">                    e.printStackTrace();</span>
+                }
+            }
+<span class="nc" id="L276">        });</span>
+<span class="nc" id="L277">        masterThread = new Thread(() -&gt; {</span>
+<span class="nc" id="L278">            slaveThread.start();</span>
+<span class="nc" id="L279">            AcquireData acquireData = new AcquireData();</span>
+<span class="nc" id="L280">            acquireData.setCurrentProfile(currentProfile);</span>
+<span class="nc" id="L281">            acquireData.setHistorySize(gameIdArrayList.size());</span>
+<span class="nc" id="L282">            acquireData.setPlayerName(summonerName);</span>
+<span class="nc" id="L283">            ApiData[][] apiDataArray = acquireData.getData(gameIdArrayList);</span>
+            Gamedata gamedata;
+            Additional additional;
+            Item item;
+            Team team;
+<span class="nc bnc" id="L288" title="All 2 branches missed.">            for(int i = 0; i &lt; acquireData.getSize(); i++) {</span>
+<span class="nc" id="L289">                gamedata = new Gamedata(acquireData.getMatchId(apiDataArray, i), acquireData.getPlayerName(apiDataArray, i),</span>
+<span class="nc" id="L290">                        acquireData.getChampionPlayed(apiDataArray, i), acquireData.getMatchKills(apiDataArray, i), acquireData.getMatchDeaths(apiDataArray, i),</span>
+<span class="nc" id="L291">                        acquireData.getMatchAssists(apiDataArray, i), acquireData.getMatchResult(apiDataArray, i),</span>
+<span class="nc" id="L292">                        acquireData.getPosition(apiDataArray, i), acquireData.getPlayerRank(apiDataArray, i));</span>
+<span class="nc" id="L293">                additional = new Additional(acquireData.getDamageDealt(apiDataArray, i), acquireData.getDamageTaken(apiDataArray, i),</span>
+<span class="nc" id="L294">                        acquireData.getQueueType(apiDataArray, i), acquireData.getGoldEarned(apiDataArray, i), acquireData.getMatchDuration(apiDataArray, i),</span>
+<span class="nc" id="L295">                        acquireData.getMatchDate(apiDataArray, i), acquireData.getWardsPlaced(apiDataArray, i), acquireData.getCreepScore(apiDataArray, i));</span>
+<span class="nc" id="L296">                String[] items = acquireData.getItemNames(apiDataArray, i);</span>
+<span class="nc" id="L297">                item = new Item(items[0], items[1], items[2], items[3], items[4], items[5], items[6]);</span>
+<span class="nc" id="L298">                String[] blue = acquireData.getBlueTeamChampions(apiDataArray, i);</span>
+<span class="nc" id="L299">                String[] red = acquireData.getRedTeamChampions(apiDataArray, i);</span>
+                try {
+<span class="nc bnc" id="L301" title="All 2 branches missed.">                    if (acquireData.getTeamColor(apiDataArray, i).equalsIgnoreCase(&quot;BLUE&quot;)) {</span>
+<span class="nc" id="L302">                        team = new Team(blue[0], blue[1], blue[2], blue[3], red[0], red[1], red[2], red[3], red[4]);</span>
+<span class="nc" id="L303">                    }</span>
+                    else {
+<span class="nc" id="L305">                        team = new Team(red[0], red[1], red[2], red[3], blue[0], blue[1], blue[2], blue[3], blue[4]);</span>
+                    }
+<span class="nc" id="L307">                } catch (NullPointerException npe) {</span>
+<span class="nc" id="L308">                    break;</span>
+                }
+<span class="nc" id="L310">                modelAccessObject.createGamedata(currentProfile.getProfileName(), gamedata, item, team, additional);</span>
+<span class="nc" id="L311">                secondaryInitialize();</span>
+            }
+<span class="nc" id="L313">            Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">                while(progressIndicator.getProgress() &lt; 1.0) {</span>
+<span class="nc" id="L315">                    progressIndicator.setProgress(progressIndicator.getProgress()+0.01);</span>
+                    try {
+<span class="nc" id="L317">                        Thread.sleep(10);</span>
+<span class="nc" id="L318">                    } catch (InterruptedException e) {</span>
+<span class="nc" id="L319">                        e.printStackTrace();</span>
+                    }
+                }
+
+<span class="nc" id="L323">                fetchGamesStatusLabel.setText(textBundle.getString(&quot;label.statusReady&quot;));</span>
+<span class="nc" id="L324">            });</span>
+<span class="nc" id="L325">        });</span>
+<span class="nc" id="L326">        masterThread.start();</span>
+<span class="nc" id="L327">    }</span>
+
+    /**
+     * Detects double left-clicks and selects the column from the table and shows the individualGame-window.
+     * @param mouseEvent Interacting with the mouse.
+     */
+    public void handleTableViewClicked(MouseEvent mouseEvent) {
+<span class="nc" id="L334">        tableView.setOnMousePressed(new EventHandler&lt;MouseEvent&gt;() {</span>
+            @Override
+            public void handle(MouseEvent event) {
+<span class="nc bnc" id="L337" title="All 4 branches missed.">                if (event.isPrimaryButtonDown() &amp;&amp; event.getClickCount() == 2) {</span>
+                    try {
+<span class="nc" id="L339">                        selectedRiotId = tableView.getSelectionModel().getSelectedItem().getRiotId();</span>
+<span class="nc" id="L340">                        System.out.println(selectedRiotId);</span>
+<span class="nc" id="L341">                        mainApp.showIGWindow(selectedRiotId);</span>
+<span class="nc" id="L342">                    } catch (IOException e) {</span>
+<span class="nc" id="L343">                        e.printStackTrace();</span>
+                    }
+                }
+<span class="nc" id="L346">            }</span>
+        });
+<span class="nc" id="L348">    }</span>
+
+    /**
+     * A helper-method that prints information about the currently loaded SoftwareProfile.
+     */
+    public void printProfileData() {
+<span class="nc bnc" id="L354" title="All 2 branches missed.">        if (currentProfile.getRiotAPIKey() != null) {</span>
+<span class="nc" id="L355">            System.out.println(&quot;Riot API Key found: &quot; + currentProfile.getRiotAPIKey());</span>
+        }
+<span class="nc bnc" id="L357" title="All 2 branches missed.">        if (currentProfile.getDefaultRegion() != null) {</span>
+<span class="nc" id="L358">            System.out.println(&quot;Region set to: &quot; + currentProfile.getDefaultRegion());</span>
+        }
+<span class="nc bnc" id="L360" title="All 2 branches missed.">        if (currentProfile.getDefaultRiotAccount() != null) {</span>
+<span class="nc" id="L361">            System.out.println(&quot;Profile default riot account id: &quot; + currentProfile.getDefaultRiotAccount());</span>
+        }
+<span class="nc bnc" id="L363" title="All 2 branches missed.">        if (currentProfile.getDefaultLanguage() != null) {</span>
+<span class="nc" id="L364">            System.out.println(&quot;Profile default language: &quot; + currentProfile.getDefaultLanguage());</span>
+        }
+<span class="nc" id="L366">    }</span>
+
+    /**
+     * Getter for the current SoftwareProfile.
+     * @return The SoftwareProfile.
+     */
+    public SoftwareProfile getCurrentProfile() {
+<span class="nc" id="L373">        return currentProfile;</span>
+    }
+
+    /**
+     * Setter for the currentProfile-variable.
+     * @param currentProfile A SoftwareProfile.
+     */
+    public void setCurrentProfile(SoftwareProfile currentProfile) {
+<span class="nc" id="L381">        this.currentProfile = currentProfile;</span>
+<span class="nc" id="L382">    }</span>
+
+    /**
+     * Refreshes the TableView.
+     */
+    public void refreshMainScene() {
+<span class="nc" id="L388">        secondaryInitialize();</span>
+<span class="nc" id="L389">    }</span>
+
+    /**
+     * Setter for the MainApp.
+     * @param mainApp The MainApp.
+     */
+    public void setMainApp(MainApp mainApp) {
+<span class="nc" id="L396">        this.mainApp = mainApp;</span>
+<span class="nc" id="L397">    }</span>
+
+    /**
+     * Setter for the mainStage.
+     * @param mainStage The Stage.
+     */
+    public void setMainStage(Stage mainStage) {
+<span class="nc" id="L404">        this.mainStage = mainStage;</span>
+<span class="nc" id="L405">    }</span>
+
+    /**
+     * Getter for the currentProfile's name.
+     * @return The name.
+     */
+    public String getProfileName() {
+<span class="nc" id="L412">        return profileName;</span>
+    }
+
+    /**
+     * Text-setter for the profileNameLabel.
+     * @param profileName The name.
+     */
+    public void setProfileNameLabel(String profileName) {
+<span class="nc" id="L420">        profileNameLabel.setText(profileName);</span>
+<span class="nc" id="L421">    }</span>
+
+    /**
+     * Getter for the current ResourceBundle.
+     * @return The ResourceBundle.
+     */
+    public ResourceBundle getTextBundle() {
+<span class="nc" id="L428">        return textBundle;</span>
+    }
+
+    /**
+     * Setter for the ResourceBundle.
+     * @param textBundle A ResourceBundle.
+     */
+    public void setTextBundle(ResourceBundle textBundle) {
+<span class="nc" id="L436">        this.textBundle = textBundle;</span>
+<span class="nc" id="L437">    }</span>
+
+    /**
+     * Getter for the selectedRiotId-variable.
+     * @return The selectedRiotId-variable.
+     */
+    public long getSelectedRiotId() {
+<span class="nc" id="L444">        return selectedRiotId;</span>
+    }
+
+    /**
+     * Setter for the selectedRiotId-variable.
+     * @param selectedRiotId The long to set.
+     */
+    public void setSelectedRiotId(long selectedRiotId) {
+<span class="nc" id="L452">        this.selectedRiotId = selectedRiotId;</span>
+<span class="nc" id="L453">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>FeedBack.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.model</a> &gt; <span class="el_source">FeedBack.java</span></div><h1>FeedBack.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.model;
+
+/**
+ * A class for analysis of in game data
+ * @author Janari
+ *
+ */
+public class FeedBack {
+	
+	//Esitellään tarvittavat muuttujat.
+	long kills, assists, deaths, cs, gold, wards, riotid;
+	double kda, gamelength, cspermin, dmgdealt, dmgpermin, gpm;
+	String rank, winstreakscore, champion, winlose, result, KDAevaluation, csfeedback, kdafeedback, wardfeedback,
+	wardevaluation, csevaluation, dmgevaluation, champion1, champion2, champion3, champion4, enemy1,
+	enemy2, enemy3, enemy4, enemy5;
+	boolean winloss;
+	
+	/*
+	//Iron statistiikat viime kuukauden keskiarvoilla
+	double ironkda = 1.64;
+	int ironcs = 81; 
+	int irongold = 9485;
+	int ironwards = 1;
+	
+	//Bronze statistiikat viime kuukauden keskiarvoilla
+	double bronzekda = 2.02;
+	int bronzecs = 90; 
+	int bronzegold = 10182;
+	int bronzewards = 1;
+	
+	//Silver statistiikat viime kuukauden keskiarvoilla
+	double silverkda = 2.31;
+	int silvercs = 101; 
+	int silvergold = 10720;
+	int silverwards = 1;
+	
+	//Gold statistiikat viime kuukauden keskiarvoilla
+	double goldkda = 2.31;
+	int goldcs = 101; 
+	int goldgold = 10720;
+	int goldwards = 1;
+		
+	//Platinum statistiikat viime kuukauden keskiarvoilla
+	double platkda = 2.31;
+	int platcs = 101; 
+	int platgold = 10720;
+	int platwards = 1;
+	
+	//Diamond statistiikat viime kuukauden keskiarvoilla
+	double diakda = 2.31;
+	int diacs = 101; 
+	int diagold = 10720;
+	int diawards = 1;
+	
+	//Master statistiikat viime kuukauden keskiarvoilla
+	double masterkda = 2.31;
+	int mastercs = 101; 
+	int mastergold = 10720;
+	int masterwards = 1;
+			
+	//Grandmaster statistiikat viime kuukauden keskiarvoilla
+	double gmasterkda = 2.31;
+	int gmastercs = 101; 
+	int gmastergold = 10720;
+	int gmasterwards = 1;
+			
+	//Challenger statistiikat viime kuukauden keskiarvoilla
+	double challkda = 2.31;
+	int challcs = 101; 
+	int challgold = 10720;
+	int challwards = 1;
+	/
+
+	/**
+	 * Constructor to analyse the data gathered from the database.
+	 * @param riotid is placed into the constructor to tell the constructor which specific game  it needs to get information from
+	 */
+<span class="nc" id="L78">	public FeedBack (long riotid) {</span>
+<span class="nc" id="L79">		this.riotid = riotid;</span>
+<span class="nc" id="L80">		ModelAccessObject mao = new ModelAccessObject();</span>
+<span class="nc" id="L81">		Gamedata stats = mao.readOneGame(riotid);</span>
+<span class="nc" id="L82">		Additional morestats = mao.readAdditionalData(riotid);</span>
+<span class="nc" id="L83">		Team champions = mao.readTeamComposition(riotid);</span>
+
+<span class="nc" id="L85">		kills = stats.getKills();</span>
+<span class="nc" id="L86">		assists = stats.getAssist();</span>
+<span class="nc" id="L87">		deaths = stats.getDeaths();</span>
+<span class="nc" id="L88">		kda = ((double)kills+(double)assists)/deaths;</span>
+<span class="nc" id="L89">		champion = stats.getChampion();</span>
+<span class="nc" id="L90">		winlose = stats.getWinlose();</span>
+<span class="nc" id="L91">		rank = stats.getRank();</span>
+<span class="nc" id="L92">		wards = morestats.getWardsScore();</span>
+<span class="nc" id="L93">		dmgdealt = morestats.getDamagedealt();</span>
+<span class="nc" id="L94">		gold = morestats.getGold();</span>
+<span class="nc" id="L95">		gamelength = morestats.getDuration();</span>
+<span class="nc" id="L96">		gpm = gold/gamelength;</span>
+<span class="nc" id="L97">		cs = morestats.getCreepScore();</span>
+<span class="nc" id="L98">		cspermin = cs/gamelength;</span>
+<span class="nc" id="L99">		dmgpermin = dmgdealt/gamelength;</span>
+<span class="nc" id="L100">		champion1 = champions.getChampion1();</span>
+<span class="nc" id="L101">		champion2 = champions.getChampion2();</span>
+<span class="nc" id="L102">		champion3 = champions.getChampion3();</span>
+<span class="nc" id="L103">		champion4 = champions.getChampion4();</span>
+<span class="nc" id="L104">		enemy1 = champions.getEnemyChampion1();</span>
+<span class="nc" id="L105">		enemy2 = champions.getEnemyChampion2();</span>
+<span class="nc" id="L106">		enemy3 = champions.getEnemyChampion3();</span>
+<span class="nc" id="L107">		enemy4 = champions.getEnemyChampion4();</span>
+<span class="nc" id="L108">		enemy5 = champions.getEnemyChampion5();</span>
+<span class="nc" id="L109">		getKDAevaluation();</span>
+<span class="nc" id="L110">		getWardEvaluation();</span>
+<span class="nc" id="L111">		getCSevaluation();</span>
+<span class="nc" id="L112">		getDMGevaluation();</span>
+<span class="nc" id="L113">	}</span>
+	
+	/**
+	 * Get method to get the GPM value as a String
+	 * @return gpmtostring
+	 */
+	public String getGPMToString() {
+<span class="nc" id="L120">		String gpmtostring = Double.toString(gpm);</span>
+<span class="nc" id="L121">		return gpmtostring;</span>
+	}
+	
+	/**
+	 * Get method for the rank of the player
+	 * @return  rank
+	 */
+	public String getRank() {
+<span class="nc" id="L129">		return rank;</span>
+	}
+	
+	/**
+	 * Get method for the players CS per minute value
+	 * @return cspermin
+	 */
+	public double getCspermin() {
+<span class="nc" id="L137">		return cspermin;</span>
+	}
+	
+	/**
+	 * Get method for the wards a player has bought in a game
+	 * @return wards
+	 */
+	public long getWards() {
+<span class="nc" id="L145">		return wards;</span>
+	}
+	
+	/**
+	 * Get method for the match result
+	 * @return winlose
+	 */
+	public String getResult() {
+<span class="nc" id="L153">		return winlose;</span>
+	}
+	
+	/**
+	 * Get method for damage done by the player in a specific game
+	 * @return ddtostring
+	 */
+	public String getDdToString() {
+<span class="nc" id="L161">		String ddtostring = Double.toString(dmgdealt);</span>
+<span class="nc" id="L162">		return ddtostring;</span>
+	}
+	
+	/**
+	 * Get method for players wards bought in a different format
+	 * @return wardstostring
+	 */
+	public String getWardsToString() {
+<span class="nc" id="L170">		String wardstostring = Long.toString(wards);</span>
+<span class="nc" id="L171">		return wardstostring;</span>
+	}
+	
+	/**
+	 * Get method for players creep score in a String format
+	 * @return cstostring
+	 */
+	public String getCStoString() {
+<span class="nc" id="L179">		String cstostring = Long.toString(cs);</span>
+<span class="nc" id="L180">		return cstostring;</span>
+	}
+	
+	/**
+	 * Get method for a players kills death assist ratio in a String format
+	 * @return kdatostring
+	 */
+	public String getKDAToString() {
+<span class="nc" id="L188">		String kdatostring = Double.toString(kda);</span>
+<span class="nc" id="L189">		return kdatostring;</span>
+		
+	}
+	
+	/**
+	 * Get method for the champion played.
+	 * @return champion
+	 */
+	public String getChamp() {
+<span class="nc" id="L198">		return champion;</span>
+	}
+	
+	/**
+	 * Get method for teammate number 1 champion played
+	 * @return champion1
+	 */
+	public String getChamp1() {
+<span class="nc" id="L206">		return champion1;</span>
+	}
+	
+	/**
+	 * Get method for teammate number 2 champion played
+	 * @return champion2
+	 */
+	public String getChamp2() {
+<span class="nc" id="L214">		return champion2;</span>
+	}
+	
+	/**
+	 * Get method for teammate number 3 champion played
+	 * @return champion3
+	 */
+	public String getChamp3() {
+<span class="nc" id="L222">		return champion3;</span>
+	}
+	
+	/**
+	 * Get method for teammate number 4 champion played
+	 * @return champio4
+	 */
+	public String getChamp4() {
+<span class="nc" id="L230">		return champion4;</span>
+	}
+	
+	/**
+	 * Get method for enemy number 1 champion played
+	 * @return enemy1
+	 */
+	public String getEnemy1() {
+<span class="nc" id="L238">		return enemy1;</span>
+	}
+	
+	/**
+	 * Get method for enemy number 2 champion played
+	 * @return enemy2
+	 */
+	public String getEnemy2() {
+<span class="nc" id="L246">		return enemy2;</span>
+	}
+	
+	/**
+	 * Get method for enemy number 3 champion played
+	 * @return enemy3
+	 */
+	public String getEnemy3() {
+<span class="nc" id="L254">		return enemy3;</span>
+	}
+	
+	/**
+	 * Get method for enemy number 4 champion played
+	 * @return enemy4
+	 */
+	public String getEnemy4() {
+<span class="nc" id="L262">		return enemy4;</span>
+	}
+	
+	/**
+	 * Get method for enemy number 5 champion played
+	 * @return enemy5
+	 */
+	public String getEnemy5() {
+<span class="nc" id="L270">		return enemy5;</span>
+	}
+	
+	/**
+	 * Get method for the kill death assist ratio evaluation as a String
+	 * @return KDAevaluation
+	 */
+	public String getKDAevaluation() {
+<span class="nc bnc" id="L278" title="All 2 branches missed.">		if(kda &lt; 1.5) {</span>
+<span class="nc" id="L279">		KDAevaluation = &quot;Poor KDA&quot;;</span>
+<span class="nc" id="L280">		}</span>
+<span class="nc bnc" id="L281" title="All 4 branches missed.">		else if(kda &gt;= 1.5 &amp;&amp;  kda&lt;3) {</span>
+<span class="nc" id="L282">			KDAevaluation = &quot;Average KDA&quot;;</span>
+<span class="nc" id="L283">		}</span>
+<span class="nc bnc" id="L284" title="All 4 branches missed.">		else if(kda &gt;= 3 &amp;&amp; kda &lt;= 5) {</span>
+<span class="nc" id="L285">			KDAevaluation = &quot;Good KDA&quot;;</span>
+<span class="nc" id="L286">		}</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">		else if(kda&gt;5){</span>
+<span class="nc" id="L288">			KDAevaluation = &quot;Insane KDA&quot;;</span>
+<span class="nc" id="L289">		}</span>
+<span class="nc" id="L290">		else {return &quot;Something went wrong, unable to get a kda rating&quot;;}</span>
+<span class="nc" id="L291">		return KDAevaluation;</span>
+	}
+	
+	/**
+	 * Get method for the ward evaluation of the player in a String format
+	 * @return wardevaluation
+	 */
+	public String getWardEvaluation() {
+<span class="nc bnc" id="L299" title="All 2 branches missed.">		if(wards &lt;= 2) {</span>
+<span class="nc" id="L300">			wardevaluation = &quot;poor&quot;;</span>
+<span class="nc" id="L301">		}</span>
+<span class="nc bnc" id="L302" title="All 4 branches missed.">		else if(wards &gt; 3 &amp;&amp; wards &lt;= 10) {</span>
+<span class="nc" id="L303">			wardevaluation = &quot;good&quot;;</span>
+<span class="nc" id="L304">		}</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">		else if(wards==3) {</span>
+<span class="nc" id="L306">			wardevaluation = &quot;average&quot;;</span>
+<span class="nc" id="L307">		}</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">		else if(wards &gt; 10) {</span>
+<span class="nc" id="L309">			wardevaluation = &quot;Too many&quot;;</span>
+		}
+<span class="nc" id="L311">	return wardevaluation;</span>
+}	
+	/**
+	 * Get method for evaluatin creep score in a String format
+	 * @return csevaluation
+	 */
+	public String getCSevaluation() {
+<span class="nc bnc" id="L318" title="All 2 branches missed.">		if (cspermin &lt; 6) {</span>
+<span class="nc" id="L319">			csevaluation = &quot;poor&quot;;</span>
+<span class="nc" id="L320">		}</span>
+<span class="nc bnc" id="L321" title="All 4 branches missed.">		else if(cspermin &gt;= 6 &amp;&amp; cspermin &lt; 8 ) {</span>
+<span class="nc" id="L322">			csevaluation = &quot;good&quot;;</span>
+<span class="nc" id="L323">		}</span>
+<span class="nc bnc" id="L324" title="All 2 branches missed.">		else if(cspermin &gt;= 8){</span>
+<span class="nc" id="L325">			csevaluation = &quot;excellent&quot;;</span>
+		}
+<span class="nc" id="L327">		return csevaluation;</span>
+	}
+	
+	
+	/**
+	 * Get method for evaluating the damage done by the player in a String format
+	 * @return dmgevaluation
+	 */
+	public String getDMGevaluation() {
+<span class="nc bnc" id="L336" title="All 2 branches missed.">		if(dmgpermin &lt; 600) {</span>
+<span class="nc" id="L337">			dmgevaluation = &quot;poor&quot;;</span>
+<span class="nc" id="L338">		}</span>
+<span class="nc bnc" id="L339" title="All 4 branches missed.">		else if (dmgpermin &gt; 600 &amp;&amp; dmgpermin &lt; 800) {</span>
+<span class="nc" id="L340">			dmgevaluation = &quot;average&quot;;</span>
+<span class="nc" id="L341">		}</span>
+<span class="nc bnc" id="L342" title="All 4 branches missed.">		else if(dmgpermin &gt; 800 &amp;&amp; dmgpermin &lt;1000) {</span>
+<span class="nc" id="L343">			dmgevaluation = &quot;good&quot;;</span>
+<span class="nc" id="L344">		}</span>
+		else {
+<span class="nc" id="L346">			dmgevaluation = &quot;excellent&quot;;</span>
+		}
+<span class="nc" id="L348">		return dmgevaluation;</span>
+	}
+	
+	/**
+	 * Get method for getting feedback based on kda evaluation for the match
+	 * @return kdafeedback
+	 */
+	public String getKDAfeedback() {
+<span class="nc bnc" id="L356" title="All 13 branches missed.">		switch (KDAevaluation) {</span>
+			case &quot;Poor KDA&quot;:
+<span class="nc" id="L358">				kdafeedback = &quot;You need to play safer especially in the early stages of the game. A poor kda is usually the result of bad positioning in teamfights or lack of game knowledge while laning.&quot;;</span>
+<span class="nc" id="L359">				break;</span>
+			case &quot;Average KDA&quot;:
+<span class="nc" id="L361">				kdafeedback = &quot;Your kda in this game is average which means you didn't nescessarily play poorly but you could improve by being more aggressive in the laning phase which results in minor leads that snowball to the later stages of the game.&quot;;</span>
+<span class="nc" id="L362">				break;</span>
+			case &quot;Good KDA&quot;:
+<span class="nc" id="L364">				kdafeedback = &quot;You have managed a good kda evaluation in this game which means your mistakes were minor or you got fed early, keep playing the same way and focus on your macro to get even more fed.&quot;;</span>
+<span class="nc" id="L365">				break;</span>
+			case &quot;Insane KDA&quot;:
+<span class="nc" id="L367">				kdafeedback = &quot;This game your kda is among smurf accounts, check your replay and look to replicate this performance in the future.&quot;;</span>
+				break;
+		}
+<span class="nc" id="L370">		return kdafeedback;</span>
+	}
+	
+	/**
+	 * Get method for getting feedback based on ward evaluation in the game
+	 * @return wardfeedback
+	 */
+	public String getWardfeedback() {
+<span class="nc bnc" id="L378" title="All 13 branches missed.">		switch (wardevaluation) {</span>
+			case &quot;poor&quot;:
+<span class="nc" id="L380">				wardfeedback = &quot;You place too little vision wards, average players place atleast 2 vision wards per game. This also helps with your teams success.&quot;;</span>
+<span class="nc" id="L381">				break;</span>
+			case &quot;average&quot;:
+<span class="nc" id="L383">				wardfeedback = &quot;Your warding this game was average meaning you do as well as any other player in your rank, try placing a couple more wards for optimal vision.&quot;;</span>
+<span class="nc" id="L384">				break;</span>
+			case &quot;good&quot;:
+<span class="nc" id="L386">				wardfeedback = &quot;Your ward score is good, keep it up and see your winrate steadily climb.&quot;;</span>
+<span class="nc" id="L387">				break;</span>
+			case &quot;Too many&quot;:
+<span class="nc" id="L389">				wardfeedback = &quot;You purchased an insane amount of vision wards this game, excluding you playing a support this isn't an optimal way to spend your gold so aim to buy 4 to 9 vision wards per game.&quot;;</span>
+				break;
+		}
+<span class="nc" id="L392">		return wardfeedback;</span>
+	}
+	
+	/**
+	 * Get method for getting feedback based on creepscore evaluation
+	 * @return csfeedback
+	 */
+	public String getCSfeedback() {
+<span class="nc bnc" id="L400" title="All 10 branches missed.">		switch (csevaluation) {</span>
+			case &quot;poor&quot;:
+<span class="nc" id="L402">				csfeedback = &quot;Your creepscore in this game is considered poor by average player standards, try going into custom games and work on your mechanics by first cs:ing without an opponent and once you get to 90cs/10 minutes add a bot to play against.&quot;;</span>
+<span class="nc" id="L403">				break;</span>
+			case &quot;good&quot;:
+<span class="nc" id="L405">				csfeedback = &quot;You did a good job cs:ing this game but there is still room for improvement, your biggest improvement in this area comes from studying and knowing your matchup. Try to play more games and in those games focus on your positioning in lane to make perfecting your cs game easier.&quot;;</span>
+<span class="nc" id="L406">				break;</span>
+			case &quot;excellent&quot;:
+<span class="nc" id="L408">				csfeedback = &quot;Excellent, your cs numbers are on par with challenger level players! Try to maintain this level in every game you play and you will see a steady climb in your rank.&quot;;</span>
+				break;
+		}
+<span class="nc" id="L411">		return csfeedback;</span>
+	}
+	
+	/**
+	 * Get method for getting your score on the individual game based on all other analysis
+	 * @return winstreakscore
+	 */
+	public String getWinstreakscore() {
+<span class="nc bnc" id="L419" title="All 4 branches missed.">		if(csevaluation.equals(&quot;poor&quot;) &amp;&amp; wardevaluation.equals(&quot;poor&quot;)) {</span>
+<span class="nc" id="L420">			winstreakscore = &quot;Score: 0\nThis is the lowest score possible which indicates that you need to work on all aspects of your gameplay, work on your basics like cs:ing, positioning and warding more.&quot;;</span>
+<span class="nc" id="L421">		}</span>
+<span class="nc bnc" id="L422" title="All 4 branches missed.">		else if(csevaluation.equals(&quot;good&quot;) &amp;&amp; wardevaluation.equals(&quot;poor&quot;)) {</span>
+<span class="nc" id="L423">			winstreakscore = &quot;Score: 2\nYour cs:ing is on an average level but you need to work on your vision game, use 75 gold everytime you back to base and buy some wards&quot;;</span>
+<span class="nc" id="L424">		}</span>
+<span class="nc bnc" id="L425" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;excellent&quot;) &amp;&amp; wardevaluation.equals(&quot;poor&quot;)) {</span>
+<span class="nc" id="L426">			winstreakscore = &quot;Score: 4\nYour farming game was on point but your vision needs working on, train in custom games and see your rank rise.&quot;;</span>
+<span class="nc" id="L427">		}</span>
+<span class="nc bnc" id="L428" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;poor&quot;) &amp;&amp; wardevaluation.equals(&quot;average&quot;)) {</span>
+<span class="nc" id="L429">			winstreakscore = &quot;Score: 2\nYour farming was really bad but your vision game was on par with an average player, go to custom games and work on your cs:ing.&quot;;</span>
+<span class="nc" id="L430">		}</span>
+<span class="nc bnc" id="L431" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;poor&quot;) &amp;&amp; wardevaluation.equals(&quot;good&quot;)) {</span>
+<span class="nc" id="L432">			winstreakscore = &quot;Score: 3\nYour farming this game was decent but your warding and positioning need to be worked on, your wardscore is too low to merit a better score.&quot;;</span>
+<span class="nc" id="L433">		}</span>
+<span class="nc bnc" id="L434" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;poor&quot;) &amp;&amp; wardevaluation.equals(&quot;Too many&quot;)) {</span>
+<span class="nc" id="L435">			winstreakscore = &quot;Score: 2\nYou bought way too many wards this game and cs:ed badly, you must be playing a support.&quot;;</span>
+<span class="nc" id="L436">		}</span>
+<span class="nc bnc" id="L437" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;good&quot;) &amp;&amp; wardevaluation.equals(&quot;average&quot;)) {</span>
+<span class="nc" id="L438">			winstreakscore = &quot;Score: 6\nYou were on par with average players this game which means you need to work on small things, we suggest improving your cs:ing by learning matchups and perfecting your mechanics in normal games.&quot;;</span>
+<span class="nc" id="L439">		}</span>
+<span class="nc bnc" id="L440" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;good&quot;) &amp;&amp; wardevaluation.equals(&quot;good&quot;)) {</span>
+<span class="nc" id="L441">			winstreakscore = &quot;Score: 8\nBetter than average, try getting a ward or two more in your next game to achieve a higher ranking on ourn scale.&quot;;</span>
+<span class="nc" id="L442">		}</span>
+<span class="nc bnc" id="L443" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;good&quot;) &amp;&amp; wardevaluation.equals(&quot;Too many&quot;)) {</span>
+<span class="nc" id="L444">			winstreakscore = &quot;Score: 7\nYour cs:ing was on point but you use way too much money on wards, aim for 4 to 10 wards per game based on gamelength to optimize your vision game.&quot;;</span>
+<span class="nc" id="L445">		}</span>
+<span class="nc bnc" id="L446" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;excellent&quot;) &amp;&amp; wardevaluation.equals(&quot;average&quot;)) {</span>
+<span class="nc" id="L447">			winstreakscore = &quot;Score: 9\nYour cs:ing was on par with challenger players. Good job! Now just place a few more vision wards in your next games to perfect your vision game.&quot;;</span>
+<span class="nc" id="L448">		}</span>
+<span class="nc bnc" id="L449" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;excellent&quot;) &amp;&amp; wardevaluation.equals(&quot;good&quot;)) {</span>
+<span class="nc" id="L450">			winstreakscore = &quot;Score: 10\nExcellent job, play like this every game and you will rank up!&quot;;</span>
+<span class="nc" id="L451">		}</span>
+<span class="nc bnc" id="L452" title="All 4 branches missed.">		else if (csevaluation.equals(&quot;excellent&quot;) &amp;&amp; wardevaluation.equals(&quot;Too many&quot;)) {</span>
+<span class="nc" id="L453">			winstreakscore = &quot;Score: 8\nYour cs:ing was excellent but you bought too many wards. This many wards should only be bought in 50+ minute games.&quot;;</span>
+		}
+<span class="nc" id="L455">		return winstreakscore;</span>
+}
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>SoftwareProfile.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.model</a> &gt; <span class="el_source">SoftwareProfile.java</span></div><h1>SoftwareProfile.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.model;
+
+import javax.persistence.*;
+
+@Entity
+@Table (name=&quot;SoftwareProfile&quot;)
+
+public class SoftwareProfile {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = &quot;profileId&quot;)
+	private int profileId;
+
+	@Column(name = &quot;profileName&quot;)
+	private String profileName;
+
+	@Column(name = &quot;profilePassword&quot;)
+	private String profilePassword;
+
+	@Column(name = &quot;riotAPIKey&quot;)
+	private String riotAPIKey;
+
+	@Column(name = &quot;defaultRegion&quot;)
+	private String defaultRegion;
+
+	@Column(name = &quot;defaultLanguage&quot;)
+	private String defaultLanguage;
+
+	@Column(name = &quot;defaultRiotAccount&quot;)
+	private String defaultRiotAccount;
+
+	/**
+	 * Empty constructor
+	 */
+<span class="fc" id="L35">	public SoftwareProfile() {</span>
+		//Default constructor
+<span class="fc" id="L37">	}</span>
+
+	/**
+	 * The main constructor
+	 * @param profileName A String for the SoftwareProfile's name (Required).
+	 * @param profilePassword A String for the SoftwareProfile's password, no encryption yet (Required).
+	 * @param defaultRegion Optional String for SoftwareProfile's default League of Legends region.
+	 * @param defaultLanguage Optional String for SoftwareProfile's default user interface language.
+	 *                        Should follow the format of &quot;language_country&quot;, e.g. &quot;en_US&quot; or &quot;fi_FI&quot;.
+	 * @param defaultRiotAccount Optional String for an encrypted version of Riot's accountId. Not in use yet.
+	 * @param riotAPIKey Partially optional String for the SoftwareProfile's Riot API-key. Mandatory to get the program
+	 *                   working as it should.
+	 */
+<span class="fc" id="L50">	public SoftwareProfile(String profileName, String profilePassword, String defaultRegion, String defaultLanguage, String defaultRiotAccount, String riotAPIKey) {</span>
+<span class="fc" id="L51">		this.profileName = profileName;</span>
+<span class="fc" id="L52">		this.profilePassword = profilePassword;</span>
+<span class="fc" id="L53">		this.riotAPIKey = riotAPIKey;</span>
+<span class="fc" id="L54">		this.defaultRegion = defaultRegion;</span>
+<span class="fc" id="L55">		this.defaultLanguage = defaultLanguage;</span>
+<span class="fc" id="L56">		this.defaultRiotAccount = defaultRiotAccount;</span>
+<span class="fc" id="L57">	}</span>
+
+	/**
+	 * Getter for the profileId.
+	 * @return The profileId.
+	 */
+	public int getProfileId() {
+<span class="nc" id="L64">		return profileId;</span>
+	}
+
+	/**
+	 * Setter for the profileId.
+	 * @param profileId Sets the profileId.
+	 */
+	public void setProfileId(int profileId) {
+<span class="nc" id="L72">		this.profileId = profileId;</span>
+<span class="nc" id="L73">	}</span>
+
+	/**
+	 * Getter for the profileName.
+	 * @return The profileName.
+	 */
+	public String getProfileName() {
+<span class="fc" id="L80">		return profileName;</span>
+	}
+
+	/**
+	 * Setter for the profileName.
+	 * @param profileName Sets the profileName.
+	 */
+	public void setProfileName(String profileName) {
+<span class="nc" id="L88">		this.profileName = profileName;</span>
+<span class="nc" id="L89">	}</span>
+
+	/**
+	 * Getter for the profilePassword.
+	 * @return The profilePassword.
+	 */
+	public String getProfilePassword() {
+<span class="fc" id="L96">		return profilePassword;</span>
+	}
+
+	/**
+	 * Setter for the profilePassword.
+	 * @param profilePassword Sets the profilePassword.
+	 */
+	public void setProfilePassword(String profilePassword) {
+<span class="nc" id="L104">		this.profilePassword = profilePassword;</span>
+<span class="nc" id="L105">	}</span>
+
+	/**
+	 * Getter for the riotAPIKey.
+	 * @return The riotAPIKey.
+	 */
+	public String getRiotAPIKey() {
+<span class="fc" id="L112">		return riotAPIKey;</span>
+	}
+
+	/**
+	 * Setter for the riotAPIKey.
+	 * @param riotAPIKey Sets the riotAPIKey.
+	 */
+	public void setRiotAPIKey(String riotAPIKey) {
+<span class="nc" id="L120">		this.riotAPIKey = riotAPIKey;</span>
+<span class="nc" id="L121">	}</span>
+
+	/**
+	 * Getter for the profile's defaultRegion.
+	 * @return The profile's defaultRegion.
+	 */
+	public String getDefaultRegion() {
+<span class="fc" id="L128">		return defaultRegion;</span>
+	}
+
+	/**
+	 * Setter for the profile's defaultRegion.
+	 * @param defaultRegion Sets the profile's defaultRegion.
+	 */
+	public void setDefaultRegion(String defaultRegion) {
+<span class="nc" id="L136">		this.defaultRegion = defaultRegion;</span>
+<span class="nc" id="L137">	}</span>
+
+	/**
+	 * Getter for the profile's defaultLanguage.
+	 * @return The profile's defaultLanguage.
+	 */
+	public String getDefaultLanguage() {
+<span class="fc" id="L144">		return defaultLanguage;</span>
+	}
+
+	/**
+	 * Setter for the profile's defaultLanguage.
+	 * @param defaultLanguage Sets the profile's defaultLanguage.
+	 */
+	public void setDefaultLanguage(String defaultLanguage) {
+<span class="nc" id="L152">		this.defaultLanguage = defaultLanguage;</span>
+<span class="nc" id="L153">	}</span>
+
+	/**
+	 * Getter for the encrypted defaultRiotAccount. Not properly implemented yet.
+	 * @return The encrypted defaultRiotAccount.
+	 */
+	public String getDefaultRiotAccount() {
+<span class="fc" id="L160">		return defaultRiotAccount;</span>
+	}
+
+	/**
+	 * Setter for the encrypted defaultRiotAccount. Not properly implemented yet.
+	 * @param defaultRiotAccount Sets the encrypted defaultRiotAccount.
+	 */
+	public void setDefaultRiotAccount(String defaultRiotAccount) {
+<span class="nc" id="L168">		this.defaultRiotAccount = defaultRiotAccount;</span>
+<span class="nc" id="L169">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

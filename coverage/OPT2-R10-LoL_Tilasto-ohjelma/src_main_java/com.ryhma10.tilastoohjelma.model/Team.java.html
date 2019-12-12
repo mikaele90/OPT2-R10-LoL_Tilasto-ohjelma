@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Team.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.model</a> &gt; <span class="el_source">Team.java</span></div><h1>Team.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.model;
+
+import javax.persistence.*;
+
+
+@Entity
+@Table(name=&quot;team&quot;)
+
+public class Team {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name=&quot;teamid&quot;)
+	private int teamid;
+	
+	@Column(name=&quot;champion1&quot;)
+	private String champion1;
+	
+	@Column(name=&quot;champion2&quot;)
+	private String champion2;
+	
+	@Column(name=&quot;champion3&quot;)
+	private String champion3;
+	
+	@Column(name=&quot;champion4&quot;)
+	private String champion4;
+	
+	@Column(name=&quot;enemyChampion1&quot;)
+	private String enemyChampion1;
+	
+	@Column(name=&quot;enemyChampion2&quot;)
+	private String enemyChampion2;
+	
+	@Column(name=&quot;enemyChampion3&quot;)
+	private String enemyChampion3;
+	
+	@Column(name=&quot;enemyChampion4&quot;)
+	private String enemyChampion4;
+	
+	@Column(name=&quot;enemyChampion5&quot;)
+	private String enemyChampion5;
+	
+	@OneToOne
+	@JoinColumn(name=&quot;game_id&quot;, referencedColumnName=&quot;gameid&quot;, nullable=false)
+	private Gamedata gamedata;
+	
+	/**
+	 * Empty constructor
+	 */
+<span class="fc" id="L50">	public Team() {</span>
+		
+<span class="fc" id="L52">	}</span>
+	
+	/**
+	 * Team constructor takes all the team members and enemy teams champios as parameter in String format
+	 * @param champion1
+	 * @param champion2
+	 * @param champion3
+	 * @param champion4
+	 * @param enemyChampion1
+	 * @param enemyChampion2
+	 * @param enemyChampion3
+	 * @param enemyChampion4
+	 * @param enemyChampion5
+	 */
+<span class="fc" id="L66">	public Team(String champion1, String champion2, String champion3, String champion4, </span>
+			String enemyChampion1, String enemyChampion2, String enemyChampion3, 
+			String enemyChampion4 , String enemyChampion5) {
+<span class="fc" id="L69">		this.champion1 = champion1;</span>
+<span class="fc" id="L70">		this.champion2 = champion2;</span>
+<span class="fc" id="L71">		this.champion3 = champion3;</span>
+<span class="fc" id="L72">		this.champion4 = champion4;</span>
+<span class="fc" id="L73">		this.enemyChampion1 = enemyChampion1;</span>
+<span class="fc" id="L74">		this.enemyChampion2 = enemyChampion2;</span>
+<span class="fc" id="L75">		this.enemyChampion3 = enemyChampion3;</span>
+<span class="fc" id="L76">		this.enemyChampion4 = enemyChampion4;</span>
+<span class="fc" id="L77">		this.enemyChampion5 = enemyChampion5;</span>
+<span class="fc" id="L78">	}</span>
+	
+	/**
+	 * Getter for the Team id
+	 * @return teamId
+	 */
+	public int getTeamid() {
+<span class="nc" id="L85">		return teamid;</span>
+	}
+	
+	/**
+	 * Setter for the Team id
+	 * @param teamid
+	 */
+	public void setTeamid(int teamid) {
+<span class="nc" id="L93">		this.teamid = teamid;</span>
+<span class="nc" id="L94">	}</span>
+	
+	/**
+	 * Getter for the champion name
+	 * @return champion name in slot 1
+	 */
+	public String getChampion1() {
+<span class="fc" id="L101">		return champion1;</span>
+	}
+	
+	/**
+	 * Setter for the champion name in slot 1
+	 * @param champion1
+	 */
+	public void setChampion1(String champion1) {
+<span class="nc" id="L109">		this.champion1 = champion1;</span>
+<span class="nc" id="L110">	}</span>
+
+	/**
+	* Getter for the champion name
+	 * @return champion name in slot 2
+	 */
+	public String getChampion2() {
+<span class="fc" id="L117">		return champion2;</span>
+	}
+	
+	/**
+	 * Setter for the champion name in slot 2
+	 * @param champion2
+	 */
+	public void setChampion2(String champion2) {
+<span class="nc" id="L125">		this.champion2 = champion2;</span>
+<span class="nc" id="L126">	}</span>
+	
+	/**
+	 * Getter for the champion name
+	 * @return champion name in slot 3
+	 */
+	public String getChampion3() {
+<span class="fc" id="L133">		return champion3;</span>
+	}
+	
+	/**
+	 * Setter for the champion name in slot 3
+	 * @param champion3
+	 */
+	public void setChampion3(String champion3) {
+<span class="nc" id="L141">		this.champion3 = champion3;</span>
+<span class="nc" id="L142">	}</span>
+	
+	/**
+	 * Getter for the champion name
+	 * @return champion name in slot 4
+	 */
+	public String getChampion4() {
+<span class="fc" id="L149">		return champion4;</span>
+	}
+	
+	/**
+	 * Setter for the champion name in slot 4
+	 * @param champion4
+	 */
+	public void setChampion4(String champion4) {
+<span class="nc" id="L157">		this.champion4 = champion4;</span>
+<span class="nc" id="L158">	}</span>
+	
+	/**
+	 * Getter for the enemy champion name
+	 * @return champion name in slot 1
+	 */
+	public String getEnemyChampion1() {
+<span class="fc" id="L165">		return enemyChampion1;</span>
+	}
+	
+	/**
+	 * Setter for the enemy champion name in slot 1
+	 * @param enemyChampion1
+	 */
+	public void setEnemyChampion1(String enemyChampion1) {
+<span class="nc" id="L173">		this.enemyChampion1 = enemyChampion1;</span>
+<span class="nc" id="L174">	}</span>
+	
+	/**
+	 * Getter for the enemy champion name
+	 * @return champion name in slot 2
+	 */
+	public String getEnemyChampion2() {
+<span class="fc" id="L181">		return enemyChampion2;</span>
+	}
+	/**
+	 * Setter for the enemy champion name in slot 2
+	 * @param enemyChampion2
+	 */
+	public void setEnemyChampion2(String enemyChampion2) {
+<span class="nc" id="L188">		this.enemyChampion2 = enemyChampion2;</span>
+<span class="nc" id="L189">	}</span>
+	
+	/**
+	 * Getter for the enemy champion name
+	 * @return champion name in slot 3
+	 */
+	public String getEnemyChampion3() {
+<span class="fc" id="L196">		return enemyChampion3;</span>
+	}
+	
+	/**
+	 * Setter for the enemy champion name in slot 3
+	 * @param enemyChampion3
+	 */
+	public void setEnemyChampion3(String enemyChampion3) {
+<span class="nc" id="L204">		this.enemyChampion3 = enemyChampion3;</span>
+<span class="nc" id="L205">	}</span>
+	
+	/**
+	 * Getter for the enemy champion name
+	 * @return champion name in slot 4
+	 */
+	public String getEnemyChampion4() {
+<span class="fc" id="L212">		return enemyChampion4;</span>
+	}
+	
+	/**
+	 * Setter for the enemy champion name in slot 4
+	 * @param enemyChampion4
+	 */
+	public void setEnemyChampion4(String enemyChampion4) {
+<span class="nc" id="L220">		this.enemyChampion4 = enemyChampion4;</span>
+<span class="nc" id="L221">	}</span>
+	
+	/**
+	 * Getter for the enemy champion name
+	 * @return champion name in slot 5
+	 */
+	public String getEnemyChampion5() {
+<span class="fc" id="L228">		return enemyChampion5;</span>
+	}
+	
+	/**
+	 * Setter for the enemy champion name in slot 5
+	 * @param enemyChampion5
+	 */
+	public void setEnemyChampion5(String enemyChampion5) {
+<span class="nc" id="L236">		this.enemyChampion5 = enemyChampion5;</span>
+<span class="nc" id="L237">	}</span>
+	
+	/**
+	 * Returns Gamedata object
+	 * @return Gamedata gamedata
+	 */
+	public Gamedata getGamedata() {
+<span class="nc" id="L244">		return gamedata;</span>
+	}
+	
+	/**
+	 * Setter for the Gamedata object
+	 * @param gamedata
+	 */
+	public void setGamedata(Gamedata gamedata) {
+<span class="fc" id="L252">		this.gamedata = gamedata;</span>
+<span class="fc" id="L253">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>IndividualGameController.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.view</a> &gt; <span class="el_source">IndividualGameController.java</span></div><h1>IndividualGameController.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.view;
+
+import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.model.FeedBack;
+import com.ryhma10.tilastoohjelma.model.Gamedata;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.ResourceBundle;
+
+/**
+ * A class for the communication between individual game stage and the model
+ * @author Janari
+ *
+ */
+public class IndividualGameController {
+	Gamedata gd;
+	FeedBack fb;
+	MainApp main;
+	MainController mc;
+	private MainApp mainApp;
+    private Stage igstage;
+	private long riotId;
+	private ResourceBundle textBundle;
+	
+    @FXML
+	private Label mr;
+	@FXML 
+	private Label champplayed;
+	@FXML
+	private Label kda;
+	@FXML
+	private Label gpm;
+	@FXML
+	private Label cs;
+	@FXML
+	private Label wp;
+	@FXML
+	private Label dd;
+	@FXML
+	private Label r;
+	@FXML
+	private Label champ1;
+	@FXML
+	private Label champ2;
+	@FXML
+	private Label champ3;
+	@FXML
+	private Label champ4;
+	@FXML
+	private Label enemy1;
+	@FXML
+	private Label enemy2;
+	@FXML
+	private Label enemy3;
+	@FXML
+	private Label enemy4;
+	@FXML
+	private Label enemy5;
+	
+<span class="nc" id="L65">	public IndividualGameController() {</span>
+
+<span class="nc" id="L67">	}</span>
+	
+	/**
+	 * Setter for main application
+	 * @param mainApp
+	 */
+	public void setMainApp(MainApp mainApp) {
+<span class="nc" id="L74">        this.mainApp = mainApp;</span>
+<span class="nc" id="L75">    }</span>
+    
+	/**
+	 * Setter for Individual game stage
+	 * @param igstage
+	 */
+    public void setIGStage(Stage igstage) {
+<span class="nc" id="L82">        this.igstage = igstage;</span>
+<span class="nc" id="L83">    }</span>
+	
+    /**
+     * Method for initializing the individual game stage when it's called
+     */
+	public void initialize() {
+<span class="nc" id="L89">		Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L90">			fb = new FeedBack(riotId);</span>
+<span class="nc" id="L91">			champplayed.setText(fb.getChamp());</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">			if (fb.getResult().equalsIgnoreCase(&quot;Win&quot;)) {</span>
+<span class="nc" id="L93">				mr.setText(textBundle.getString(&quot;label.win&quot;));</span>
+<span class="nc" id="L94">			}</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">			else if (fb.getResult().equalsIgnoreCase(&quot;Loss&quot;)) {</span>
+<span class="nc" id="L96">				mr.setText(textBundle.getString(&quot;label.loss&quot;));</span>
+			}
+<span class="nc" id="L98">			kda.setText(fb.getKDAToString());</span>
+<span class="nc" id="L99">			gpm.setText(fb.getGPMToString());</span>
+<span class="nc" id="L100">			cs.setText(fb.getCStoString());</span>
+<span class="nc" id="L101">			wp.setText(fb.getWardsToString());</span>
+<span class="nc" id="L102">			dd.setText(fb.getDdToString());</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">			if (fb.getRank().equalsIgnoreCase(&quot;No Rank&quot;)) {</span>
+<span class="nc" id="L104">				r.setText(textBundle.getString(&quot;label.noRank&quot;));</span>
+<span class="nc" id="L105">			}</span>
+			else {
+<span class="nc" id="L107">				r.setText(fb.getRank());</span>
+			}
+<span class="nc" id="L109">			champ1.setText(fb.getChamp1());</span>
+<span class="nc" id="L110">			champ2.setText(fb.getChamp2());</span>
+<span class="nc" id="L111">			champ3.setText(fb.getChamp3());</span>
+<span class="nc" id="L112">			champ4.setText(fb.getChamp4());</span>
+<span class="nc" id="L113">			enemy1.setText(fb.getEnemy1());</span>
+<span class="nc" id="L114">			enemy2.setText(fb.getEnemy2());</span>
+<span class="nc" id="L115">			enemy3.setText(fb.getEnemy3());</span>
+<span class="nc" id="L116">			enemy4.setText(fb.getEnemy4());</span>
+<span class="nc" id="L117">			enemy5.setText(fb.getEnemy5());</span>
+<span class="nc" id="L118">			this.mc = mainApp.getMainController();</span>
+<span class="nc" id="L119">		});</span>
+<span class="nc" id="L120">	}</span>
+	
+	/**
+	 * Action handler for when the &quot;Back&quot; button is pressed
+	 */
+	public void handleBack() {
+<span class="nc" id="L126">		igstage.close();</span>
+<span class="nc" id="L127">	}</span>
+	
+	/**
+	 * Action handler for when the &quot;Feedback&quot; button is pressed
+	 * @param event
+	 * @throws IOException
+	 */
+	public void handleFeedback(ActionEvent event) throws IOException{
+<span class="nc" id="L135">		mainApp.showFeedBackWindow(fb);</span>
+<span class="nc" id="L136">	}</span>
+	
+	/**
+	 * get method for the riotif used to specify the match
+	 * @return the riotid
+	 */
+	public long getRiotId() {
+<span class="nc" id="L143">		return riotId;</span>
+	}
+	
+	/**
+	 * setter method for the riotid 
+	 * @param riotId to be set
+	 */
+	public void setRiotId(long riotId) {
+<span class="nc" id="L151">		this.riotId = riotId;</span>
+<span class="nc" id="L152">	}</span>
+	
+	/**
+	 * getter for the FeedBack object used to give feedback to the user
+	 * @return feedback object
+	 */
+	public FeedBack getFb() {
+<span class="nc" id="L159">		return fb;</span>
+	}
+	
+	/**
+	 * setter for the textbundle used to print messages in finnish and english depending on the language selected
+	 * @param textBundle to be used
+	 */
+	public void setTextBundle(ResourceBundle textBundle) {
+<span class="nc" id="L167">		this.textBundle = textBundle;</span>
+<span class="nc" id="L168">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

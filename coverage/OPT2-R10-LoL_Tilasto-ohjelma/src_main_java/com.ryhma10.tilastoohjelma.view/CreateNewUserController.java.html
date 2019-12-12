@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>CreateNewUserController.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.view</a> &gt; <span class="el_source">CreateNewUserController.java</span></div><h1>CreateNewUserController.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.view;
+
+import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.OriannaException;
+import com.merakianalytics.orianna.types.common.Region;
+import com.merakianalytics.orianna.types.core.status.ShardStatus;
+
+import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
+import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
+
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Properties;
+import java.util.ResourceBundle;
+
+
+public class CreateNewUserController {
+
+    private MainApp mainApp;
+    private Stage createNewUserStage;
+    private AlertFactory alertFactory;
+    private ResourceBundle textBundle;
+
+    @FXML
+    private Accordion centerAccordion;
+    @FXML
+    private TitledPane requiredInformationPane, optionalInformationPane;
+    @FXML
+    private ProgressIndicator progressIndicator;
+    @FXML
+    private TextField profileNameTextField, riotAPIKeyTextField;
+    @FXML
+    private PasswordField profilePasswordField;
+    @FXML
+    private ChoiceBox&lt;String&gt; riotRegionChoiceBox, languageChoiceBox;
+    @FXML
+    private Button testAPIKeyButton, helpButton, cancelButton, doneButton;
+    @FXML
+    private Label createNewProfileLabel, profileNameLabel, profilePasswordLabel, riotAPIKeyLabel, riotRegionLabel, languageLabel;
+    @FXML
+    private Tooltip testAPIKeyButtonTooltip;
+
+    /**
+     * Empty constructor.
+     */
+<span class="nc" id="L58">    public CreateNewUserController() {</span>
+        //Constructor
+<span class="nc" id="L60">    }</span>
+
+    /**
+     * Initializes the CreateNewUser-window.
+     */
+    public void initialize() {
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (progressIndicator.isVisible()) {</span>
+<span class="nc" id="L67">            progressIndicator.setVisible(false);</span>
+        }
+<span class="nc" id="L69">        profileNameTextField.setText(&quot;&quot;);</span>
+<span class="nc" id="L70">        profilePasswordField.setText(&quot;&quot;);</span>
+<span class="nc" id="L71">        riotAPIKeyTextField.setText(&quot;&quot;);</span>
+<span class="nc" id="L72">        centerAccordion.setExpandedPane(requiredInformationPane);</span>
+<span class="nc" id="L73">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L74">            alertFactory = new AlertFactory(mainApp.getTextBundle());</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            for (Region region : Region.values()) {</span>
+<span class="nc" id="L76">                riotRegionChoiceBox.getItems().add(region.name().replace(&quot;_&quot;, &quot; &quot;));</span>
+            }
+<span class="nc" id="L78">            riotRegionChoiceBox.setValue(Region.NORTH_AMERICA.name().replace(&quot;_&quot;, &quot; &quot;));</span>
+<span class="nc" id="L79">            List&lt;String&gt; languageArrayList = mainApp.getLanguageArrayList();</span>
+<span class="nc" id="L80">            ObservableList&lt;String&gt; languageObservableList = FXCollections.observableList(languageArrayList);</span>
+<span class="nc" id="L81">            languageChoiceBox.getItems().addAll(languageObservableList);</span>
+<span class="nc" id="L82">            languageChoiceBox.setValue(textBundle.getString(mainApp.getCurrentLocale().toString()));</span>
+<span class="nc" id="L83">        });</span>
+<span class="nc" id="L84">    }</span>
+
+    /**
+     * Sets the MainApp.
+     * @param mainApp The MainApp.
+     */
+    public void setMainApp(MainApp mainApp) {
+<span class="nc" id="L91">        this.mainApp = mainApp;</span>
+<span class="nc" id="L92">    }</span>
+
+    /**
+     * Sets the Stage.
+     * @param createNewUserStage The Stage.
+     */
+    public void setCreateNewUserStage(Stage createNewUserStage) {
+<span class="nc" id="L99">        this.createNewUserStage = createNewUserStage;</span>
+<span class="nc" id="L100">    }</span>
+
+    /**
+     * Cancels the creation of a new SoftwareProfile.
+     * @param actionEvent Interacting with the button, defined in CreateNewUser.fxml.
+     */
+    @FXML
+    public void handleCancel(ActionEvent actionEvent) {
+<span class="nc" id="L108">        createNewUserStage.close();</span>
+<span class="nc" id="L109">    }</span>
+
+    /**
+     * Detects if Enter is pressed.
+     * @param keyEvent Any KeyEvent.
+     */
+    @FXML
+    public void onEnter(KeyEvent keyEvent) {
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        if(keyEvent.getCode().equals(KeyCode.ENTER)) {</span>
+<span class="nc" id="L118">            System.out.println(&quot;Enter pressed&quot;);</span>
+<span class="nc" id="L119">            handleDone(new ActionEvent());</span>
+        }
+<span class="nc" id="L121">    }</span>
+
+    /**
+     * Opens the help-window. Help not yet implemented.
+     * @param actionEvent Interacting with the button, defined in CreateNewUser.fxml.
+     */
+    @FXML
+    public void handleCreateNewProfileHelp(ActionEvent actionEvent) {
+<span class="nc" id="L129">        System.out.println(&quot;Not yet implemented&quot;);</span>
+        //TODO
+<span class="nc" id="L131">    }</span>
+
+    /**
+     * Tests the String inputted into the API-Key TextField.
+     * @param actionEvent Interacting with the button, defined in CreateNewUser.fxml.
+     */
+    @FXML
+    public void handleTestAPIKey(ActionEvent actionEvent) {
+<span class="nc" id="L139">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L140">            progressIndicator.setVisible(true);</span>
+<span class="nc" id="L141">            testAPIKeyButton.setText(textBundle.getString(&quot;button.testingAPIKey&quot;));</span>
+<span class="nc" id="L142">            testAPIKeyButton.setDisable(true);</span>
+<span class="nc" id="L143">        });</span>
+<span class="nc" id="L144">        new Thread(() -&gt; {</span>
+<span class="nc" id="L145">            Orianna.setRiotAPIKey(riotAPIKeyTextField.getText());</span>
+            ShardStatus status;
+            try {
+<span class="nc" id="L148">                status = ShardStatus.withRegion(Region.NORTH_AMERICA).get();</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                if (status.exists()) {</span>
+<span class="nc" id="L150">                    Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L151">                        Alert apiKeySuccessAlert = alertFactory.createAlert(&quot;APIKeyTest:Pass&quot;);</span>
+<span class="nc" id="L152">                        apiKeySuccessAlert.show();</span>
+<span class="nc" id="L153">                    });</span>
+<span class="nc" id="L154">                }</span>
+                else {
+<span class="nc" id="L156">                    System.out.println(&quot;Unknown error. Status: &quot; + status.exists());</span>
+                }
+<span class="nc" id="L158">            } catch (OriannaException oe) {</span>
+<span class="nc" id="L159">                System.out.println(oe.getClass().getSimpleName());</span>
+<span class="nc" id="L160">                Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L161">                    Alert apiKeyFailAlert = alertFactory.createAlert(&quot;APIKeyTest:Fail&quot;);</span>
+<span class="nc" id="L162">                    apiKeyFailAlert.show();</span>
+<span class="nc" id="L163">                });</span>
+            }
+<span class="nc" id="L165">            Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L166">                progressIndicator.setVisible(false);</span>
+<span class="nc" id="L167">                testAPIKeyButton.setText(textBundle.getString(&quot;button.testAPIKey&quot;));</span>
+<span class="nc" id="L168">                testAPIKeyButton.setDisable(false);</span>
+<span class="nc" id="L169">            });</span>
+<span class="nc" id="L170">        }).start();</span>
+<span class="nc" id="L171">    }</span>
+
+    /**
+     * Exports the given values into the database. Creates a new SoftwareProfile.
+     * @param actionEvent Interacting with the button, defined in CreateNewUser.fxml.
+     */
+    @FXML
+    public void handleDone(ActionEvent actionEvent) {
+<span class="nc bnc" id="L179" title="All 4 branches missed.">        if(profileNameTextField.getText().length() &gt; 0 &amp;&amp; profilePasswordField.getText().length() &gt; 3) {</span>
+<span class="nc" id="L180">            new Thread(() -&gt; {</span>
+<span class="nc" id="L181">                String riotAPIKey = riotAPIKeyTextField.getText();</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">                if (riotAPIKey.equals(&quot;&quot;)) {</span>
+<span class="nc" id="L183">                    riotAPIKey = null;</span>
+                }
+<span class="nc" id="L185">                progressIndicator.setVisible(true);</span>
+<span class="nc" id="L186">                ModelAccessObject modelAccessObject = new ModelAccessObject();</span>
+<span class="nc" id="L187">                String resultStringFromMethod = modelAccessObject.createProfile(profileNameTextField.getText(), profilePasswordField.getText(),</span>
+<span class="nc" id="L188">                        riotRegionChoiceBox.getSelectionModel().getSelectedItem().toString().replace(&quot; &quot;, &quot;_&quot;),</span>
+<span class="nc" id="L189">                        getSelectedLanguage(languageChoiceBox.getSelectionModel().getSelectedIndex()), null, riotAPIKey);</span>
+<span class="nc" id="L190">                Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L191" title="All 10 branches missed.">                    switch (resultStringFromMethod) {</span>
+                        case &quot;Profile successfully created&quot;:
+<span class="nc" id="L193">                            System.out.println(resultStringFromMethod);</span>
+<span class="nc" id="L194">                            Alert successAlert = alertFactory.createAlert(resultStringFromMethod);</span>
+<span class="nc" id="L195">                            successAlert.show();</span>
+<span class="nc" id="L196">                            createNewUserStage.close();</span>
+<span class="nc" id="L197">                            break;</span>
+                        case &quot;Profile already exists&quot;:
+                        case &quot;Database connection error&quot;:
+<span class="nc" id="L200">                            System.out.println(resultStringFromMethod);</span>
+<span class="nc" id="L201">                            Alert errorAlert = alertFactory.createAlert(resultStringFromMethod);</span>
+<span class="nc" id="L202">                            errorAlert.show();</span>
+                            break;
+                    }
+<span class="nc" id="L205">                    progressIndicator.setVisible(false);</span>
+<span class="nc" id="L206">                });</span>
+<span class="nc" id="L207">            }).start();</span>
+<span class="nc" id="L208">        }</span>
+        else {
+<span class="nc" id="L210">            Alert userInputErrorAlert = alertFactory.createAlert(&quot;CreateProfile:UserInputError&quot;);</span>
+<span class="nc" id="L211">            userInputErrorAlert.showAndWait();</span>
+        }
+<span class="nc" id="L213">    }</span>
+
+    /**
+     * Selects the language that the user has selected.
+     * @param langIndex The index of the language; Corresponds to the index of the file when read from the folder due to
+     *                  the way the ChoiceBox lists languages in a similar manner.
+     * @return String of language and country, e.g. &quot;en_US&quot; or &quot;fi_FI&quot;.
+     */
+    private String getSelectedLanguage(int langIndex) {
+        String selectedLanguage;
+<span class="nc" id="L223">        selectedLanguage = languageChoiceBox.getSelectionModel().getSelectedItem().toString();</span>
+<span class="nc" id="L224">        String langString = mainApp.getLanguageDirFiles().get(langIndex);</span>
+<span class="nc" id="L225">        Properties propertiesHelper = new Properties();</span>
+        try {
+<span class="nc" id="L227">            propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + &quot;/&quot; + langString));</span>
+<span class="nc" id="L228">        } catch (IOException e) {</span>
+<span class="nc" id="L229">            e.printStackTrace();</span>
+        }
+<span class="nc" id="L231">        selectedLanguage = propertiesHelper.getProperty(&quot;localeINFO&quot;);</span>
+<span class="nc" id="L232">        System.out.println(selectedLanguage);</span>
+<span class="nc" id="L233">        return selectedLanguage;</span>
+    }
+
+    /**
+     * Getter for the ResourceBundle.
+     * @return The ResourceBundle
+     */
+    public ResourceBundle getTextBundle() {
+<span class="nc" id="L241">        return textBundle;</span>
+    }
+
+    /**
+     * Setter for the ResourceBundle.
+     * @param textBundle The ResourceBundle to be set.
+     */
+    public void setTextBundle(ResourceBundle textBundle) {
+<span class="nc" id="L249">        this.textBundle = textBundle;</span>
+<span class="nc" id="L250">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>InputController.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.view</a> &gt; <span class="el_source">InputController.java</span></div><h1>InputController.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.view;
+
+import com.merakianalytics.orianna.types.common.OriannaException;
+import com.merakianalytics.orianna.types.common.Region;
+import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.api.RiotApi;
+import com.ryhma10.tilastoohjelma.model.Gamedata;
+import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.*;
+
+/**
+ * a class for handling data between the input window and the model
+ * @author Janari
+ *
+ */
+public class InputController  {
+
+	private Gamedata match;
+	private SoftwareProfile currentProfile;
+	private ModelAccessObject modelAccessObject;
+	private MainController mainController;
+	private MainApp mainApp;
+    private Stage inputStage;
+    private AlertFactory alertFactory;
+	private ResourceBundle textBundle;
+	private SpinnerValueFactory&lt;Integer&gt; spinnerValueFactory;
+<span class="nc" id="L38">	private final int defaultNumberOfGames = 1;</span>
+<span class="nc" id="L39">	private ArrayList&lt;Long&gt; matchHistoryIdsFromDb = null;</span>
+<span class="nc" id="L40">	private ArrayList&lt;Long&gt; matchHistoryIdsFromAPI = null;</span>
+
+    @FXML
+	private Menu editMenu, helpMenu;
+    @FXML
+	private MenuItem settingsMenuItem, helpMenuItem, aboutMenuItem;
+    @FXML
+	private Label leagueOfLegendsRegionLabel, summonerNameLabel, numberOfGamesLabel, currentRegionLabel;
+    @FXML
+	private TextField summonerNameTextField;
+    @FXML
+	private Spinner&lt;Integer&gt; numberOfGamesSpinner;
+    @FXML
+	private Button cancelButton, fetchGamesButton;
+    @FXML
+	private ProgressIndicator progressIndicator;
+
+	/**
+	 * Initializes the window
+	 */
+	@FXML
+	private void initialize() {
+<span class="nc" id="L62">    	numberOfGamesSpinner.setEditable(true);</span>
+<span class="nc" id="L63">    	spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE, defaultNumberOfGames);</span>
+<span class="nc" id="L64">    	numberOfGamesSpinner.setValueFactory(spinnerValueFactory);</span>
+<span class="nc" id="L65">    	summonerNameTextField.setText(&quot;&quot;);</span>
+<span class="nc" id="L66">		progressIndicator.setVisible(false);</span>
+<span class="nc" id="L67">		Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L68">			alertFactory = new AlertFactory(textBundle);</span>
+<span class="nc" id="L69">			mainController = mainApp.getMainController();</span>
+<span class="nc" id="L70">			currentProfile = mainApp.getProfile();</span>
+<span class="nc" id="L71">			currentRegionLabel.setText(currentProfile.getDefaultRegion().replace(&quot;_&quot;, &quot; &quot;));</span>
+<span class="nc" id="L72">		});</span>
+<span class="nc" id="L73">	}</span>
+
+	/**
+	 * Default constructor
+	 */
+<span class="nc" id="L78">    public InputController() {</span>
+    	//Constructor
+<span class="nc" id="L80">    }</span>
+
+	/**
+	 * Checks whether user inputs are ok for continuation and fires the prepareFetchingGames-method.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 */
+	@FXML
+	public void handleFetchGames(ActionEvent actionEvent) {
+    	try {
+<span class="nc" id="L89">    		int numberOfGames = Integer.parseInt(numberOfGamesSpinner.editorProperty().getValue().getText());</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">    		if (numberOfGames &lt; 1) {</span>
+<span class="nc" id="L91">				numberOfGamesSpinner.editorProperty().getValue().setText(String.valueOf(defaultNumberOfGames));</span>
+<span class="nc" id="L92">				return;</span>
+			}
+<span class="nc bnc" id="L94" title="All 2 branches missed.">			if (!summonerNameTextField.getText().equals(&quot;&quot;)) {</span>
+<span class="nc" id="L95">				prepareFetchingGames(summonerNameTextField.getText(), numberOfGames);</span>
+<span class="nc" id="L96">			}</span>
+			else {
+<span class="nc" id="L98">				Alert emptySummonerTextFieldAlert = alertFactory.createAlert(&quot;Input:UserInputError&quot;);</span>
+<span class="nc" id="L99">				emptySummonerTextFieldAlert.show();</span>
+			}
+<span class="nc" id="L101">		}</span>
+<span class="nc" id="L102">    	catch (NumberFormatException nfe) {</span>
+<span class="nc" id="L103">			numberOfGamesSpinner.editorProperty().getValue().setText(String.valueOf(defaultNumberOfGames));</span>
+		}
+<span class="nc" id="L105">	}</span>
+
+	/**
+	 * Prepares a list of games to fetch from the API. Fires up the startFetchingGames-method in the MainController-class.
+	 * @param summonerName The name of the wanted summoner (player).
+	 * @param numberOfGames The number of games to fetch.
+	 */
+	private void prepareFetchingGames(String summonerName, int numberOfGames) {
+<span class="nc" id="L113">    	Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L114">    		progressIndicator.setVisible(true);</span>
+<span class="nc" id="L115">		});</span>
+<span class="nc" id="L116">    	new Thread(() -&gt; {</span>
+<span class="nc" id="L117">    		matchHistoryIdsFromAPI = new ArrayList&lt;Long&gt;();</span>
+<span class="nc" id="L118">    		matchHistoryIdsFromDb = new ArrayList&lt;Long&gt;();</span>
+<span class="nc" id="L119">			System.out.println(&quot;Fetching games...\nSummoner: &quot; + summonerName + &quot;\tNumber of games: &quot; + numberOfGames);</span>
+<span class="nc" id="L120">			RiotApi riotApi = new RiotApi();</span>
+<span class="nc" id="L121">			ModelAccessObject modelAccessObject = new ModelAccessObject();</span>
+<span class="nc" id="L122">			ArrayList&lt;Long&gt; finalIdArrayList = new ArrayList&lt;Long&gt;();</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">			if (currentProfile.getRiotAPIKey() != null) {</span>
+<span class="nc" id="L124">				System.out.println(&quot;SoftwareProfile: API-key found (&quot; + currentProfile.getRiotAPIKey() + &quot;).&quot;);</span>
+<span class="nc" id="L125">				riotApi.setKeyFromProfile(currentProfile.getRiotAPIKey());</span>
+<span class="nc" id="L126">			}</span>
+			else {
+<span class="nc" id="L128">				System.out.println(&quot;SoftwareProfile: No API-key found. Trying the one in ApiKey-class...&quot;);</span>
+<span class="nc" id="L129">				riotApi.setKey();</span>
+			}
+<span class="nc bnc" id="L131" title="All 2 branches missed.">			if (currentProfile.getDefaultRegion() != null) {</span>
+<span class="nc" id="L132">				riotApi.setWantedPlayer(summonerName);</span>
+<span class="nc" id="L133">				riotApi.setMatchListSize(numberOfGames);</span>
+				try {
+<span class="nc" id="L135">					riotApi.setCurrentRegion(Region.valueOf(currentProfile.getDefaultRegion()));</span>
+<span class="nc" id="L136">					matchHistoryIdsFromAPI = riotApi.getCompleteMatchHistoryOnlyIds();</span>
+<span class="nc" id="L137">				} catch (OriannaException oe) {</span>
+<span class="nc" id="L138">					System.out.println(oe.getClass().getSimpleName());</span>
+				}
+				List&lt;Gamedata&gt; matchHistoryFromDb;
+<span class="nc" id="L141">				matchHistoryFromDb = modelAccessObject.readSpecificProfilesGames(currentProfile.getProfileName());</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">				for (Gamedata game : matchHistoryFromDb) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">					if (game.getIngameName().equals(summonerName)) {</span>
+<span class="nc" id="L144">						matchHistoryIdsFromDb.add(game.getRiotid());</span>
+					}
+				}
+<span class="nc bnc" id="L147" title="All 4 branches missed.">				if (matchHistoryIdsFromDb == null || matchHistoryIdsFromDb.isEmpty()) {</span>
+<span class="nc" id="L148">					matchHistoryIdsFromDb = new ArrayList&lt;&gt;();</span>
+				}
+<span class="nc" id="L150">				ArrayList&lt;Long&gt; helperArrayList = matchHistoryIdsFromAPI;</span>
+<span class="nc" id="L151">				Collection&lt;Long&gt; helperCollection = matchHistoryIdsFromDb;</span>
+<span class="nc" id="L152">				helperArrayList.removeAll(helperCollection);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">				for (int i = 0; i &lt; numberOfGames; i++) {</span>
+					try {
+<span class="nc" id="L155">						finalIdArrayList.add(helperArrayList.get(i));</span>
+<span class="nc" id="L156">					} catch (IndexOutOfBoundsException ioobe) {</span>
+<span class="nc" id="L157">						break;</span>
+					}
+				}
+<span class="nc" id="L160">			}</span>
+			else {
+<span class="nc" id="L162">				System.out.println(&quot;No default region set&quot;);</span>
+<span class="nc" id="L163">				return;</span>
+			}
+<span class="nc" id="L165">			System.out.println(&quot;List from API: &quot; + matchHistoryIdsFromAPI + &quot;\nAPISize: &quot; + matchHistoryIdsFromAPI.size());</span>
+<span class="nc" id="L166">			System.out.println(&quot;List from DB: &quot; + matchHistoryIdsFromDb + &quot;\nDBSize: &quot; + matchHistoryIdsFromDb.size());</span>
+<span class="nc" id="L167">			System.out.println(&quot;Final list after removeAll(): &quot; + finalIdArrayList + &quot;\nFinalSize: &quot; + finalIdArrayList.size());</span>
+<span class="nc" id="L168">			Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L169">				progressIndicator.setVisible(false);</span>
+<span class="nc" id="L170">				inputStage.close();</span>
+<span class="nc" id="L171">				mainController.startFetchingGames(finalIdArrayList, summonerName, modelAccessObject);</span>
+<span class="nc" id="L172">			});</span>
+<span class="nc" id="L173">		}).start();</span>
+<span class="nc" id="L174">	}</span>
+
+	/**
+	 * Closes the inputStage.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 */
+	@FXML
+	public void handleCancel(ActionEvent actionEvent) {
+<span class="nc" id="L182">    	inputStage.close();</span>
+<span class="nc" id="L183">	}</span>
+
+	/**
+	 * Opens the settings-window and closes the inputStage.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 * @throws IOException on failed load of Settings.fxml.
+	 */
+	@FXML
+	public void handleSettings(ActionEvent actionEvent) throws IOException {
+<span class="nc" id="L192">    	mainApp.showSettingsWindow();</span>
+<span class="nc" id="L193">    	inputStage.close();</span>
+<span class="nc" id="L194">	}</span>
+
+	/**
+	 * Shows a help-dialog. Not yet implemented.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 */
+	@FXML
+	public void handleHelp(ActionEvent actionEvent) {
+    	//TODO
+<span class="nc" id="L203">		System.out.println(&quot;Not yet implemented&quot;);</span>
+<span class="nc" id="L204">	}</span>
+
+	/**
+	 * Shows an Alert as defined in the AlertFactory-class.
+	 * @param actionEvent Interacting with the corresponding button, as defined in Input.fxml.
+	 */
+	@FXML
+	public void handleAbout(ActionEvent actionEvent) {
+<span class="nc" id="L212">    	Alert aboutAlert = alertFactory.createAlert(&quot;About application&quot;);</span>
+<span class="nc" id="L213">    	aboutAlert.show();</span>
+<span class="nc" id="L214">	}</span>
+
+	/**
+	 * Sets the currently in use ResourceBundle.
+	 * @param textBundle A ResourceBundle.
+	 */
+	public void setTextBundle(ResourceBundle textBundle) {
+<span class="nc" id="L221">		this.textBundle = textBundle;</span>
+<span class="nc" id="L222">	}</span>
+
+	/**
+	 * Sets the MainApp.
+	 * @param mainApp The MainApp.
+	 */
+	public void setMainApp(MainApp mainApp) {
+<span class="nc" id="L229">		this.mainApp = mainApp;</span>
+<span class="nc" id="L230">	}</span>
+
+	/**
+	 * Sets the Stage.
+	 * @param inputStage The Stage to set.
+	 */
+	public void setInputStage(Stage inputStage) {
+<span class="nc" id="L237">		this.inputStage = inputStage;</span>
+<span class="nc" id="L238">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

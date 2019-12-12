@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>SettingsController.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.view</a> &gt; <span class="el_source">SettingsController.java</span></div><h1>SettingsController.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.view;
+
+import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.OriannaException;
+import com.merakianalytics.orianna.types.common.Region;
+import com.merakianalytics.orianna.types.core.status.ShardStatus;
+import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
+
+public class SettingsController {
+
+    private MainApp mainApp;
+    private MainController mainController;
+    private Stage settingsStage;
+    private List&lt;Button&gt; buttonList;
+    private SingleSelectionModel&lt;Tab&gt; tabSingleSelectionModel;
+    private AlertFactory alertFactory;
+    private SoftwareProfile currentProfile;
+    private ResourceBundle textBundle;
+
+    @FXML
+    private TabPane settingsTabPane;
+    @FXML
+    private Tab apiAndUserInterfaceTab, profileTab;
+    @FXML
+    private TextField apiKeyTextField;
+    @FXML
+    private Button testAPIKeyButton, helpButton, cancelButton, applyButton, saveButton, showOrHidePasswordButton, hiddenShowOrHidePasswordButton;
+    @FXML
+    private Label changeAPIKeyLabel, changeRegionLabel, changeLanguageLabel, changeProfilePasswordLabel, confirmProfilePasswordLabel;
+    @FXML
+    private ChoiceBox&lt;String&gt; changeRegionChoiceBox, changeLanguageChoiceBox;
+    @FXML
+    private CheckBox makeRegionDefaultCheckBox, makeLanguageDefaultCheckBox;
+    @FXML
+    private PasswordField profilePasswordField, confirmProfilePasswordField;
+
+    /**
+     * Default constructor
+     */
+<span class="nc" id="L54">    public SettingsController() {</span>
+        //Default Constructor
+<span class="nc" id="L56">    }</span>
+
+    /**
+     * Initializes the Settings-window.
+     */
+    public void initialize() {
+<span class="nc" id="L62">        tabSingleSelectionModel = settingsTabPane.getSelectionModel();</span>
+<span class="nc" id="L63">        tabSingleSelectionModel.select(apiAndUserInterfaceTab);</span>
+<span class="nc" id="L64">        profilePasswordField.setText(&quot;&quot;);</span>
+<span class="nc" id="L65">        confirmProfilePasswordField.setText(&quot;&quot;);</span>
+<span class="nc" id="L66">        Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L67">            alertFactory = new AlertFactory(textBundle);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (buttonList == null) {</span>
+<span class="nc" id="L69">                makeButtonList();</span>
+            }
+<span class="nc" id="L71">            currentProfile = mainApp.getProfile();</span>
+<span class="nc" id="L72">            mainController = mainApp.getMainController();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (currentProfile.getRiotAPIKey() == null) {</span>
+<span class="nc" id="L74">                apiKeyTextField.setText(&quot;&quot;);</span>
+<span class="nc" id="L75">            }</span>
+            else {
+<span class="nc" id="L77">                apiKeyTextField.setText(currentProfile.getRiotAPIKey());</span>
+            }
+<span class="nc" id="L79">            changeRegionChoiceBox.getItems().clear();</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            for (Region region : Region.values()) {</span>
+<span class="nc" id="L81">                changeRegionChoiceBox.getItems().add(region.name().replace(&quot;_&quot;, &quot; &quot;));</span>
+            }
+<span class="nc bnc" id="L83" title="All 2 branches missed.">            if (currentProfile.getDefaultRegion() != null) {</span>
+<span class="nc" id="L84">                changeRegionChoiceBox.setValue(currentProfile.getDefaultRegion().replace(&quot;_&quot;, &quot; &quot;));</span>
+<span class="nc" id="L85">            }</span>
+            else {
+<span class="nc" id="L87">                changeRegionChoiceBox.setValue(Region.NORTH_AMERICA.name().replace(&quot;_&quot;, &quot; &quot;));</span>
+            }
+<span class="nc" id="L89">            makeRegionDefaultCheckBox.setSelected(false);</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">            if (!changeLanguageChoiceBox.getItems().isEmpty()) {</span>
+<span class="nc" id="L91">                changeLanguageChoiceBox.getSelectionModel().clearSelection();</span>
+<span class="nc" id="L92">                changeLanguageChoiceBox.getItems().clear();</span>
+            }
+<span class="nc" id="L94">            List&lt;String&gt; languageArrayList = mainApp.getLanguageArrayList();</span>
+<span class="nc" id="L95">            ObservableList&lt;String&gt; languageObservableList = FXCollections.observableList(languageArrayList);</span>
+<span class="nc" id="L96">            changeLanguageChoiceBox.getItems().addAll(languageObservableList);</span>
+<span class="nc" id="L97">            changeLanguageChoiceBox.setValue(textBundle.getString(currentProfile.getDefaultLanguage()));</span>
+<span class="nc" id="L98">            makeLanguageDefaultCheckBox.setSelected(false);</span>
+<span class="nc" id="L99">        });</span>
+<span class="nc" id="L100">    }</span>
+
+    /**
+     * Updates the settings depending on which have been changed. Updates either the SoftwareProfile of this session or the SoftwareProfile in the
+     * database depending on user choices.
+     * @return String of the result-variable. Can have three values:
+     * &quot;Nothing changed&quot;: No settings have been changed.
+     * &quot;Settings changed&quot;: At least one of the settings have been changed.
+     * &quot;Fail&quot;: Only happens when trying to change the password and the given passwords does not match.
+     */
+    public String updateSettings() {
+<span class="nc" id="L111">        boolean dbUpdateRequired = false;</span>
+<span class="nc" id="L112">        boolean dbUpdateRegion = false;</span>
+<span class="nc" id="L113">        boolean dbUpdateLanguage = false;</span>
+<span class="nc" id="L114">        String result = &quot;Nothing changed&quot;;</span>
+<span class="nc bnc" id="L115" title="All 4 branches missed.">        if ((!apiKeyTextField.getText().equals(&quot;&quot;)) &amp;&amp; (!apiKeyTextField.getText().equals(currentProfile.getRiotAPIKey()))) {</span>
+<span class="nc" id="L116">            Orianna.setRiotAPIKey(apiKeyTextField.getText());</span>
+<span class="nc" id="L117">            currentProfile.setRiotAPIKey(apiKeyTextField.getText());</span>
+<span class="nc" id="L118">            result = &quot;Settings changed&quot;;</span>
+<span class="nc" id="L119">            dbUpdateRequired = true;</span>
+        }
+<span class="nc bnc" id="L121" title="All 4 branches missed.">        if (!changeRegionChoiceBox.getSelectionModel().getSelectedItem().replace(&quot; &quot;, &quot;_&quot;).equals(currentProfile.getDefaultRegion()) || makeRegionDefaultCheckBox.isSelected()) {</span>
+<span class="nc" id="L122">            currentProfile.setDefaultRegion(changeRegionChoiceBox.getSelectionModel().getSelectedItem().replace(&quot; &quot;, &quot;_&quot;));</span>
+<span class="nc" id="L123">            Orianna.setDefaultRegion(Region.valueOf(currentProfile.getDefaultRegion()));</span>
+<span class="nc" id="L124">            result = &quot;Settings changed&quot;;</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            if (makeRegionDefaultCheckBox.isSelected()) {</span>
+<span class="nc" id="L126">                dbUpdateRegion = true;</span>
+<span class="nc" id="L127">                dbUpdateRequired = true;</span>
+            }
+        }
+<span class="nc bnc" id="L130" title="All 4 branches missed.">        if (!getSelectedLanguage(changeLanguageChoiceBox.getSelectionModel().getSelectedIndex()).equals(currentProfile.getDefaultLanguage()) || makeLanguageDefaultCheckBox.isSelected()) {</span>
+<span class="nc" id="L131">            currentProfile.setDefaultLanguage(getSelectedLanguage(changeLanguageChoiceBox.getSelectionModel().getSelectedIndex()));</span>
+<span class="nc" id="L132">            this.textBundle = ResourceBundle.getBundle(&quot;languages/TextResources&quot;, Locale.forLanguageTag(currentProfile.getDefaultLanguage().replace(&quot;_&quot;, &quot;-&quot;)));</span>
+<span class="nc" id="L133">            mainApp.setTextBundle(this.textBundle);</span>
+<span class="nc" id="L134">            result = &quot;Settings changed&quot;;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">            if (makeLanguageDefaultCheckBox.isSelected()) {</span>
+<span class="nc" id="L136">                dbUpdateLanguage = true;</span>
+<span class="nc" id="L137">                dbUpdateRequired = true;</span>
+            }
+        }
+<span class="nc bnc" id="L140" title="All 4 branches missed.">        if (!profilePasswordField.getText().equals(&quot;&quot;) &amp;&amp; profilePasswordField.getText().length() &gt; 3) {</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">            if (profilePasswordField.getText().equals(confirmProfilePasswordField.getText())) {</span>
+<span class="nc" id="L142">                currentProfile.setProfilePassword(confirmProfilePasswordField.getText());</span>
+<span class="nc" id="L143">                result = &quot;Settings changed&quot;;</span>
+<span class="nc" id="L144">                dbUpdateRequired = true;</span>
+<span class="nc" id="L145">            }</span>
+            else {
+<span class="nc" id="L147">                result = &quot;Fail&quot;;</span>
+<span class="nc" id="L148">                Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L149">                    alertFactory = new AlertFactory(textBundle);</span>
+<span class="nc" id="L150">                    Alert nonMatchingPasswordsAlert = alertFactory.createAlert(&quot;Passwords do not match&quot;);</span>
+<span class="nc" id="L151">                    nonMatchingPasswordsAlert.show();</span>
+<span class="nc" id="L152">                });</span>
+            }
+        }
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if (dbUpdateRequired) {</span>
+<span class="nc" id="L156">            Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">                for (Button button : buttonList) {</span>
+<span class="nc" id="L158">                    button.setDisable(true);</span>
+                }
+<span class="nc" id="L160">            });</span>
+<span class="nc" id="L161">            boolean finalDbUpdateRegion = dbUpdateRegion;</span>
+<span class="nc" id="L162">            boolean finalDbUpdateLanguage = dbUpdateLanguage;</span>
+<span class="nc" id="L163">            new Thread(() -&gt; {</span>
+<span class="nc" id="L164">                ModelAccessObject modelAccessObject = new ModelAccessObject();</span>
+<span class="nc" id="L165">                modelAccessObject.updateProfile(currentProfile, finalDbUpdateRegion, finalDbUpdateLanguage);</span>
+<span class="nc" id="L166">                Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                    for (Button button : buttonList) {</span>
+<span class="nc" id="L168">                        button.setDisable(false);</span>
+                    }
+<span class="nc" id="L170">                });</span>
+<span class="nc" id="L171">            }).start();</span>
+        }
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (result.equals(&quot;Settings changed&quot;)) {</span>
+<span class="nc" id="L174">            mainController.setCurrentProfile(currentProfile);</span>
+<span class="nc" id="L175">            mainApp.setProfile(currentProfile);</span>
+<span class="nc" id="L176">            mainController.setTextBundle(this.textBundle);</span>
+<span class="nc" id="L177">            mainController.printProfileData();</span>
+<span class="nc" id="L178">            mainController.setTexts();</span>
+        }
+<span class="nc" id="L180">        return result;</span>
+    }
+
+    /**
+     * Cancels any changes done and closes the settingsStage.
+     * @param actionEvent Interacting with the button, defined in Settings.fxml.
+     */
+    @FXML
+    public void handleCancel(ActionEvent actionEvent) {
+<span class="nc" id="L189">        settingsStage.close();</span>
+<span class="nc" id="L190">    }</span>
+
+    /**
+     * Applies settings using updateSettings()-method. Does different things depending on return from updateSettings().
+     * @param actionEvent Interacting with the button, defined in Settings.fxml.
+     */
+    @FXML
+    public void handleApply(ActionEvent actionEvent) {
+<span class="nc" id="L198">        String result = updateSettings();</span>
+<span class="nc bnc" id="L199" title="All 10 branches missed.">        switch (result) {</span>
+            case &quot;Settings changed&quot;:
+<span class="nc" id="L201">                Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L202">                    initialize();</span>
+<span class="nc" id="L203">                    updateTexts();</span>
+<span class="nc" id="L204">                });</span>
+<span class="nc" id="L205">                break;</span>
+            case &quot;Fail&quot;:
+<span class="nc" id="L207">                Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L208">                    String passwordMemory = profilePasswordField.getText();</span>
+<span class="nc" id="L209">                    initialize();</span>
+<span class="nc" id="L210">                    updateTexts();</span>
+<span class="nc" id="L211">                    profilePasswordField.setText(passwordMemory);</span>
+<span class="nc" id="L212">                    tabSingleSelectionModel.select(profileTab);</span>
+<span class="nc" id="L213">                });</span>
+                break;
+            case &quot;Nothing changed&quot;:
+            default:
+        }
+<span class="nc" id="L218">    }</span>
+
+    /**
+     * Runs the updateSettings()-method. If method is successfully ran, will close settingsStage;
+     * Otherwise opens the profileTab.
+     * @param actionEvent Interacting with the button, defined in Settings.fxml.
+     */
+    @FXML
+    public void handleSave(ActionEvent actionEvent) {
+<span class="nc" id="L227">        String result = updateSettings();</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        if (!result.equals(&quot;Fail&quot;)) {</span>
+<span class="nc" id="L229">            settingsStage.close();</span>
+<span class="nc" id="L230">        }</span>
+        else {
+<span class="nc" id="L232">            tabSingleSelectionModel.select(profileTab);</span>
+        }
+<span class="nc" id="L234">    }</span>
+
+    /**
+     * Tests the String inputted into the API-Key TextField.
+     * @param actionEvent Interacting with the button, defined in Settings.fxml.
+     */
+    @FXML
+    public void handleTestAPIKey(ActionEvent actionEvent) {
+<span class="nc" id="L242">        testAPIKeyButton.setText(textBundle.getString(&quot;button.testingAPIKey&quot;));</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        for (Button button : buttonList) {</span>
+<span class="nc" id="L244">            button.setDisable(true);</span>
+        }
+<span class="nc" id="L246">        new Thread(() -&gt; {</span>
+<span class="nc" id="L247">            Orianna.setRiotAPIKey(apiKeyTextField.getText());</span>
+            ShardStatus status;
+            try {
+<span class="nc" id="L250">                status = ShardStatus.withRegion(Region.NORTH_AMERICA).get();</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">                if (status.exists()) {</span>
+<span class="nc" id="L252">                    Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L253">                        Alert apiKeySuccessAlert = alertFactory.createAlert(&quot;APIKeyTest:Pass&quot;);</span>
+<span class="nc" id="L254">                        apiKeySuccessAlert.show();</span>
+<span class="nc" id="L255">                    });</span>
+<span class="nc" id="L256">                }</span>
+                else {
+<span class="nc" id="L258">                    System.out.println(&quot;Unknown error. Status: &quot; + status.exists());</span>
+                }
+<span class="nc" id="L260">            } catch (OriannaException oe) {</span>
+<span class="nc" id="L261">                System.out.println(oe.getClass().getSimpleName());</span>
+<span class="nc" id="L262">                Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L263">                    Alert apiKeyFailAlert = alertFactory.createAlert(&quot;APIKeyTest:Fail&quot;);</span>
+<span class="nc" id="L264">                    apiKeyFailAlert.show();</span>
+<span class="nc" id="L265">                });</span>
+            }
+<span class="nc" id="L267">            Platform.runLater(() -&gt; {</span>
+<span class="nc" id="L268">                testAPIKeyButton.setText(textBundle.getString(&quot;button.testAPIKey&quot;));</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">                for (Button button : buttonList) {</span>
+<span class="nc" id="L270">                    button.setDisable(false);</span>
+                }
+<span class="nc" id="L272">            });</span>
+<span class="nc" id="L273">        }).start();</span>
+<span class="nc" id="L274">    }</span>
+
+    /**
+     * Shows or hides the password. Not yet implemented.
+     * @param actionEvent Interacting with the button, defined in Settings.fxml.
+     */
+    @FXML
+    public void handleShowOrHide(ActionEvent actionEvent) {
+<span class="nc" id="L282">    }</span>
+
+    /**
+     * Opens the program's help. Help not yet implemented.
+     * @param actionEvent Interacting with the button, defined in Settings.fxml.
+     */
+    @FXML
+    public void handleHelp(ActionEvent actionEvent) {
+<span class="nc" id="L290">        System.out.println(&quot;Not yet implemented&quot;);</span>
+        //TODO
+<span class="nc" id="L292">    }</span>
+
+    /**
+     * Selects the language that the user has selected.
+     * @param langIndex The index of the language; Corresponds to the index of the file when read from the folder due to
+     *                  the way the ChoiceBox lists languages in a similar manner.
+     * @return String of language and country, e.g. &quot;en_US&quot; or &quot;fi_FI&quot;.
+     */
+    private String getSelectedLanguage(int langIndex) {
+        String selectedLanguage;
+<span class="nc" id="L302">        String langString = mainApp.getLanguageDirFiles().get(langIndex);</span>
+<span class="nc" id="L303">        Properties propertiesHelper = new Properties();</span>
+        try {
+<span class="nc" id="L305">            propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + &quot;/&quot; + langString));</span>
+<span class="nc" id="L306">        } catch (IOException e) {</span>
+<span class="nc" id="L307">            e.printStackTrace();</span>
+        }
+<span class="nc" id="L309">        selectedLanguage = propertiesHelper.getProperty(&quot;localeINFO&quot;);</span>
+<span class="nc" id="L310">        System.out.println(selectedLanguage);</span>
+<span class="nc" id="L311">        return selectedLanguage;</span>
+    }
+
+    /**
+     * Create a list of buttons in the Settings.fxml.
+     */
+    private void makeButtonList() {
+<span class="nc" id="L318">        buttonList = Arrays.asList(testAPIKeyButton, helpButton, cancelButton, applyButton, saveButton, showOrHidePasswordButton, hiddenShowOrHidePasswordButton);</span>
+<span class="nc" id="L319">    }</span>
+
+    /**
+     * Updates UI texts, meant for updating the language without having to reload the fxml.
+     */
+    private void updateTexts() {
+<span class="nc" id="L325">        settingsStage.setTitle(textBundle.getString(&quot;windowTitle.settings&quot;));</span>
+<span class="nc" id="L326">        apiAndUserInterfaceTab.setText(textBundle.getString(&quot;tab.apiAndUserInterface&quot;));</span>
+<span class="nc" id="L327">        profileTab.setText(textBundle.getString(&quot;tab.profile&quot;));</span>
+<span class="nc" id="L328">        apiKeyTextField.setPromptText(textBundle.getString(&quot;promptText.yourRiotAPIKey&quot;));</span>
+<span class="nc" id="L329">        profilePasswordField.setPromptText(textBundle.getString(&quot;promptText.newPassword&quot;));</span>
+<span class="nc" id="L330">        confirmProfilePasswordField.setPromptText(textBundle.getString(&quot;promptText.retypeNewPassword&quot;));</span>
+<span class="nc" id="L331">        changeAPIKeyLabel.setText(textBundle.getString(&quot;label.changeRiotAPIKey&quot;));</span>
+<span class="nc" id="L332">        changeRegionLabel.setText(textBundle.getString(&quot;label.changeRegion&quot;));</span>
+<span class="nc" id="L333">        changeLanguageLabel.setText(textBundle.getString(&quot;label.changeLanguage&quot;));</span>
+<span class="nc" id="L334">        changeProfilePasswordLabel.setText(textBundle.getString(&quot;label.changePassword&quot;));</span>
+<span class="nc" id="L335">        confirmProfilePasswordLabel.setText(textBundle.getString(&quot;label.confirmNewPassword&quot;));</span>
+<span class="nc" id="L336">        makeRegionDefaultCheckBox.setText(textBundle.getString(&quot;checkBox.makeDefaultForProfile&quot;));</span>
+<span class="nc" id="L337">        makeLanguageDefaultCheckBox.setText(textBundle.getString(&quot;checkBox.makeDefaultForProfile&quot;));</span>
+<span class="nc" id="L338">        testAPIKeyButton.setText(textBundle.getString(&quot;button.testAPIKey&quot;));</span>
+<span class="nc" id="L339">        helpButton.setText(textBundle.getString(&quot;button.help&quot;));</span>
+<span class="nc" id="L340">        cancelButton.setText(textBundle.getString(&quot;button.cancel&quot;));</span>
+<span class="nc" id="L341">        applyButton.setText(textBundle.getString(&quot;button.apply&quot;));</span>
+<span class="nc" id="L342">        saveButton.setText(textBundle.getString(&quot;button.save&quot;));</span>
+<span class="nc" id="L343">        showOrHidePasswordButton.setText(textBundle.getString(&quot;button.show&quot;));</span>
+<span class="nc" id="L344">        hiddenShowOrHidePasswordButton.setText(showOrHidePasswordButton.getText());</span>
+<span class="nc" id="L345">    }</span>
+
+    /**
+     * Sets the MainApp.
+     * @param mainApp The MainApp to be set.
+     */
+    public void setMainApp(MainApp mainApp) {
+<span class="nc" id="L352">        this.mainApp = mainApp;</span>
+<span class="nc" id="L353">    }</span>
+
+    /**
+     * Sets the Stage for this class.
+     * @param settingsStage The Stage to be set.
+     */
+    public void setSettingsStage(Stage settingsStage) {
+<span class="nc" id="L360">        this.settingsStage = settingsStage;</span>
+<span class="nc" id="L361">    }</span>
+
+    /**
+     * Getter for the current ResourceBundle in this class.
+     * @return The ResourceBundle of this class.
+     */
+    public ResourceBundle getTextBundle() {
+<span class="nc" id="L368">        return textBundle;</span>
+    }
+
+    /**
+     * Setter for the ResourceBundle
+     * @param textBundle The ResourceBundle to be set.
+     */
+    public void setTextBundle(ResourceBundle textBundle) {
+<span class="nc" id="L376">        this.textBundle = textBundle;</span>
+<span class="nc" id="L377">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RiotApi.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.api</a> &gt; <span class="el_source">RiotApi.java</span></div><h1>RiotApi.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.api;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.Queue;
+import com.merakianalytics.orianna.types.common.Region;
+import com.merakianalytics.orianna.types.core.match.Match;
+import com.merakianalytics.orianna.types.core.match.MatchHistory;
+import com.merakianalytics.orianna.types.core.match.Participant;
+import com.merakianalytics.orianna.types.core.staticdata.Item;
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
+import com.merakianalytics.orianna.types.core.summoner.Summoners;
+
+<span class="nc" id="L16">public class RiotApi {</span>
+	
+	// RiotApi-luokan getMatchHistory()-metodin palauttavan listan elementtien sijainnit:
+	
+				// 0 = PlayerName
+				// 1 = PlayerRank
+				// 2 = MatchId
+				// 3 = MatchDate
+				// 4 = MatchDuration
+				// 5 = ChampionPlayed
+				// 6 = MatchKills
+				// 7 = MatchDeaths
+				// 8 = MatchAssists
+				// 9 = DamageDealt
+				// 10 = DamageTaken
+				// 11 = GoldEarned
+				// 12 = MatchResult
+				// 13 = Player's Team Color
+				// 14 = Creep Score
+				// 15 = Wards Placed
+				// 16 = Position
+				// 17-19 = Empty
+				// 20-29 = Items, leftover slots Empty
+				// 30-39 = Blue Team Champions, leftover slots Empty
+				// 40-49 = Red Team Champions, leftover slots Empty
+				// 50 = QueueType
+
+	Match currentMatch;
+	public static String wantedPlayer;
+	static Region currentRegion;
+	static String playerName, playerRank, matchDate, playerTeam, championPlayed, otherPlayers, itemName, matchResult, queueType, playedPosition, playerId;
+	static long matchId, matchDuration, matchKills, matchDeaths, matchAssists, damageDealt, damageTaken, goldEarned, creepScore, wardsPlaced;
+<span class="nc" id="L48">	static String blueTeam = &quot;BLUE&quot;;</span>
+<span class="nc" id="L49">	static String redTeam = &quot;RED&quot;;</span>
+<span class="nc" id="L50">	static String emptyObject = &quot;Empty&quot;;</span>
+<span class="nc" id="L51">	static int historySize;</span>
+	
+	ApiData[][] matchArray;
+<span class="nc" id="L54">	ApiKey key = new ApiKey();</span>
+	
+	
+	/**
+	 * Method to set the player name whose match history the user wants to search
+	 * @param name
+	 */
+	public void setWantedPlayer(String name) {
+<span class="nc" id="L62">		wantedPlayer = name;</span>
+<span class="nc" id="L63">	}</span>
+	
+	
+	/**
+	 * Method to set how many matches to get from user's match history
+	 * @param size
+	 */
+	public void setMatchListSize(int size) {
+<span class="nc" id="L71">		historySize = size;</span>
+<span class="nc" id="L72">	}</span>
+	
+	
+	/**
+	 * Method to return the size of the match list
+	 * @return historySize
+	 */
+	public int getMatchListSize() {
+<span class="nc" id="L80">		return historySize;</span>
+	}
+	
+	
+	/**
+	 * Method to return the player id
+	 * @return playerId
+	 */
+	public String getPlayerId() {
+<span class="nc" id="L89">		return playerId;</span>
+	}
+	
+	
+	/**
+	 * Method to set the correct API Key for Orianna Framework
+	 */
+	public void setKey() {
+<span class="nc" id="L97">		Orianna.setRiotAPIKey(key.getKey());</span>
+<span class="nc" id="L98">	}</span>
+
+	public void setKeyFromProfile(String theAPIKey) {
+<span class="nc" id="L101">		Orianna.setRiotAPIKey(theAPIKey);</span>
+<span class="nc" id="L102">	}</span>
+
+	public void setCurrentRegion(Region theRegionToSet) {
+<span class="nc" id="L105">		currentRegion = theRegionToSet;</span>
+<span class="nc" id="L106">	}</span>
+
+	public ArrayList&lt;Long&gt; getCompleteMatchHistoryOnlyIds() {
+<span class="nc" id="L109">		ArrayList&lt;Long&gt; matchHistoryArrayList = new ArrayList&lt;Long&gt;();</span>
+		try {
+<span class="nc" id="L111">			List&lt;Summoner&gt; summoners = Summoners.named(wantedPlayer).withRegion(currentRegion).get();</span>
+<span class="nc" id="L112">			playerName = summoners.get(0).getName();MatchHistory matchHistory = MatchHistory.forSummoner(summoners.get(0)).get();</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">			for (Match match : matchHistory) {</span>
+<span class="nc" id="L114">				Long matchId = match.getId();</span>
+<span class="nc" id="L115">				matchHistoryArrayList.add(matchId);</span>
+			}
+<span class="nc" id="L117">		} catch (Exception e) {</span>
+<span class="nc" id="L118">			System.out.println(&quot;Error&quot;);</span>
+		}
+<span class="nc" id="L120">		return matchHistoryArrayList;</span>
+	}
+    
+	
+	/**
+	 * Method to search the wanted players match history, filtering relevant information from each match
+	 * and returning the match list as a 2d array
+	 * @return matchArray
+	 * @throws InterruptedException
+	 */
+	public ApiData[][] getMatchHistory(ArrayList&lt;Long&gt; matchesToGet) throws InterruptedException {
+<span class="nc" id="L131">		List&lt;Summoner&gt; summoners = Summoners.named(wantedPlayer).withRegion(currentRegion).get();</span>
+<span class="nc" id="L132">		playerName = summoners.get(0).getName();</span>
+<span class="nc" id="L133">		ArrayList&lt;Long&gt; historyArrayList = new ArrayList&lt;Long&gt;();</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">		if (matchesToGet == null) {</span>
+<span class="nc" id="L135">			MatchHistory history = MatchHistory.forSummoner(summoners.get(0)).get();</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">			for (int i = 0; i &lt; historySize; i++) {</span>
+<span class="nc" id="L137">				Long matchId = (history.get(i).getId());</span>
+<span class="nc" id="L138">				historyArrayList.add(matchId);</span>
+			}
+<span class="nc" id="L140">		}</span>
+		else {
+<span class="nc" id="L142">			historyArrayList = matchesToGet;</span>
+		}
+<span class="nc" id="L144">        matchArray = new ApiData[historySize][51];</span>
+<span class="nc" id="L145">        int l = 0; // Match</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        for (Long mId : historyArrayList) {</span>
+<span class="nc" id="L147">            currentMatch = Match.withId(mId).withRegion(currentRegion).get();</span>
+<span class="nc" id="L148">            int participants = 0;</span>
+<span class="nc" id="L149">            int k = 20; // Items pointer</span>
+<span class="nc" id="L150">            int n = 30; // Blue team pointer</span>
+<span class="nc" id="L151">            int o = 40; // Red team pointer</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            for (final Participant player : currentMatch.getParticipants()) {</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            	if (currentMatch.getParticipants().get(participants).getSummoner().getName().equals(playerName)) {</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            		if(player.getSummoner().getLeague(Queue.RANKED_SOLO) == null) {</span>
+<span class="nc" id="L155">            			playerRank = &quot;No Rank&quot;;</span>
+<span class="nc" id="L156">            		} else {</span>
+<span class="nc" id="L157">            			playerRank = player.getSummoner().getLeaguePosition(Queue.RANKED_SOLO).getTier()+&quot; &quot;+player.getSummoner().getLeaguePosition(Queue.RANKED_SOLO).getDivision();</span>
+            		}
+<span class="nc" id="L159">            		matchId = currentMatch.getId();</span>
+<span class="nc" id="L160">            		matchDate = currentMatch.getCreationTime().toDate().toString();</span>
+<span class="nc" id="L161">            		matchDuration = currentMatch.getDuration().getStandardSeconds();</span>
+<span class="nc" id="L162">            		championPlayed = player.getChampion().getName();</span>
+<span class="nc" id="L163">            		matchKills = player.getStats().getKills();</span>
+<span class="nc" id="L164">                	matchDeaths = player.getStats().getDeaths();</span>
+<span class="nc" id="L165">                	matchAssists = player.getStats().getAssists();</span>
+<span class="nc" id="L166">                	damageDealt = player.getStats().getDamageDealtToChampions();</span>
+<span class="nc" id="L167">                	damageTaken = player.getStats().getDamageTaken();</span>
+<span class="nc" id="L168">                	goldEarned = player.getStats().getGoldEarned();</span>
+<span class="nc" id="L169">                	playerTeam = player.getTeam().getSide().name();</span>
+<span class="nc" id="L170">                	creepScore = player.getStats().getCreepScore();</span>
+<span class="nc" id="L171">                	wardsPlaced = player.getStats().getWardsPlaced();</span>
+<span class="nc" id="L172">                	playedPosition = player.getLane().toString();</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">                	if (!player.getTeam().isWinner()) {</span>
+<span class="nc" id="L174">                		matchResult = &quot;Loss&quot;;</span>
+<span class="nc" id="L175">                	} else {</span>
+<span class="nc" id="L176">                		matchResult = &quot;Win&quot;;</span>
+                	}
+<span class="nc" id="L178">                	matchArray[l][0] = new PlayerName(playerName);</span>
+                	//System.out.println(((PlayerName) matchArray[l][0]).getPlayerName());
+<span class="nc" id="L180">                	Thread.sleep(100);</span>
+<span class="nc" id="L181">                	matchArray[l][1] = new PlayerRank(playerRank);</span>
+                	//System.out.println(((PlayerRank) matchArray[l][1]).getPlayerRank());
+<span class="nc" id="L183">                	Thread.sleep(100);      	</span>
+<span class="nc" id="L184">                	matchArray[l][2] = new MatchId(matchId);</span>
+                	//System.out.println(((MatchId) matchArray[l][2]).getMatchId());
+<span class="nc" id="L186">                	Thread.sleep(100);                	</span>
+<span class="nc" id="L187">                	matchArray[l][3] = new MatchDate(matchDate);</span>
+                	//System.out.println(((MatchDate) matchArray[l][3]).getMatchDate());
+<span class="nc" id="L189">                	Thread.sleep(100);               	</span>
+<span class="nc" id="L190">                	matchArray[l][4] = new MatchDuration(matchDuration);</span>
+                	//System.out.println(((MatchDuration) matchArray[l][4]).getMatchDuration());
+<span class="nc" id="L192">                	Thread.sleep(100);                	</span>
+<span class="nc" id="L193">                	matchArray[l][5] = new ChampionPlayed(championPlayed);</span>
+                	//System.out.println(((ChampionPlayed) matchArray[l][5]).getChampionPlayed());
+<span class="nc" id="L195">                	Thread.sleep(100);              	</span>
+<span class="nc" id="L196">                	matchArray[l][6] = new MatchKills(matchKills);</span>
+                	//System.out.println(((MatchKills) matchArray[l][6]).getMatchKills());
+<span class="nc" id="L198">                	Thread.sleep(100);               	</span>
+<span class="nc" id="L199">                	matchArray[l][7] = new MatchDeaths(matchDeaths);</span>
+                	//System.out.println(((MatchDeaths) matchArray[l][7]).getMatchDeaths());
+<span class="nc" id="L201">                	Thread.sleep(100);               	</span>
+<span class="nc" id="L202">                	matchArray[l][8] = new MatchAssists(matchAssists);</span>
+                	//System.out.println(((MatchAssists) matchArray[l][8]).getMatchAssists());
+<span class="nc" id="L204">                	Thread.sleep(100);             	</span>
+<span class="nc" id="L205">                	matchArray[l][9] = new DamageDealt(damageDealt);</span>
+                	//System.out.println(((DamageDealt) matchArray[l][9]).getDamageDealt());
+<span class="nc" id="L207">                	Thread.sleep(100);                	</span>
+<span class="nc" id="L208">                	matchArray[l][10] = new DamageTaken(damageTaken);</span>
+                	//System.out.println(((DamageTaken) matchArray[l][10]).getDamageTaken());
+<span class="nc" id="L210">                	Thread.sleep(100);                	</span>
+<span class="nc" id="L211">                	matchArray[l][11] = new GoldEarned(goldEarned);</span>
+                	//System.out.println(((GoldEarned) matchArray[l][11]).getGoldEarned());
+<span class="nc" id="L213">                	Thread.sleep(100);               	</span>
+<span class="nc" id="L214">                	matchArray[l][12] = new MatchResult(matchResult);</span>
+                	//System.out.println(((MatchResult) matchArray[l][12]).getMatchResult());
+<span class="nc" id="L216">                	Thread.sleep(100);               	</span>
+<span class="nc" id="L217">                	matchArray[l][13] = new TeamColor(playerTeam);</span>
+                	//System.out.println(((TeamColor) matchArray[l][13]).getTeamColor());
+<span class="nc" id="L219">                	Thread.sleep(100);</span>
+<span class="nc" id="L220">                	matchArray[l][14] = new CreepScore(creepScore);</span>
+                	//System.out.println(((CreepScore) matchArray[l][14]).getCreepScore());
+<span class="nc" id="L222">                	Thread.sleep(100);</span>
+<span class="nc" id="L223">                	matchArray[l][15] = new WardsPlaced(wardsPlaced);</span>
+                	//System.out.println(((WardsPlaced) matchArray[l][15]).getWardsPlaced());
+<span class="nc" id="L225">                	Thread.sleep(100);</span>
+<span class="nc" id="L226">                	matchArray[l][16] = new Position(playedPosition);</span>
+                	//System.out.println(((Position) matchArray[l][16]).getPosition());
+<span class="nc" id="L228">                	Thread.sleep(100);</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">                	for (int empty = 17; empty &lt; 20; empty++) {</span>
+<span class="nc" id="L230">                		matchArray[l][empty] = new EmptyObject(emptyObject);</span>
+                	}
+<span class="nc bnc" id="L232" title="All 2 branches missed.">                	for(final Item items : currentMatch.getParticipants().get(participants).getItems()) {</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">                		if(items.getName() == null) {</span>
+<span class="nc" id="L234">                			matchArray[l][k] = new EmptyObject(emptyObject);</span>
+<span class="nc" id="L235">                		} else {</span>
+<span class="nc" id="L236">                			itemName = items.getName();</span>
+<span class="nc" id="L237">                    		matchArray[l][k] = new ItemName(itemName);</span>
+                    		//System.out.println(((ItemName) matchArray[l][k]).getItemName());
+                		}
+<span class="nc" id="L240">                		k++;</span>
+<span class="nc" id="L241">                		Thread.sleep(100);</span>
+                	}
+<span class="nc" id="L243">            	} else {</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">            		if (player.getTeam().getSide().name().equals(blueTeam)) {</span>
+<span class="nc" id="L245">            			otherPlayers = player.getChampion().getName();</span>
+<span class="nc" id="L246">                		matchArray[l][n] = new OtherPlayers(otherPlayers);</span>
+                		//System.out.println(((OtherPlayers) matchArray[l][n]).getOtherPlayers());
+<span class="nc" id="L248">                		n++;</span>
+<span class="nc" id="L249">            		} else {</span>
+<span class="nc" id="L250">            			otherPlayers = player.getChampion().getName();</span>
+<span class="nc" id="L251">                		matchArray[l][o] = new OtherPlayers(otherPlayers);</span>
+                		//System.out.println(((OtherPlayers) matchArray[l][o]).getOtherPlayers());
+<span class="nc" id="L253">                		o++;</span>
+            		}
+<span class="nc" id="L255">            		Thread.sleep(100);</span>
+            	}
+<span class="nc" id="L257">            	participants++;</span>
+            }
+<span class="nc" id="L259">            queueType = currentMatch.getQueue().name();</span>
+<span class="nc" id="L260">            matchArray[l][50] = new QueueType(queueType);</span>
+            //System.out.println(((QueueType) matchArray[l][50]).getQueueType()); 
+            //System.out.println(&quot;- - - - - - - - - - - -&quot;);
+<span class="nc bnc" id="L263" title="All 2 branches missed.">            for(int q = 0; q &lt; matchArray.length; q++) {</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">            	for(int w = 0; w &lt; matchArray[q].length; w++) {</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">            		if(matchArray[q][w] == null) {</span>
+<span class="nc" id="L266">            			matchArray[q][w] = new EmptyObject(emptyObject);</span>
+            		}
+            		//System.out.println(matchArray[q][w].toString());
+            	}
+            }
+<span class="nc" id="L271">            l++;</span>
+<span class="nc" id="L272">            Thread.sleep(3000);</span>
+		}
+<span class="nc" id="L274">        System.out.println(&quot;Match history acquired!&quot;);</span>
+<span class="nc" id="L275">        return matchArray;</span>
+	}
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

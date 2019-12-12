@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ModelAccessObject.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.model</a> &gt; <span class="el_source">ModelAccessObject.java</span></div><h1>ModelAccessObject.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.model;
+
+import org.hibernate.boot.registry.*;
+
+import java.util.*;
+import org.hibernate.*;
+import org.hibernate.boot.registry.*;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.query.Query;
+import java.lang.Math;
+
+
+public class ModelAccessObject implements IModelDAO {
+	
+<span class="fc" id="L15">	SessionFactory factory= null;</span>
+	
+<span class="fc" id="L17">	public ModelAccessObject() {</span>
+<span class="fc" id="L18">		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();</span>
+			
+		try{
+<span class="fc" id="L21">			factory = new MetadataSources(registry).buildMetadata().buildSessionFactory();</span>
+<span class="pc" id="L22">		}catch(Exception e) {</span>
+<span class="nc" id="L23">			System.out.println(&quot;Istuntotehtaan luonti ei onnistunut&quot;);</span>
+<span class="nc" id="L24">			StandardServiceRegistryBuilder.destroy(registry);</span>
+<span class="nc" id="L25">			e.printStackTrace();</span>
+			}
+<span class="fc" id="L27">	}</span>
+	
+	
+	
+	/**
+	 * readProfile method read SoftareProfile data from database.
+	 * @param profileName Takes in the profile name in String format.
+	 * @return SoftwareProfile object
+	 */
+	@SuppressWarnings(&quot;rawtypes&quot;)
+	@Override
+	public SoftwareProfile readProfile(String profileName) {
+<span class="fc" id="L39">		Transaction transaction = null;</span>
+<span class="fc" id="L40">		try(Session session = factory.openSession()) {</span>
+<span class="fc" id="L41">			transaction = session.beginTransaction();</span>
+<span class="fc" id="L42">			Query q = session.createQuery(&quot;FROM SoftwareProfile WHERE profileName = :profileName&quot;);</span>
+<span class="fc" id="L43">			q.setParameter(&quot;profileName&quot;, profileName);</span>
+<span class="fc" id="L44">			SoftwareProfile profile = (SoftwareProfile) q.uniqueResult();</span>
+<span class="fc" id="L45">			session.getTransaction().commit();</span>
+<span class="fc" id="L46">			session.close();</span>
+<span class="fc" id="L47">			return profile;</span>
+<span class="nc" id="L48">		}catch(Exception e) {</span>
+<span class="nc" id="L49">			transaction.rollback();</span>
+<span class="nc" id="L50">			throw e;</span>
+		}
+	}
+	
+	
+	/**
+	 * createGamedata method adds all the gamedata to database. It adds data to Gamedata- , Item-,
+	 * Team-, and Additional tables.
+	 * @param name Sets SoftwareProfile by profiles name parameter in String format
+	 * @param gamedata Sets Gamedata teable via Gamedata object
+	 * @param item Sets Item table via Item object
+	 * @param team Sets Team table via Team object
+	 * @param additional Sets Additional table via Additional object
+	 * @return boolean true or false.
+	 */
+		@Override
+		public boolean createGamedata(String name, Gamedata gamedata, Item item, Team team, Additional additional) {
+<span class="fc" id="L67">			Transaction transaction = null;</span>
+<span class="fc" id="L68">			boolean totuus = false;</span>
+<span class="fc" id="L69">			try(Session session = factory.openSession()) {</span>
+<span class="fc" id="L70">				transaction = session.beginTransaction();</span>
+<span class="fc" id="L71">				SoftwareProfile profile = readProfile(name);</span>
+<span class="fc" id="L72">				Gamedata game = gamedata;</span>
+<span class="fc" id="L73">				game.setSoftwareProfile(profile);</span>
+<span class="fc" id="L74">				Item newItem = item;</span>
+<span class="fc" id="L75">				game.setItem(newItem);</span>
+<span class="fc" id="L76">				newItem.setGamedata(game);</span>
+<span class="fc" id="L77">				Team newTeam = team;</span>
+<span class="fc" id="L78">				Additional newData = additional;</span>
+<span class="fc" id="L79">				newTeam.setGamedata(game);</span>
+<span class="fc" id="L80">				newData.setGamedata(game);</span>
+<span class="fc" id="L81">				session.saveOrUpdate(game);</span>
+<span class="fc" id="L82">				session.saveOrUpdate(newItem);</span>
+<span class="fc" id="L83">				session.saveOrUpdate(newTeam);</span>
+<span class="fc" id="L84">				session.saveOrUpdate(newData);</span>
+<span class="fc" id="L85">				transaction.commit();</span>
+<span class="fc" id="L86">				session.close();</span>
+<span class="fc" id="L87">				totuus = true;</span>
+<span class="nc" id="L88">			}catch(Exception e) {</span>
+<span class="nc" id="L89">				transaction.rollback();</span>
+<span class="nc" id="L90">				throw e;</span>
+			}
+<span class="fc" id="L92">			return totuus;</span>
+		}
+	
+	
+	/**
+	 * readGames method lists all the games from database.
+	 * @return list of Gamedata objects
+	 */
+	@SuppressWarnings( &quot;unchecked&quot;)
+	@Override
+	public List&lt;Gamedata&gt; readGames() {
+<span class="fc" id="L103">		Transaction transaction = null;</span>
+<span class="fc" id="L104">		try (Session session = factory.openSession()){</span>
+<span class="fc" id="L105">			transaction = session.beginTransaction();</span>
+			
+<span class="fc" id="L107">			List&lt;Gamedata&gt; games = session.createQuery(&quot;FROM Gamedata&quot;).getResultList();</span>
+			
+<span class="fc" id="L109">			session.getTransaction().commit();</span>
+<span class="fc" id="L110">			session.close();</span>
+<span class="fc" id="L111">			return games;</span>
+<span class="nc" id="L112">		}catch(Exception e) {</span>
+<span class="nc" id="L113">			transaction.rollback();</span>
+<span class="nc" id="L114">			throw e;</span>
+		}
+	}
+
+	
+	/**
+	 * gpmCalculus counts simply gold per minute value.
+	 * @param time Takes in time as double format
+	 * @param gold Takes in gold value in double format.
+	 * @return Answer of the calculus in double format.
+	 */
+	public double gpmCalculus(double time, double gold) {
+<span class="fc" id="L126">		double result = gold/time;</span>
+<span class="fc" id="L127">		double gpm = (double)Math.round(result);</span>
+	
+<span class="fc" id="L129">		return gpm;</span>
+		
+	}
+	
+	/**
+	 * readSpecificProfilesGames method returns all the games which were played by same profile.
+	 * @param name Method takes in Profile name in String format.
+	 * @return list of gamedata objects
+	 */
+	@SuppressWarnings(&quot;unchecked&quot;)
+	@Override
+	public List&lt;Gamedata&gt; readSpecificProfilesGames(String name) {
+<span class="fc" id="L141">		Transaction transaction = null;</span>
+<span class="fc" id="L142">		try(Session session = factory.openSession()){</span>
+<span class="fc" id="L143">			transaction = session.beginTransaction();</span>
+
+<span class="fc" id="L145">			List&lt;Gamedata&gt; results = session.createQuery(&quot;select g FROM  Gamedata as g Join g.SoftwareProfile as p where p.profileName = :name&quot;).setParameter(&quot;name&quot;, name).getResultList();</span>
+<span class="fc" id="L146">			session.getTransaction().commit();</span>
+<span class="fc" id="L147">			session.close();</span>
+<span class="fc" id="L148">			return results;</span>
+<span class="nc" id="L149">		}catch(Exception e) {</span>
+<span class="nc" id="L150">			transaction.rollback();</span>
+<span class="nc" id="L151">			throw e;</span>
+			}
+	}
+	
+	/**
+	 * addProfile method add SoftwareProfile data into database.
+	 * @param profile Method takes in SoftwareProfile object and saves it to the database.
+	 * @return boolean true or false.
+	 */
+	@Override
+	public boolean addProfile(SoftwareProfile profile) {
+<span class="fc" id="L162">		Transaction transaction = null;</span>
+<span class="fc" id="L163">		boolean totuus = false;</span>
+<span class="fc" id="L164">		try(Session session = factory.openSession()){</span>
+<span class="fc" id="L165">			transaction = session.beginTransaction();</span>
+<span class="fc" id="L166">			session.saveOrUpdate(profile);</span>
+<span class="fc" id="L167">			session.getTransaction().commit();</span>
+<span class="fc" id="L168">			session.close();</span>
+<span class="fc" id="L169">			totuus = true;</span>
+<span class="nc" id="L170">		}catch (Exception e) {</span>
+<span class="nc" id="L171">			transaction.rollback();</span>
+<span class="nc" id="L172">			throw e;</span>
+		}
+			
+<span class="fc" id="L175">		return totuus;</span>
+		}
+
+	/**
+	 * Creates a SoftwareProfile into the database.
+	 * @param profileName Sets the name of the SoftwareProfile.
+	 * @param profilePassword Sets the password of the SoftwareProfile.
+	 * @param defaultRegion Sets the region of the SoftwareProfile.
+	 * @param defaultLanguage Sets the language of the SoftwareProfile.
+	 * @param defaultRiotAccount Sets the riot account of the SoftwareProfile. Not in use currently.
+	 * @param riotAPIKey Sets the Riot API-key of the SoftwareProfile.
+	 * @return The resulting string.
+	 */
+	@Override
+	public String createProfile(String profileName, String profilePassword, String defaultRegion, String defaultLanguage, String defaultRiotAccount, String riotAPIKey) {
+		SoftwareProfile newProfile;
+		String resultString;
+<span class="nc" id="L192">		Transaction transaction = null;</span>
+		try {
+<span class="nc" id="L194">			Session session = factory.openSession();</span>
+<span class="nc" id="L195">			Query query = session.createQuery(&quot;FROM SoftwareProfile WHERE profileName = :profileName&quot;);</span>
+<span class="nc" id="L196">			query.setParameter(&quot;profileName&quot;, profileName);</span>
+<span class="nc" id="L197">			List queryResult = query.list();</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">			if (queryResult.isEmpty()) {</span>
+<span class="nc" id="L199">				transaction = session.beginTransaction();</span>
+<span class="nc" id="L200">				newProfile = new SoftwareProfile(profileName, profilePassword, defaultRegion, defaultLanguage, defaultRiotAccount, riotAPIKey);</span>
+<span class="nc" id="L201">				session.saveOrUpdate(newProfile);</span>
+<span class="nc" id="L202">				transaction.commit();</span>
+<span class="nc" id="L203">				factory.close();</span>
+<span class="nc" id="L204">				resultString = &quot;Profile successfully created&quot;;</span>
+<span class="nc" id="L205">			}</span>
+			else {
+<span class="nc" id="L207">				System.out.println(&quot;Failed to create profile. Probably too many records found.&quot;);</span>
+<span class="nc" id="L208">				resultString = &quot;Profile already exists&quot;;</span>
+			}
+<span class="nc" id="L210">		} catch (Exception e) {</span>
+<span class="nc" id="L211">			resultString = &quot;Database connection error&quot;;</span>
+<span class="nc" id="L212">			System.out.println(&quot;Failed to create profile.&quot;);</span>
+<span class="nc bnc" id="L213" title="All 4 branches missed.">			if (transaction != null &amp;&amp; factory != null) {</span>
+<span class="nc" id="L214">				transaction.rollback();</span>
+			}
+<span class="nc bnc" id="L216" title="All 2 branches missed.">			if (factory != null) {</span>
+<span class="nc" id="L217">				factory.close();</span>
+			}
+<span class="nc" id="L219">			e.printStackTrace();</span>
+<span class="nc" id="L220">			return resultString;</span>
+		}
+<span class="nc bnc" id="L222" title="All 2 branches missed.">		if (factory.isOpen()) {</span>
+<span class="nc" id="L223">			factory.close();</span>
+		}
+<span class="nc" id="L225">		return resultString;</span>
+	}
+
+	/**
+	 * Attempts to login a SoftwareProfile.
+	 * @param profileName The name of the SoftwareProfile.
+	 * @param profilePassword The password of the SoftwareProfile.
+	 * @return The resulting string.
+	 */
+	@Override
+	public String loginProfile(String profileName, String profilePassword) {
+		String resultString;
+		try {
+<span class="nc" id="L238">			Session session = factory.openSession();</span>
+<span class="nc" id="L239">			Query query = session.createQuery(&quot;FROM SoftwareProfile WHERE profileName = :profileName AND profilePassword = :profilePassword&quot;);</span>
+<span class="nc" id="L240">			query.setParameter(&quot;profileName&quot;, profileName);</span>
+<span class="nc" id="L241">			query.setParameter(&quot;profilePassword&quot;, profilePassword);</span>
+<span class="nc" id="L242">			List queryResult = query.list();</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">			if (queryResult.size() == 1) {</span>
+<span class="nc" id="L244">				resultString = &quot;Login successful&quot;;</span>
+<span class="nc" id="L245">			}</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">			else if (queryResult.isEmpty()){</span>
+<span class="nc" id="L247">				resultString = &quot;Profile not found&quot;;</span>
+<span class="nc" id="L248">			}</span>
+			else {
+<span class="nc" id="L250">				resultString = &quot;Too many records found&quot;;</span>
+			}
+<span class="nc" id="L252">		} catch (Exception e) {</span>
+<span class="nc" id="L253">			resultString = &quot;Database connection error&quot;;</span>
+<span class="nc" id="L254">			System.out.println(&quot;Database connection error (loginProfile)&quot;);</span>
+<span class="nc bnc" id="L255" title="All 2 branches missed.">			if (factory != null) {</span>
+<span class="nc" id="L256">				factory.close();</span>
+			}
+<span class="nc" id="L258">			e.printStackTrace();</span>
+<span class="nc" id="L259">			return resultString;</span>
+		}
+<span class="nc bnc" id="L261" title="All 2 branches missed.">		if (factory.isOpen()) {</span>
+<span class="nc" id="L262">			factory.close();</span>
+		}
+<span class="nc" id="L264">		return resultString;</span>
+	}
+
+	/**
+	 * Sets the SoftwareProfile, designed for use with loginProfile-method.
+	 * @param profileName The name of the SoftwareProfile.
+	 * @param profilePassword The password of the SoftwareProfile.
+	 * @return The SoftwareProfile.
+	 */
+	@Override
+	public SoftwareProfile setLoggedInProfile(String profileName, String profilePassword) {
+<span class="nc" id="L275">		SoftwareProfile loggedInProfile = null;</span>
+		try {
+<span class="nc" id="L277">			Session session = factory.openSession();</span>
+<span class="nc" id="L278">			Query query = session.createQuery(&quot;FROM SoftwareProfile WHERE profileName = :profileName AND profilePassword = :profilePassword&quot;);</span>
+<span class="nc" id="L279">			query.setParameter(&quot;profileName&quot;, profileName);</span>
+<span class="nc" id="L280">			query.setParameter(&quot;profilePassword&quot;, profilePassword);</span>
+<span class="nc" id="L281">			List queryResult = query.list();</span>
+<span class="nc" id="L282">			System.out.println(queryResult);</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">			if (queryResult.size() == 1) {</span>
+<span class="nc" id="L284">				loggedInProfile = (SoftwareProfile)queryResult.get(0);</span>
+<span class="nc" id="L285">				factory.close();</span>
+<span class="nc" id="L286">			}</span>
+			else {
+<span class="nc" id="L288">				System.out.println(&quot;Fail (setLoggedInProfile)&quot;);</span>
+			}
+<span class="nc" id="L290">		} catch (Exception e) {</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">			if (factory != null) {</span>
+<span class="nc" id="L292">				factory.close();</span>
+			}
+<span class="nc" id="L294">			e.printStackTrace();</span>
+<span class="nc" id="L295">			return loggedInProfile;</span>
+		}
+<span class="nc bnc" id="L297" title="All 2 branches missed.">		if (factory.isOpen()) {</span>
+<span class="nc" id="L298">			factory.close();</span>
+		}
+<span class="nc" id="L300">		return loggedInProfile;</span>
+	}
+
+	/**
+	 * Updates one SoftwareProfile.
+	 * @param currentProfile The currently loaded SoftwareProfile.
+	 * @param updateDefaultRegion If true, updates the SoftwareProfile's defaultRegion.
+	 * @param updateDefaultLanguage If true, updates the SoftwareProfile's defaultLanguage.
+	 * @return True, on success.
+	 */
+	@Override
+	public boolean updateProfile(SoftwareProfile currentProfile, boolean updateDefaultRegion, boolean updateDefaultLanguage) {
+<span class="nc" id="L312">		boolean success = false;</span>
+<span class="nc" id="L313">		Transaction transaction = null;</span>
+		try {
+<span class="nc" id="L315">			Session session = factory.openSession();</span>
+<span class="nc" id="L316">			transaction = session.beginTransaction();</span>
+<span class="nc" id="L317">			SoftwareProfile placeholderProfile = session.load(SoftwareProfile.class, currentProfile.getProfileId());</span>
+<span class="nc" id="L318">			placeholderProfile.setRiotAPIKey(currentProfile.getRiotAPIKey());</span>
+<span class="nc bnc" id="L319" title="All 2 branches missed.">			if (updateDefaultRegion) {</span>
+<span class="nc" id="L320">				placeholderProfile.setDefaultRegion(currentProfile.getDefaultRegion());</span>
+			}
+<span class="nc bnc" id="L322" title="All 2 branches missed.">			if (updateDefaultLanguage) {</span>
+<span class="nc" id="L323">				placeholderProfile.setDefaultLanguage(currentProfile.getDefaultLanguage());</span>
+			}
+<span class="nc" id="L325">			placeholderProfile.setProfilePassword(currentProfile.getProfilePassword());</span>
+<span class="nc" id="L326">			placeholderProfile.setDefaultRiotAccount(null);</span>
+<span class="nc" id="L327">			session.update(placeholderProfile);</span>
+<span class="nc" id="L328">			session.getTransaction().commit();</span>
+<span class="nc" id="L329">			success = true;</span>
+<span class="nc" id="L330">			session.close();</span>
+<span class="nc" id="L331">		} catch (Exception e) {</span>
+<span class="nc bnc" id="L332" title="All 4 branches missed.">			if (factory != null &amp;&amp; transaction != null) {</span>
+<span class="nc" id="L333">				transaction.rollback();</span>
+			}
+<span class="nc bnc" id="L335" title="All 2 branches missed.">			if (factory != null) {</span>
+<span class="nc" id="L336">				factory.close();</span>
+			}
+<span class="nc" id="L338">			e.printStackTrace();</span>
+<span class="nc" id="L339">			return success;</span>
+		}
+<span class="nc bnc" id="L341" title="All 2 branches missed.">		if (factory.isOpen()) {</span>
+<span class="nc" id="L342">			factory.close();</span>
+		}
+<span class="nc" id="L344">		return success;</span>
+	}
+		
+		/**
+		 * readAdditionalData method searches single games all the extra data.
+		 * @param riotid Method takes in riot id and searches with it from the database.
+		 * @return Additional object.
+		 */
+		@SuppressWarnings(&quot;unchecked&quot;)
+		public Additional readAdditionalData(long riotid){
+<span class="fc" id="L354">			Transaction transaction = null;</span>
+<span class="fc" id="L355">			try(Session session = factory.openSession()){</span>
+<span class="fc" id="L356">				transaction = session.beginTransaction();</span>
+				
+<span class="fc" id="L358">				Additional result = (Additional) session.createQuery(&quot;Select a from Additional as a Join a.gamedata as g where g.riotid = :id&quot;).setParameter(&quot;id&quot;, riotid).uniqueResult();</span>
+<span class="fc" id="L359">				session.getTransaction().commit();</span>
+<span class="fc" id="L360">				return result;</span>
+<span class="nc" id="L361">			}catch(Exception e) {</span>
+<span class="nc" id="L362">				transaction.rollback();</span>
+<span class="nc" id="L363">				throw e;</span>
+				}	
+		}
+		
+		/**
+		 * readTeamComposition method searches both own team and enemy team champions from a single game.
+		 * @param riotid Method takes in riot id
+		 * @return Team object
+		 */
+		@SuppressWarnings(&quot;unchecked&quot;)
+		public Team readTeamComposition(long riotid){
+<span class="fc" id="L374">			Transaction transaction = null;</span>
+<span class="fc" id="L375">			try(Session session = factory.openSession()){</span>
+<span class="fc" id="L376">				transaction = session.beginTransaction();</span>
+				
+<span class="fc" id="L378">				Team result = (Team) session.createQuery(&quot;Select t from Team as t Join t.gamedata as g where g.riotid = :id&quot;).setParameter(&quot;id&quot;, riotid).uniqueResult();</span>
+<span class="fc" id="L379">				session.getTransaction().commit();</span>
+<span class="fc" id="L380">				return result;</span>
+<span class="nc" id="L381">			}catch(Exception e) {</span>
+<span class="nc" id="L382">				transaction.rollback();</span>
+<span class="nc" id="L383">				throw e;</span>
+				}	
+		}
+		
+		/**
+		 * readOneGame method searches one game specific game from database.
+		 * @param riotid Method takes in riot id.
+		 * @return Gamedata object.
+		 */
+		@Override
+		@SuppressWarnings(&quot;rawtypes&quot;)
+		public Gamedata readOneGame(long riotid) {
+<span class="fc" id="L395">			Transaction transaction = null;</span>
+<span class="fc" id="L396">			try(Session session = factory.openSession()) {</span>
+<span class="fc" id="L397">				transaction = session.beginTransaction();</span>
+<span class="fc" id="L398">				Query q = session.createQuery(&quot;FROM Gamedata WHERE riotid = :riotid&quot;);</span>
+<span class="fc" id="L399">				q.setParameter(&quot;riotid&quot;, riotid);</span>
+<span class="fc" id="L400">				Gamedata gamedata = (Gamedata) q.uniqueResult();</span>
+<span class="fc" id="L401">				session.getTransaction().commit();</span>
+<span class="fc" id="L402">				session.close();</span>
+<span class="fc" id="L403">				return gamedata;</span>
+<span class="nc" id="L404">			}catch(Exception e) {</span>
+<span class="nc" id="L405">				transaction.rollback();</span>
+<span class="nc" id="L406">				throw e;</span>
+			}
+		}
+
+		/**
+		 * readItems method lists every single item from database.
+		 * @return List of Item objects
+		 */
+		@SuppressWarnings(&quot;unchecked&quot;)
+		@Override
+		public List&lt;Item&gt; readItems() {
+<span class="fc" id="L417">			Transaction transaction = null;</span>
+<span class="fc" id="L418">			try (Session session = factory.openSession()){</span>
+<span class="fc" id="L419">				transaction = session.beginTransaction();</span>
+				
+<span class="fc" id="L421">				List&lt;Item&gt; items = session.createQuery(&quot;FROM Item&quot;).getResultList();</span>
+				
+<span class="fc" id="L423">				session.getTransaction().commit();</span>
+<span class="fc" id="L424">				session.close();</span>
+<span class="fc" id="L425">				return items;</span>
+<span class="nc" id="L426">			}catch(Exception e) {</span>
+<span class="nc" id="L427">				transaction.rollback();</span>
+<span class="nc" id="L428">				throw e;</span>
+				}
+		}
+		
+		/**
+		 * checkGame method checks from database if gamedata already exists in there.
+		 * @param riotid Method takes in riot id.
+		 * @return boolean true or false
+		 */
+		@SuppressWarnings(&quot;rawtypes&quot;)
+		@Override
+		public boolean checkGame(long riotid) {
+<span class="fc" id="L440">			Transaction transaction = null;</span>
+<span class="fc" id="L441">			try(Session session = factory.openSession()) {</span>
+<span class="fc" id="L442">				transaction = session.beginTransaction();</span>
+<span class="fc" id="L443">				Query q = session.createQuery(&quot;FROM Gamedata WHERE riotid = :riotid&quot;);</span>
+<span class="fc" id="L444">				q.setParameter(&quot;riotid&quot;, riotid);</span>
+<span class="fc" id="L445">				Gamedata gamedata = (Gamedata) q.uniqueResult();</span>
+<span class="fc" id="L446">				session.getTransaction().commit();</span>
+<span class="fc" id="L447">				session.close();</span>
+<span class="fc bfc" id="L448" title="All 2 branches covered.">				if (gamedata !=null) {</span>
+<span class="fc" id="L449">					return true;</span>
+				}
+				else {
+<span class="fc" id="L452">					return false;</span>
+				}
+<span class="nc" id="L454">			}catch(Exception e) { </span>
+<span class="nc" id="L455">				transaction.rollback();</span>
+<span class="nc" id="L456">				throw e;</span>
+			}
+		}
+		
+		/**
+		 * deleteAdditional method deletes all columns from additional table
+		 * @return boolean true or false
+		 */
+		public boolean deleteAdditonal() {
+<span class="fc" id="L465">			Transaction transaction = null;</span>
+<span class="fc" id="L466">			boolean truth = false;</span>
+			
+<span class="fc" id="L468">			try(Session session = factory.openSession()){</span>
+<span class="fc" id="L469">				transaction = session.beginTransaction();</span>
+<span class="fc" id="L470">				String hql = &quot;delete Additional&quot;;</span>
+<span class="fc" id="L471">				Query query = session.createQuery(hql);</span>
+<span class="fc" id="L472">				query.executeUpdate();</span>
+<span class="fc" id="L473">				session.getTransaction().commit();</span>
+<span class="fc" id="L474">				truth = true;</span>
+<span class="nc" id="L475">			}catch(Exception e) {</span>
+<span class="nc" id="L476">				transaction.rollback();</span>
+<span class="nc" id="L477">				throw e;</span>
+				}
+<span class="fc" id="L479">			return truth;	</span>
+		}
+		
+		/**
+		 * deleteTeam method deletes all columns from team table
+		 * @return boolean true or false
+		 */
+		public boolean deleteTeam() {
+<span class="fc" id="L487">			Transaction transaction = null;</span>
+<span class="fc" id="L488">			boolean truth = false;</span>
+			
+<span class="fc" id="L490">			try(Session session = factory.openSession()){</span>
+<span class="fc" id="L491">				transaction = session.beginTransaction();</span>
+<span class="fc" id="L492">				String hql = &quot;delete Team&quot;;</span>
+<span class="fc" id="L493">				Query query = session.createQuery(hql);</span>
+<span class="fc" id="L494">				query.executeUpdate();</span>
+<span class="fc" id="L495">				session.getTransaction().commit();</span>
+<span class="fc" id="L496">				truth = true;</span>
+<span class="nc" id="L497">			}catch(Exception e) {</span>
+<span class="nc" id="L498">				transaction.rollback();</span>
+<span class="nc" id="L499">				throw e;</span>
+				}
+<span class="fc" id="L501">			return truth;	</span>
+		}
+		
+		/**
+		 * deleteItem method deletes all columns from item table
+		 * @return boolean true or false
+		 */
+		public boolean deleteItem() {
+<span class="fc" id="L509">			Transaction transaction = null;</span>
+<span class="fc" id="L510">			boolean truth = false;</span>
+			
+<span class="fc" id="L512">			try(Session session = factory.openSession()){</span>
+<span class="fc" id="L513">				transaction = session.beginTransaction();</span>
+<span class="fc" id="L514">				String hql = &quot;delete Item&quot;;</span>
+<span class="fc" id="L515">				Query query = session.createQuery(hql);</span>
+<span class="fc" id="L516">				query.executeUpdate();</span>
+<span class="fc" id="L517">				session.getTransaction().commit();</span>
+<span class="fc" id="L518">				truth = true;</span>
+<span class="nc" id="L519">			}catch(Exception e) {</span>
+<span class="nc" id="L520">				transaction.rollback();</span>
+<span class="nc" id="L521">				throw e;</span>
+				}
+<span class="fc" id="L523">			return truth;	</span>
+		}
+		
+		/**
+		 * deleteGamedata method deletes all columns from gamedata table
+		 * @return boolean true or false
+		 */
+		public boolean deleteGamedata() {
+<span class="fc" id="L531">			Transaction transaction = null;</span>
+<span class="fc" id="L532">			boolean truth = false;</span>
+			
+<span class="fc" id="L534">			try(Session session = factory.openSession()){</span>
+<span class="fc" id="L535">				transaction = session.beginTransaction();</span>
+<span class="fc" id="L536">				String hql = &quot;delete Gamedata&quot;;</span>
+<span class="fc" id="L537">				Query query = session.createQuery(hql);</span>
+<span class="fc" id="L538">				query.executeUpdate();</span>
+<span class="fc" id="L539">				session.getTransaction().commit();</span>
+<span class="fc" id="L540">				truth = true;</span>
+<span class="nc" id="L541">			}catch(Exception e) {</span>
+<span class="nc" id="L542">				transaction.rollback();</span>
+<span class="nc" id="L543">				throw e;</span>
+				}
+<span class="fc" id="L545">			return truth;	</span>
+		}
+		
+		/**
+		 * deleteProfile method deletes all columns from softwareprofile table
+		 * @return boolean true or false
+		 */
+		@SuppressWarnings(&quot;null&quot;)
+		public boolean deleteProfile() {
+<span class="fc" id="L554">			Transaction transaction = null;</span>
+<span class="fc" id="L555">			boolean truth = false;</span>
+			
+<span class="fc" id="L557">			try(Session session = factory.openSession()){</span>
+<span class="fc" id="L558">				transaction = session.beginTransaction();</span>
+<span class="fc" id="L559">				String hql = &quot;delete SoftwareProfile&quot;;</span>
+<span class="fc" id="L560">				Query query = session.createQuery(hql);</span>
+<span class="fc" id="L561">				query.executeUpdate();</span>
+<span class="fc" id="L562">				session.getTransaction().commit();</span>
+<span class="fc" id="L563">				truth = true;</span>
+<span class="nc" id="L564">			}catch(Exception e) {</span>
+<span class="nc" id="L565">				transaction.rollback();</span>
+<span class="nc" id="L566">				throw e;</span>
+				}
+<span class="fc" id="L568">			return truth;	</span>
+		}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

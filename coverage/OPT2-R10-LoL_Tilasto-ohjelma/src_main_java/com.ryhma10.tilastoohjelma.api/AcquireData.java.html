@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AcquireData.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.api</a> &gt; <span class="el_source">AcquireData.java</span></div><h1>AcquireData.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.api;
+
+import com.merakianalytics.orianna.types.common.Region;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+
+import java.util.ArrayList;
+
+<span class="nc" id="L8">public class AcquireData {</span>
+	
+	// RiotApi-luokan getMatchHistory()-metodin palauttavan listan elementtien sijainnit:
+	
+			// 0 = PlayerName
+			// 1 = PlayerRank
+			// 2 = MatchId
+			// 3 = MatchDate
+			// 4 = MatchDuration
+			// 5 = ChampionPlayed
+			// 6 = MatchKills
+			// 7 = MatchDeaths
+			// 8 = MatchAssists
+			// 9 = DamageDealt
+			// 10 = DamageTaken
+			// 11 = GoldEarned
+			// 12 = MatchResult
+			// 13 = Player's Team Color
+			// 14 = Creep Score
+			// 15 = Wards Placed
+			// 16-19 = Empty
+			// 20-29 = Items, leftover slots Empty
+			// 30-39 = Blue Team Champions, leftover slots Empty
+			// 40-49 = Red Team Champions, leftover slots Empty
+			// 50 = QueueType
+	
+	int size;
+<span class="nc" id="L35">	static String queueType = &quot;RANKED_SOLO&quot;;</span>
+	String playerName, playerId;
+	int historySize;
+	SoftwareProfile currentProfile;
+
+	
+	/**
+	 * Method to set player name
+	 * @param name
+	 */
+	public void setPlayerName(String name) {
+<span class="nc bnc" id="L46" title="All 2 branches missed.">		if(name == null) {</span>
+<span class="nc" id="L47">			System.out.println(&quot;Name needed&quot;);</span>
+<span class="nc" id="L48">		} else {</span>
+<span class="nc" id="L49">			playerName = name;</span>
+		} 
+<span class="nc" id="L51">	}</span>
+	
+	
+	/**
+	 * Method to set history size
+	 * @param history
+	 */
+	public void setHistorySize(int history) {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		if (history &lt; 1) {</span>
+<span class="nc" id="L60">			System.out.println(&quot;We want to find at least one match...&quot;);</span>
+<span class="nc" id="L61">		} else {</span>
+<span class="nc" id="L62">			historySize = history;</span>
+		}
+<span class="nc" id="L64">	}</span>
+
+	public void setCurrentProfile(SoftwareProfile currentProfile) {
+<span class="nc" id="L67">		this.currentProfile = currentProfile;</span>
+<span class="nc" id="L68">	}</span>
+
+	/**
+	 * Method to get player's EUNE server match history and match information through RiotAPI by setting the correct API key,
+	 * setting the wanted player's name, setting how many matches to get, executing RiotApi class'
+	 * getMatchHistory() method and return the received information as a 2d array
+	 * @return data
+	 */
+	public ApiData[][] getData(ArrayList&lt;Long&gt; matchIds) {
+<span class="nc" id="L77">		ApiData[][] data = null;</span>
+<span class="nc" id="L78">		RiotApi api = new RiotApi();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		if (currentProfile != null) {</span>
+<span class="nc" id="L80">			api.setKeyFromProfile(currentProfile.getRiotAPIKey());</span>
+<span class="nc" id="L81">		}</span>
+		else {
+<span class="nc" id="L83">			api.setCurrentRegion(Region.EUROPE_NORTH_EAST);</span>
+<span class="nc" id="L84">			api.setKey();</span>
+		}
+<span class="nc" id="L86">		api.setWantedPlayer(playerName);</span>
+<span class="nc" id="L87">		api.setMatchListSize(historySize);</span>
+<span class="nc" id="L88">		size = api.getMatchListSize();</span>
+		try {
+<span class="nc bnc" id="L90" title="All 2 branches missed.">			if (matchIds != null) {</span>
+<span class="nc" id="L91">				data = api.getMatchHistory(matchIds);</span>
+<span class="nc" id="L92">			}</span>
+			else {
+<span class="nc" id="L94">				data = api.getMatchHistory(null);</span>
+			}
+<span class="nc" id="L96">		} catch (InterruptedException e) {</span>
+<span class="nc" id="L97">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L99">		return data;</span>
+	}
+	
+	
+	/**
+	 * Method to get the size of the list of matches
+	 * @return size
+	 */
+	public int getSize() {
+<span class="nc" id="L108">		return size;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the player's name from each match
+	 * @param data
+	 * @param matchIndex
+	 * @return playerName
+	 */
+	public String getPlayerName(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L119">		String playerName = null;</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof PlayerName) {</span>
+<span class="nc" id="L122">				playerName = ((PlayerName)data[matchIndex][z]).getPlayerName();</span>
+			}
+		}
+<span class="nc" id="L125">		return playerName;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return player id
+	 * @return playerId
+	 */
+	public String getPlayerId() {
+<span class="nc" id="L134">		return playerId;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the player's rank from each match
+	 * @param data
+	 * @param matchIndex
+	 * @return playerRank
+	 */
+	public String getPlayerRank(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L145">		String playerRank = null;</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof PlayerRank) {</span>
+<span class="nc" id="L148">				playerRank = ((PlayerRank)data[matchIndex][z]).getPlayerRank();</span>
+			}
+		}
+<span class="nc" id="L151">		return playerRank;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the match id of each match
+	 * @param data
+	 * @param matchIndex
+	 * @return matchId
+	 */
+	public long getMatchId(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L162">		long matchId = 0;</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof MatchId) {</span>
+<span class="nc" id="L165">				matchId = ((MatchId)data[matchIndex][z]).getMatchId();</span>
+			}
+		}
+<span class="nc" id="L168">		return matchId;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the date of each match
+	 * @param data
+	 * @param matchIndex
+	 * @return matchDate
+	 */
+	public String getMatchDate(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L179">		String matchDate = null;</span>
+<span class="nc bnc" id="L180" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof MatchDate) {</span>
+<span class="nc" id="L182">				matchDate = ((MatchDate)data[matchIndex][z]).getMatchDate();</span>
+			}
+		}
+<span class="nc" id="L185">		return matchDate;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the duration of each match
+	 * @param data
+	 * @param matchIndex
+	 * @return matchDuration
+	 */
+	public long getMatchDuration(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L196">		long matchDuration = 0;</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof MatchDuration) {</span>
+<span class="nc" id="L199">				matchDuration = ((MatchDuration)data[matchIndex][z]).getMatchDuration();</span>
+			}
+		}
+<span class="nc" id="L202">		return matchDuration;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the champion's name the player played as each match
+	 * @param data
+	 * @param matchIndex
+	 * @return championPlayed
+	 */
+	public String getChampionPlayed(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L213">		String championPlayed = null;</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof ChampionPlayed) {</span>
+<span class="nc" id="L216">				championPlayed = ((ChampionPlayed)data[matchIndex][z]).getChampionPlayed();</span>
+			}
+		}
+<span class="nc" id="L219">		return championPlayed;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the amount of kills the player got each match
+	 * @param data
+	 * @param matchIndex
+	 * @return matchKills
+	 */
+	public long getMatchKills(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L230">		long matchKills = 0;</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof MatchKills) {</span>
+<span class="nc" id="L233">				matchKills = ((MatchKills)data[matchIndex][z]).getMatchKills();</span>
+			}
+		}
+<span class="nc" id="L236">		return matchKills;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the amount of deaths from each match
+	 * @param data
+	 * @param matchIndex
+	 * @return matchDeaths
+	 */
+	public long getMatchDeaths(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L247">		long matchDeaths = 0;</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof MatchDeaths) {</span>
+<span class="nc" id="L250">				matchDeaths = ((MatchDeaths)data[matchIndex][z]).getMatchDeaths();</span>
+			}
+		}
+<span class="nc" id="L253">		return matchDeaths;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the amount of assists from each match
+	 * @param data
+	 * @param matchIndex
+	 * @return matchAssists
+	 */
+	public long getMatchAssists(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L264">		long matchAssists = 0;</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L266" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof MatchAssists) {</span>
+<span class="nc" id="L267">				matchAssists = ((MatchAssists)data[matchIndex][z]).getMatchAssists();</span>
+			}
+		}
+<span class="nc" id="L270">		return matchAssists;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the amount of damage the player dealt each match
+	 * @param data
+	 * @param matchIndex
+	 * @return damageDealt
+	 */
+	public long getDamageDealt(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L281">		long damageDealt = 0;</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof DamageDealt) {</span>
+<span class="nc" id="L284">				damageDealt = ((DamageDealt)data[matchIndex][z]).getDamageDealt();</span>
+			}
+		}
+<span class="nc" id="L287">		return damageDealt;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the amount of damage the player took each match
+	 * @param data
+	 * @param matchIndex
+	 * @return damageTaken
+	 */
+	public long getDamageTaken(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L298">		long damageTaken = 0;</span>
+<span class="nc bnc" id="L299" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L300" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof DamageTaken) {</span>
+<span class="nc" id="L301">				damageTaken = ((DamageTaken)data[matchIndex][z]).getDamageTaken();</span>
+			}
+		}
+<span class="nc" id="L304">		return damageTaken;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the amount of gold the player earned each match
+	 * @param data
+	 * @param matchIndex
+	 * @return goldEarned
+	 */
+	public long getGoldEarned(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L315">		long goldEarned = 0;</span>
+<span class="nc bnc" id="L316" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof GoldEarned) {</span>
+<span class="nc" id="L318">				goldEarned = ((GoldEarned)data[matchIndex][z]).getGoldEarned();</span>
+			}
+		}
+<span class="nc" id="L321">		return goldEarned;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the result of each match
+	 * @param data
+	 * @param matchIndex
+	 * @return matchResult
+	 */
+	public String getMatchResult(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L332">		String matchResult = null;</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L334" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof MatchResult) {</span>
+<span class="nc" id="L335">				matchResult = ((MatchResult)data[matchIndex][z]).getMatchResult();</span>
+			}
+		}
+<span class="nc" id="L338">		return matchResult;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the player's team color from each match
+	 * @param data
+	 * @param matchIndex
+	 * @return teamColor
+	 */
+	public String getTeamColor(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L349">		String teamColor = null;</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L351" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof TeamColor) {</span>
+<span class="nc" id="L352">				teamColor = ((TeamColor)data[matchIndex][z]).getTeamColor();</span>
+			}
+		}
+<span class="nc" id="L355">		return teamColor;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the player's creep score from each match
+	 * @param data
+	 * @param matchIndex
+	 * @return creepScore
+	 */
+	public long getCreepScore(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L366">		long creepScore = 0;</span>
+<span class="nc bnc" id="L367" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L368" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof CreepScore) {</span>
+<span class="nc" id="L369">				creepScore = ((CreepScore)data[matchIndex][z]).getCreepScore();</span>
+			}
+		}
+<span class="nc" id="L372">		return creepScore;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the amount of wards the player placed each match
+	 * @param data
+	 * @param matchIndex
+	 * @return wardsPlaced
+	 */
+	public long getWardsPlaced(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L383">		long wardsPlaced = 0;</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L385" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof WardsPlaced) {</span>
+<span class="nc" id="L386">				wardsPlaced = ((WardsPlaced)data[matchIndex][z]).getWardsPlaced();</span>
+			}
+		}
+<span class="nc" id="L389">		return wardsPlaced;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the player's position from each match
+	 * @param data
+	 * @param matchIndex
+	 * @return position
+	 */
+	public String getPosition(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L400">		String position = null;</span>
+<span class="nc bnc" id="L401" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L402" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof Position) {</span>
+<span class="nc" id="L403">				position = ((Position)data[matchIndex][z]).getPosition();</span>
+			}
+		}
+<span class="nc" id="L406">		return position;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return a list of items the player had each match
+	 * @param data
+	 * @param matchIndex
+	 * @return itemList
+	 */
+	public String[] getItemNames(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L417">		String[] itemList = new String[7];</span>
+<span class="nc" id="L418">		String itemName = null;</span>
+<span class="nc" id="L419">		int x = 0;</span>
+<span class="nc bnc" id="L420" title="All 2 branches missed.">		for(int z = 0; z &lt; data[matchIndex].length; z++) {</span>
+<span class="nc bnc" id="L421" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof ItemName) {</span>
+<span class="nc" id="L422">				itemName = ((ItemName)data[matchIndex][z]).getItemName();</span>
+<span class="nc" id="L423">				itemList[x] = itemName;</span>
+<span class="nc" id="L424">				x++;</span>
+			}
+		}
+<span class="nc" id="L427">		return itemList;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return a list of champions the blue team had each match
+	 * @param data
+	 * @param matchIndex
+	 * @return blueTeam
+	 */
+	public String[] getBlueTeamChampions(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L438">		String[] blueTeam = new String[5];</span>
+<span class="nc" id="L439">		String championName = null;</span>
+<span class="nc" id="L440">		int x = 0;</span>
+<span class="nc bnc" id="L441" title="All 2 branches missed.">		for(int z = 30; z &lt; 40; z++) {</span>
+<span class="nc bnc" id="L442" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof OtherPlayers) {</span>
+<span class="nc" id="L443">				championName = ((OtherPlayers)data[matchIndex][z]).getOtherPlayers();</span>
+<span class="nc" id="L444">				blueTeam[x] = championName;</span>
+<span class="nc" id="L445">				x++;</span>
+			}
+		}
+<span class="nc" id="L448">		return blueTeam;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return a list of champions the red team had each match
+	 * @param data
+	 * @param matchIndex
+	 * @return redTeam
+	 */
+	public String[] getRedTeamChampions(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L459">		String[] redTeam = new String[5];</span>
+<span class="nc" id="L460">		String championName = null;</span>
+<span class="nc" id="L461">		int x = 0;</span>
+<span class="nc bnc" id="L462" title="All 2 branches missed.">		for(int z = 40; z &lt; 50; z++) {</span>
+<span class="nc bnc" id="L463" title="All 2 branches missed.">			if (data[matchIndex][z] instanceof OtherPlayers) {</span>
+<span class="nc" id="L464">				championName = ((OtherPlayers)data[matchIndex][z]).getOtherPlayers();</span>
+<span class="nc" id="L465">				redTeam[x] = championName;</span>
+<span class="nc" id="L466">				x++;</span>
+			}
+		}
+<span class="nc" id="L469">		return redTeam;</span>
+	}
+	
+	
+	/**
+	 * Method to get and return the game mode of each match
+	 * @param data
+	 * @param matchIndex
+	 * @return queueType
+	 */
+	public String getQueueType(ApiData[][] data, int matchIndex) {
+<span class="nc" id="L480">		String queueType = null;</span>
+<span class="nc" id="L481">		queueType = ((QueueType)data[matchIndex][50]).getQueueType();</span>
+<span class="nc" id="L482">		return queueType;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

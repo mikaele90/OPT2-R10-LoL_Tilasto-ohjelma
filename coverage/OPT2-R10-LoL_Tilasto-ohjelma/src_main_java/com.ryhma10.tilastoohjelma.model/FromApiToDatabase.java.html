@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>FromApiToDatabase.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.model</a> &gt; <span class="el_source">FromApiToDatabase.java</span></div><h1>FromApiToDatabase.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.model;
+
+import com.ryhma10.tilastoohjelma.api.AcquireData;
+import com.ryhma10.tilastoohjelma.api.ApiData;
+
+import java.util.ArrayList;
+
+public class FromApiToDatabase {
+		
+		
+		Gamedata gamedata;
+		Item item;
+		Team team;
+		Additional additional;
+		String playerName;
+		ApiData[][] array;
+
+<span class="nc" id="L18">		public FromApiToDatabase() {</span>
+			//Constructor
+<span class="nc" id="L20">		}</span>
+		
+		/**
+		 * Method to get player's match history from server and store it in database
+		 */
+		public void storeData(ArrayList&lt;Long&gt; matchIdsToStore) {
+<span class="nc" id="L26">			ModelAccessObject mao = new ModelAccessObject();</span>
+<span class="nc" id="L27">			AcquireData data = new AcquireData();</span>
+<span class="nc" id="L28">			data.setPlayerName(playerName);</span>
+<span class="nc" id="L29">			data.setHistorySize(50);</span>
+<span class="nc" id="L30">			array = data.getData(matchIdsToStore);</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">			if (data.getPlayerId() == null) {</span>
+<span class="nc" id="L32">				System.out.println(&quot;Player not found&quot;);</span>
+<span class="nc" id="L33">			} else {</span>
+<span class="nc" id="L34">				int counter = 0;</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">				for(int i = 0; i &lt; data.getSize(); i++) {</span>
+<span class="nc" id="L36">					gamedata = new Gamedata(data.getMatchId(array, i), data.getPlayerName(array, i), </span>
+<span class="nc" id="L37">							data.getChampionPlayed(array, i), data.getMatchKills(array, i), data.getMatchDeaths(array, i), </span>
+<span class="nc" id="L38">							data.getMatchAssists(array, i), data.getMatchResult(array, i), </span>
+<span class="nc" id="L39">							data.getPosition(array, i), data.getPlayerRank(array, i));</span>
+<span class="nc" id="L40">					additional = new Additional(data.getDamageDealt(array, i), data.getDamageTaken(array, i), </span>
+<span class="nc" id="L41">							data.getQueueType(array, i), data.getGoldEarned(array, i), data.getMatchDuration(array, i), </span>
+<span class="nc" id="L42">							data.getMatchDate(array, i), data.getWardsPlaced(array, i), data.getCreepScore(array, i));</span>
+<span class="nc" id="L43">					String[] items = data.getItemNames(array, i);</span>
+<span class="nc" id="L44">					item = new Item(items[0], items[1], items[2], items[3], items[4], items[5], items[6]);</span>
+<span class="nc" id="L45">					String[] blue = data.getBlueTeamChampions(array, i);</span>
+<span class="nc" id="L46">					String[] red = data.getRedTeamChampions(array, i);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">					if (data.getTeamColor(array, i).equals(&quot;BLUE&quot;)) {</span>
+<span class="nc" id="L48">						team = new Team(blue[0], blue[1], blue[2], blue[3], red[0], red[1], red[2], red[3], red[4]);</span>
+<span class="nc" id="L49">					}</span>
+					else {
+<span class="nc" id="L51">						team = new Team(red[0], red[1], red[2], red[3], blue[0], blue[1], blue[2], blue[3], blue[4]);</span>
+					}
+<span class="nc bnc" id="L53" title="All 2 branches missed.">					if (!mao.checkGame(data.getMatchId(array, i))) {</span>
+<span class="nc" id="L54">						mao.createGamedata(&quot;testi&quot;, gamedata, item, team, additional);</span>
+<span class="nc" id="L55">						counter ++;</span>
+					}
+				}
+<span class="nc" id="L58">				System.out.println(counter+&quot; matches added to database&quot;);</span>
+			}
+<span class="nc" id="L60">			}	</span>
+		}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

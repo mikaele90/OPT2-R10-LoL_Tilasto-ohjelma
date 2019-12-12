@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>AlertFactory.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.view.utilities</a> &gt; <span class="el_source">AlertFactory.java</span></div><h1>AlertFactory.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.view.utilities;
+
+import javafx.scene.control.Alert;
+
+import java.util.ResourceBundle;
+
+public class AlertFactory {
+
+    private ResourceBundle textBundle;
+
+    /**
+     * Constructor.
+     * @param textBundle Requires a ResourceBundle.
+     */
+<span class="nc" id="L15">    public AlertFactory(ResourceBundle textBundle) {</span>
+        //Default constructor
+<span class="nc" id="L17">        this.textBundle = textBundle;</span>
+<span class="nc" id="L18">    }</span>
+
+    /**
+     * Creates different types of Alert alerts.
+     * @param alertType String that defines which Alert to return.
+     * @return Returns an Alert in the language defined by the ResourceBundle passed to the constructor.
+     */
+    public Alert createAlert(String alertType) {
+<span class="nc" id="L26">        Alert alertToReturn = new Alert(null);</span>
+<span class="nc bnc" id="L27" title="All 37 branches missed.">        switch (alertType) {</span>
+            case &quot;Profile successfully created&quot;:
+<span class="nc" id="L29">                alertToReturn.setAlertType(Alert.AlertType.INFORMATION);</span>
+<span class="nc" id="L30">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.profileCreated&quot;));</span>
+<span class="nc" id="L31">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.profileCreated&quot;));</span>
+<span class="nc" id="L32">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.profileCreated&quot;));</span>
+<span class="nc" id="L33">                break;</span>
+            case &quot;Profile already exists&quot;:
+<span class="nc" id="L35">                alertToReturn.setAlertType(Alert.AlertType.WARNING);</span>
+<span class="nc" id="L36">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.profileAlreadyExists&quot;));</span>
+<span class="nc" id="L37">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.profileAlreadyExists&quot;));</span>
+<span class="nc" id="L38">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.profileAlreadyExists&quot;));</span>
+<span class="nc" id="L39">                break;</span>
+            case &quot;Database connection error&quot;:
+<span class="nc" id="L41">                alertToReturn.setAlertType(Alert.AlertType.ERROR);</span>
+<span class="nc" id="L42">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.databaseConnectionError&quot;));</span>
+<span class="nc" id="L43">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.databaseConnectionError&quot;));</span>
+<span class="nc" id="L44">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.databaseConnectionError&quot;));</span>
+<span class="nc" id="L45">                break;</span>
+            case &quot;CreateProfile:UserInputError&quot;:
+<span class="nc" id="L47">                alertToReturn.setAlertType(Alert.AlertType.ERROR);</span>
+<span class="nc" id="L48">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.profileCreationUserInputError&quot;));</span>
+<span class="nc" id="L49">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.profileCreationUserInputError&quot;));</span>
+<span class="nc" id="L50">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.profileCreationUserInputError&quot;));</span>
+<span class="nc" id="L51">                break;</span>
+            case &quot;Profile not found&quot;:
+<span class="nc" id="L53">                alertToReturn.setAlertType(Alert.AlertType.ERROR);</span>
+<span class="nc" id="L54">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.profileNotFound&quot;));</span>
+<span class="nc" id="L55">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.profileNotFound&quot;));</span>
+<span class="nc" id="L56">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.profileNotFound&quot;));</span>
+<span class="nc" id="L57">                break;</span>
+            case &quot;Too many records found&quot;:
+<span class="nc" id="L59">                alertToReturn.setAlertType(Alert.AlertType.WARNING);</span>
+<span class="nc" id="L60">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.tooManyRecordsFound&quot;));</span>
+<span class="nc" id="L61">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.tooManyRecordsFound&quot;));</span>
+<span class="nc" id="L62">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.tooManyRecordsFound&quot;));</span>
+<span class="nc" id="L63">                break;</span>
+            case &quot;Login:UserInputError&quot;:
+<span class="nc" id="L65">                alertToReturn.setAlertType(Alert.AlertType.ERROR);</span>
+<span class="nc" id="L66">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.loginUserInputError&quot;));</span>
+<span class="nc" id="L67">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.loginUserInputError&quot;));</span>
+<span class="nc" id="L68">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.loginUserInputError&quot;));</span>
+<span class="nc" id="L69">                break;</span>
+            case &quot;Input:UserInputError&quot;:
+<span class="nc" id="L71">                alertToReturn.setAlertType(Alert.AlertType.ERROR);</span>
+<span class="nc" id="L72">                alertToReturn.setTitle(&quot;Error&quot;);</span>
+<span class="nc" id="L73">                alertToReturn.setHeaderText(&quot;Unable to fetch games&quot;);</span>
+<span class="nc" id="L74">                alertToReturn.setContentText(&quot;No summoner name given. The name has to at least 1 character long.&quot;);</span>
+<span class="nc" id="L75">                break;</span>
+            case &quot;About application&quot;:
+<span class="nc" id="L77">                alertToReturn.setAlertType(Alert.AlertType.INFORMATION);</span>
+<span class="nc" id="L78">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.aboutApp&quot;));</span>
+<span class="nc" id="L79">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.aboutApp&quot;));</span>
+<span class="nc" id="L80">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.aboutApp&quot;));</span>
+<span class="nc" id="L81">                break;</span>
+            case &quot;APIKeyTest:Fail&quot;:
+<span class="nc" id="L83">                alertToReturn.setAlertType(Alert.AlertType.WARNING);</span>
+<span class="nc" id="L84">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.failedAPIKeyTest&quot;));</span>
+<span class="nc" id="L85">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.failedAPIKeyTest&quot;));</span>
+<span class="nc" id="L86">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.failedAPIKeyTest&quot;));</span>
+<span class="nc" id="L87">                break;</span>
+            case &quot;APIKeyTest:Pass&quot;:
+<span class="nc" id="L89">                alertToReturn.setAlertType(Alert.AlertType.INFORMATION);</span>
+<span class="nc" id="L90">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.successfulAPIKeyTest&quot;));</span>
+<span class="nc" id="L91">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.successfulAPIKeyTest&quot;));</span>
+<span class="nc" id="L92">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.successfulAPIKeyTest&quot;));</span>
+<span class="nc" id="L93">                break;</span>
+            case &quot;Passwords do not match&quot;:
+<span class="nc" id="L95">                alertToReturn.setAlertType(Alert.AlertType.WARNING);</span>
+<span class="nc" id="L96">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.changePasswordNoMatch&quot;));</span>
+<span class="nc" id="L97">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.changePasswordNoMatch&quot;));</span>
+<span class="nc" id="L98">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.changePasswordNoMatch&quot;));</span>
+<span class="nc" id="L99">                break;</span>
+            default:
+<span class="nc" id="L101">                alertToReturn.setAlertType(Alert.AlertType.ERROR);</span>
+<span class="nc" id="L102">                alertToReturn.setTitle(textBundle.getString(&quot;alert.title.alertFactoryInternalError&quot;));</span>
+<span class="nc" id="L103">                alertToReturn.setHeaderText(textBundle.getString(&quot;alert.headerText.alertFactoryInternalError&quot;));</span>
+<span class="nc" id="L104">                alertToReturn.setContentText(textBundle.getString(&quot;alert.contentText.alertFactoryInternalError&quot;) + alertType);</span>
+        }
+<span class="nc" id="L106">        return alertToReturn;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

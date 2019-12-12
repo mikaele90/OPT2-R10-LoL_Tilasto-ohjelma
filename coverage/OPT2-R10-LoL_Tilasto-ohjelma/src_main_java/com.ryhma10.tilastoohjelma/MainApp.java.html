@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>MainApp.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma</a> &gt; <span class="el_source">MainApp.java</span></div><h1>MainApp.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma;
+
+import com.ryhma10.tilastoohjelma.model.FeedBack;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+import com.ryhma10.tilastoohjelma.view.*;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.*;
+
+
+public class MainApp extends Application {
+
+    private Stage primaryStage;
+    private AnchorPane loginWindow;
+    private BorderPane createNewUserWindow;
+    private AnchorPane mainWindow;
+    private BorderPane inputWindow;
+    private AnchorPane feedBackWindow;
+    private AnchorPane profileWindow;
+    private AnchorPane IGWindow;
+    private BorderPane settingsWindow;
+
+    private SoftwareProfile currentProfile;
+    private MainController mainController;
+
+    private ResourceBundle textBundle;
+    private Properties defaultProperties;
+    private String applicationDefaultConfigFilePath;
+    private String languageDirPath;
+    private Locale currentLocale;
+    private String currentLanguage;
+    private String currentCountry;
+    private int languageDirLength;
+    private List&lt;String&gt; languageDirFiles;
+
+    private String loginWindowTitle;
+    private String createNewUserWindowTitle;
+    private String mainWindowTitle;
+    private String inputWindowTitle;
+    private String settingsWindowTitle;
+
+<span class="nc" id="L51">    public MainApp() {</span>
+        //Constructor
+<span class="nc" id="L53">    }</span>
+
+    /**
+     * Run when app starts.
+     * @param primaryStage the primaryStage Stage.
+     * @throws Exception on Exception.
+     */
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+<span class="nc" id="L62">        this.primaryStage = primaryStage;</span>
+<span class="nc" id="L63">        primaryStage.setTitle(loginWindowTitle);</span>
+<span class="nc" id="L64">        showLoginWindow(textBundle);</span>
+<span class="nc" id="L65">    }</span>
+
+    /**
+     * Init for MainApp. Loads language-files among other things.
+     */
+    public void init() {
+<span class="nc" id="L71">        this.applicationDefaultConfigFilePath = &quot;src/main/resources/defaultconfig.properties&quot;;</span>
+<span class="nc" id="L72">        this.languageDirPath = &quot;src/main/resources/languages&quot;;</span>
+<span class="nc" id="L73">        this.defaultProperties = new Properties();</span>
+        try {
+<span class="nc" id="L75">            this.defaultProperties.load(new FileInputStream(applicationDefaultConfigFilePath));</span>
+<span class="nc" id="L76">            this.currentLanguage = defaultProperties.getProperty(&quot;languageINFO&quot;);</span>
+<span class="nc" id="L77">            this.currentCountry = defaultProperties.getProperty(&quot;countryINFO&quot;);</span>
+<span class="nc" id="L78">            this.currentLocale = new Locale(currentLanguage, currentCountry);</span>
+<span class="nc" id="L79">            System.out.println(&quot;Current Locale (mainApp):&quot; + currentLocale.toString());</span>
+<span class="nc" id="L80">        } catch (Exception e) {</span>
+<span class="nc" id="L81">            System.out.println(&quot;Default properties: file not found&quot;);</span>
+<span class="nc" id="L82">            e.printStackTrace();</span>
+<span class="nc" id="L83">            System.exit(-1);</span>
+        }
+        try {
+<span class="nc" id="L86">            this.textBundle = ResourceBundle.getBundle(&quot;languages/TextResources&quot;, currentLocale);</span>
+<span class="nc" id="L87">            this.languageDirLength = checkLangDirLength();</span>
+<span class="nc" id="L88">            this.languageDirFiles = Arrays.asList(Objects.requireNonNull(new File(languageDirPath).list()));</span>
+            //Set window titles using defaultconfig
+<span class="nc" id="L90">            this.loginWindowTitle = textBundle.getString(&quot;windowTitle.login&quot;);</span>
+<span class="nc" id="L91">            this.createNewUserWindowTitle = textBundle.getString(&quot;windowTitle.createNewUser&quot;);</span>
+<span class="nc" id="L92">            this.mainWindowTitle = textBundle.getString(&quot;windowTitle.main&quot;);</span>
+<span class="nc" id="L93">            this.settingsWindowTitle = textBundle.getString(&quot;windowTitle.settings&quot;);</span>
+<span class="nc" id="L94">            this.inputWindowTitle = textBundle.getString(&quot;windowTitle.input&quot;);</span>
+<span class="nc" id="L95">        }catch (Exception e) {</span>
+<span class="nc" id="L96">            System.out.println(&quot;TextBundle: file not found&quot;);</span>
+<span class="nc" id="L97">            e.printStackTrace();</span>
+<span class="nc" id="L98">            System.exit(-1);</span>
+        }
+<span class="nc" id="L100">    }</span>
+
+    /**
+     * Loads the Login-window.
+     * @param textBundle a ResourceBundle.
+     * @throws IOException on failed load.
+     */
+    public void showLoginWindow(ResourceBundle textBundle) throws IOException {
+<span class="nc" id="L108">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/Login.fxml&quot;), textBundle);</span>
+<span class="nc" id="L109">        loginWindow = (AnchorPane)loader.load();</span>
+
+<span class="nc" id="L111">        Scene loginScene = new Scene(loginWindow);</span>
+<span class="nc" id="L112">        loginScene.getStylesheets().add(&quot;/styles/Styles.css&quot;);</span>
+<span class="nc" id="L113">        primaryStage.setScene(loginScene);</span>
+
+<span class="nc" id="L115">        LoginController loginController = loader.getController();</span>
+<span class="nc" id="L116">        loginController.setMainApp(this);</span>
+<span class="nc" id="L117">        loginController.setLoginStage(primaryStage);</span>
+<span class="nc" id="L118">        loginController.setTextBundle(textBundle);</span>
+
+<span class="nc" id="L120">        primaryStage.show();</span>
+<span class="nc" id="L121">    }</span>
+
+    /**
+     * Loads the CreateNewUser-window.
+     * @throws IOException on failed load.
+     */
+    public void showCreateNewUserWindow() throws IOException {
+<span class="nc" id="L128">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/CreateNewUser.fxml&quot;), textBundle);</span>
+<span class="nc" id="L129">        createNewUserWindow = (BorderPane)loader.load();</span>
+
+<span class="nc" id="L131">        Stage createNewUserStage = new Stage();</span>
+<span class="nc" id="L132">        createNewUserStage.setTitle(createNewUserWindowTitle);</span>
+<span class="nc" id="L133">        createNewUserStage.initModality(Modality.WINDOW_MODAL);</span>
+<span class="nc" id="L134">        createNewUserStage.initOwner(primaryStage);</span>
+<span class="nc" id="L135">        Scene createNewUserScene = new Scene(createNewUserWindow);</span>
+<span class="nc" id="L136">        createNewUserScene.getStylesheets().add(&quot;/styles/Styles.css&quot;);</span>
+<span class="nc" id="L137">        createNewUserStage.setScene(createNewUserScene);</span>
+
+<span class="nc" id="L139">        CreateNewUserController createNewUserController = loader.getController();</span>
+<span class="nc" id="L140">        createNewUserController.setMainApp(this);</span>
+<span class="nc" id="L141">        createNewUserController.setCreateNewUserStage(createNewUserStage);</span>
+<span class="nc" id="L142">        createNewUserController.setTextBundle(textBundle);</span>
+
+<span class="nc" id="L144">        createNewUserStage.show();</span>
+<span class="nc" id="L145">    }</span>
+
+    /**
+     * Shows the Main-window.
+     * @param profile a SoftwareProfile.
+     * @throws IOException on failed load.
+     */
+    public void showMainWindow(SoftwareProfile profile) throws IOException {
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if (profile.getDefaultLanguage() != null) {</span>
+<span class="nc" id="L154">            currentLocale = Locale.forLanguageTag(profile.getDefaultLanguage().replace(&quot;_&quot;, &quot;-&quot;));</span>
+<span class="nc" id="L155">            currentLanguage = currentLocale.getLanguage();</span>
+<span class="nc" id="L156">            currentCountry = currentLocale.getCountry();</span>
+<span class="nc" id="L157">            textBundle = ResourceBundle.getBundle(&quot;languages/TextResources&quot;, currentLocale);</span>
+        }
+<span class="nc" id="L159">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/Main.fxml&quot;), textBundle);</span>
+<span class="nc" id="L160">        mainWindow = (AnchorPane)loader.load();</span>
+
+<span class="nc" id="L162">        Stage mainStage = new Stage();</span>
+<span class="nc" id="L163">        mainStage.setTitle(mainWindowTitle);</span>
+<span class="nc" id="L164">        mainStage.initOwner(primaryStage);</span>
+<span class="nc" id="L165">        Scene mainScene = new Scene(mainWindow);</span>
+<span class="nc" id="L166">        mainScene.getStylesheets().add(&quot;/styles/Styles.css&quot;);</span>
+<span class="nc" id="L167">        mainStage.setScene(mainScene);</span>
+
+<span class="nc" id="L169">        MainController mainController = loader.getController();</span>
+<span class="nc" id="L170">        mainController.setMainApp(this);</span>
+<span class="nc" id="L171">        mainController.setMainStage(mainStage);</span>
+
+<span class="nc" id="L173">        mainController.setTextBundle(textBundle);</span>
+<span class="nc" id="L174">        mainStage.setTitle(textBundle.getString(&quot;windowTitle.main&quot;));</span>
+<span class="nc" id="L175">        mainStage.show();</span>
+<span class="nc" id="L176">    }</span>
+
+    /**
+     * Loads the IndividualGame-window.
+     * @param riotId a valid id for a game fetched from Riot's API.
+     * @throws IOException on failed load.
+     */
+    public void showIGWindow(long riotId) throws IOException {
+<span class="nc" id="L184">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/IndividualGame.fxml&quot;), textBundle);</span>
+<span class="nc" id="L185">        IGWindow = (AnchorPane)loader.load();</span>
+
+<span class="nc" id="L187">        Stage IGStage = new Stage();</span>
+<span class="nc" id="L188">        IGStage.setTitle(&quot;Here are your statistics for this specific game&quot;);</span>
+<span class="nc" id="L189">        IGStage.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="nc" id="L190">        IGStage.initOwner(primaryStage);</span>
+<span class="nc" id="L191">        Scene IGScene = new Scene(IGWindow);</span>
+<span class="nc" id="L192">        IGStage.setScene(IGScene);</span>
+
+<span class="nc" id="L194">        IndividualGameController igcontroller = loader.getController();</span>
+<span class="nc" id="L195">        igcontroller.setMainApp(this);</span>
+<span class="nc" id="L196">        igcontroller.setIGStage(IGStage);</span>
+<span class="nc" id="L197">        igcontroller.setRiotId(riotId);</span>
+<span class="nc" id="L198">        igcontroller.setTextBundle(textBundle);</span>
+<span class="nc" id="L199">        IGStage.setTitle(textBundle.getString(&quot;windowTitle.individualGame&quot;));</span>
+
+<span class="nc" id="L201">        IGStage.show();</span>
+<span class="nc" id="L202">    }</span>
+
+    /**
+     * Shows the Input-window.
+     * @throws IOException on failed load.
+     */
+    public void showInputWindow() throws IOException {
+<span class="nc" id="L209">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/Input.fxml&quot;), textBundle);</span>
+<span class="nc" id="L210">        inputWindow = (BorderPane)loader.load();</span>
+
+<span class="nc" id="L212">        Stage inputStage = new Stage();</span>
+<span class="nc" id="L213">        inputStage.setTitle(&quot;Input your in-game statistics&quot;);</span>
+<span class="nc" id="L214">        inputStage.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="nc" id="L215">        inputStage.initOwner(primaryStage);</span>
+<span class="nc" id="L216">        Scene InputScene = new Scene(inputWindow);</span>
+<span class="nc" id="L217">        inputStage.setScene(InputScene);</span>
+
+<span class="nc" id="L219">        InputController inputController = loader.getController();</span>
+<span class="nc" id="L220">        inputController.setMainApp(this);</span>
+<span class="nc" id="L221">        inputController.setInputStage(inputStage);</span>
+<span class="nc" id="L222">        inputController.setTextBundle(textBundle);</span>
+<span class="nc" id="L223">        inputStage.setTitle(textBundle.getString(&quot;windowTitle.input&quot;));</span>
+
+<span class="nc" id="L225">        inputStage.show();</span>
+<span class="nc" id="L226">    }</span>
+
+    /**
+     * Loads the Feedback-window.
+     * @param newFeedback a Feedback-object.
+     * @throws IOException on failed load.
+     */
+    public void showFeedBackWindow(FeedBack newFeedback) throws IOException {
+<span class="nc" id="L234">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/Feedback.fxml&quot;), textBundle);</span>
+<span class="nc" id="L235">        feedBackWindow = (AnchorPane)loader.load();</span>
+
+<span class="nc" id="L237">        Stage feedBackStage = new Stage();</span>
+<span class="nc" id="L238">        feedBackStage.setTitle(&quot;Check out your match analysis&quot;);</span>
+<span class="nc" id="L239">        feedBackStage.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="nc" id="L240">        feedBackStage.initOwner(primaryStage);</span>
+<span class="nc" id="L241">        Scene FeedBackScene = new Scene(feedBackWindow);</span>
+<span class="nc" id="L242">        feedBackStage.setScene(FeedBackScene);</span>
+
+<span class="nc" id="L244">        FeedBackController feedBackController = loader.getController();</span>
+<span class="nc" id="L245">        feedBackController.setMainApp(this);</span>
+<span class="nc" id="L246">        feedBackController.setFeedBackStage(feedBackStage);</span>
+<span class="nc" id="L247">        feedBackController.setFb(newFeedback);</span>
+<span class="nc" id="L248">        feedBackController.setTextBundle(textBundle);</span>
+<span class="nc" id="L249">        feedBackStage.setTitle(textBundle.getString(&quot;windowTitle.feedback&quot;));</span>
+
+<span class="nc" id="L251">        feedBackStage.show();</span>
+<span class="nc" id="L252">    }</span>
+
+    /**
+     * Loads the Profile-window. Under construction.
+     * @throws IOException on failed load.
+     */
+    public void showProfileWindow() throws IOException {
+<span class="nc" id="L259">        FXMLLoader loader = new FXMLLoader();</span>
+<span class="nc" id="L260">        loader.setLocation(MainApp.class.getResource(&quot;/fxml/Profile.fxml&quot;));</span>
+<span class="nc" id="L261">        profileWindow = (AnchorPane)loader.load();</span>
+
+<span class="nc" id="L263">        Stage profileStage = new Stage();</span>
+<span class="nc" id="L264">        profileStage.setTitle(&quot;Check out your profile&quot;);</span>
+<span class="nc" id="L265">        profileStage.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="nc" id="L266">        profileStage.initOwner(primaryStage);</span>
+<span class="nc" id="L267">        Scene ProfileScene = new Scene(profileWindow);</span>
+<span class="nc" id="L268">        profileStage.setScene(ProfileScene);</span>
+
+<span class="nc" id="L270">        ProfileController profileController = loader.getController();</span>
+<span class="nc" id="L271">        profileController.setMainApp(this);</span>
+<span class="nc" id="L272">        profileController.setProfileStage(profileStage);</span>
+
+<span class="nc" id="L274">        profileStage.show();</span>
+<span class="nc" id="L275">    }</span>
+
+    /**
+     * Loads the Settings-window.
+     * @throws IOException on failed load.
+     */
+    public void showSettingsWindow() throws IOException {
+<span class="nc" id="L282">        FXMLLoader loader = new FXMLLoader(getClass().getResource(&quot;/fxml/Settings.fxml&quot;), textBundle);</span>
+<span class="nc" id="L283">        settingsWindow = (BorderPane)loader.load();</span>
+
+<span class="nc" id="L285">        Stage settingsStage = new Stage();</span>
+<span class="nc" id="L286">        settingsStage.setTitle(settingsWindowTitle);</span>
+<span class="nc" id="L287">        settingsStage.initModality(Modality.APPLICATION_MODAL);</span>
+<span class="nc" id="L288">        settingsStage.initOwner(primaryStage);</span>
+<span class="nc" id="L289">        Scene settingsScene = new Scene(settingsWindow);</span>
+<span class="nc" id="L290">        settingsStage.setScene(settingsScene);</span>
+
+<span class="nc" id="L292">        SettingsController settingsController = loader.getController();</span>
+<span class="nc" id="L293">        settingsController.setMainApp(this);</span>
+<span class="nc" id="L294">        settingsController.setSettingsStage(settingsStage);</span>
+<span class="nc" id="L295">        settingsController.setTextBundle(textBundle);</span>
+<span class="nc" id="L296">        settingsStage.setTitle(textBundle.getString(&quot;windowTitle.settings&quot;));</span>
+
+<span class="nc" id="L298">        settingsStage.show();</span>
+<span class="nc" id="L299">    }</span>
+
+    /**
+     * Returns a List of languages.
+     * @return the List&lt;String&gt;.
+     */
+    public List&lt;String&gt; getLanguageArrayList() {
+<span class="nc" id="L306">        List&lt;String&gt; languageArrayList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L307">        Properties propertiesHelper = new Properties();</span>
+<span class="nc bnc" id="L308" title="All 2 branches missed.">        for (int i = 0; i &lt; getLanguageDirLength(); i++) {</span>
+<span class="nc" id="L309">            String langString = getLanguageDirFiles().get(i);</span>
+            try {
+<span class="nc" id="L311">                propertiesHelper.load(new FileInputStream(getLanguageDirPath() + &quot;/&quot; + langString));</span>
+<span class="nc" id="L312">            } catch (IOException e) {</span>
+<span class="nc" id="L313">                e.printStackTrace();</span>
+            }
+<span class="nc" id="L315">            languageArrayList.add(textBundle.getString(propertiesHelper.getProperty(&quot;localeINFO&quot;)));</span>
+        }
+<span class="nc" id="L317">        return languageArrayList;</span>
+    }
+
+    /**
+     * Checks the number of files in the languages-directory.
+     * @return the number of files.
+     */
+    public int checkLangDirLength() {
+<span class="nc" id="L325">        return (Objects.requireNonNull(new File(languageDirPath).listFiles())).length;</span>
+    }
+
+    /**
+     * Return the primaryStage Stage.
+     * @return the Stage.
+     */
+    public Stage getPrimaryStage() {
+<span class="nc" id="L333">        return primaryStage;</span>
+    }
+
+    /**
+     * Return this MainApp.
+     * @return the MainApp.
+     */
+    public MainApp getMainApp() {
+<span class="nc" id="L341">        return this;</span>
+    }
+
+    /**
+     * Sets the settingsWindow-variable.
+     * @param settingsWindow a BorderPane.
+     */
+    public void setSettingsWindow(BorderPane settingsWindow) {
+<span class="nc" id="L349">        this.settingsWindow = settingsWindow;</span>
+<span class="nc" id="L350">    }</span>
+
+    /**
+     * Sets the currentProfile-variable.
+     * @param profile a SoftwareProfile.
+     */
+    public void setProfile(SoftwareProfile profile) {
+<span class="nc" id="L357">        this.currentProfile = profile;</span>
+<span class="nc" id="L358">    }</span>
+
+    /**
+     * Returns the currentProfile-variable.
+     * @return a SoftwareProfile.
+     */
+    public SoftwareProfile getProfile() {
+<span class="nc" id="L365">        return this.currentProfile;</span>
+    }
+
+    /**
+     * Sets the mainController-variable.
+     * @param mainController a MainController.
+     */
+    public void setMainController(MainController mainController) {
+<span class="nc" id="L373">        this.mainController = mainController;</span>
+<span class="nc" id="L374">    }</span>
+
+    /**
+     * Returns the mainController-variable.
+     * @return a MainController.
+     */
+    public MainController getMainController() {
+<span class="nc" id="L381">        return this.mainController;</span>
+    }
+
+    /**
+     * Return the textBundle-variable.
+     * @return a ResourceBundle.
+     */
+    public ResourceBundle getTextBundle() {
+<span class="nc" id="L389">        return textBundle;</span>
+    }
+
+    /**
+     * Sets the textBundle-variable.
+     * @param textBundle a ResourceBundle.
+     */
+    public void setTextBundle(ResourceBundle textBundle) {
+<span class="nc" id="L397">        this.textBundle = textBundle;</span>
+<span class="nc" id="L398">    }</span>
+
+    /**
+     * Returns the currentLocale-variable.
+     * @return a Locale.
+     */
+    public Locale getCurrentLocale() {
+<span class="nc" id="L405">        return currentLocale;</span>
+    }
+
+    /**
+     * Sets the currentLocale-variable.
+     * @param currentLocale a Locale.
+     */
+    public void setCurrentLocale(Locale currentLocale) {
+<span class="nc" id="L413">        this.currentLocale = currentLocale;</span>
+<span class="nc" id="L414">    }</span>
+
+    /**
+     * Returns the currentLanguage-variable.
+     * @return a String.
+     */
+    public String getCurrentLanguage() {
+<span class="nc" id="L421">        return currentLanguage;</span>
+    }
+
+    /**
+     * Sets the currentLanguage-variable.
+     * @param currentLanguage a String of format e.g. &quot;en&quot;.
+     */
+    public void setCurrentLanguage(String currentLanguage) {
+<span class="nc" id="L429">        this.currentLanguage = currentLanguage;</span>
+<span class="nc" id="L430">    }</span>
+
+    /**
+     * Return the currentCountry-variable.
+     * @return a String.
+     */
+    public String getCurrentCountry() {
+<span class="nc" id="L437">        return currentCountry;</span>
+    }
+
+    /**
+     * Sets the currentCountry-variable.
+     * @param currentCountry a String of format e.g. &quot;US&quot;.
+     */
+    public void setCurrentCountry(String currentCountry) {
+<span class="nc" id="L445">        this.currentCountry = currentCountry;</span>
+<span class="nc" id="L446">    }</span>
+
+    /**
+     * Return the defaultProperties-variable.
+     * @return a Properties.
+     */
+    public Properties getDefaultProperties() {
+<span class="nc" id="L453">        return defaultProperties;</span>
+    }
+
+    /**
+     * Sets the defaultProperties-variable.
+     * @param defaultProperties a Properties.
+     */
+    public void setDefaultProperties(Properties defaultProperties) {
+<span class="nc" id="L461">        this.defaultProperties = defaultProperties;</span>
+<span class="nc" id="L462">    }</span>
+
+    /**
+     * Returns the applicationDefaultConfigFilePath-variable.
+     * @return a String.
+     */
+    public String getApplicationDefaultConfigFilePath() {
+<span class="nc" id="L469">        return applicationDefaultConfigFilePath;</span>
+    }
+
+    /**
+     * Sets the applicationDefaultConfigFilePath-variable.
+     * @param applicationDefaultConfigFilePath a String.
+     */
+    public void setApplicationDefaultConfigFilePath(String applicationDefaultConfigFilePath) {
+<span class="nc" id="L477">        this.applicationDefaultConfigFilePath = applicationDefaultConfigFilePath;</span>
+<span class="nc" id="L478">    }</span>
+
+    /**
+     * Returns the languageDirLength-variable.
+     * @return an Integer.
+     */
+    public int getLanguageDirLength() {
+<span class="nc" id="L485">        return languageDirLength;</span>
+    }
+
+    /**
+     * Sets the languageDirLength-variable.
+     * @param languageDirLength an Integer.
+     */
+    public void setLanguageDirLength(int languageDirLength) {
+<span class="nc" id="L493">        this.languageDirLength = languageDirLength;</span>
+<span class="nc" id="L494">    }</span>
+
+    /**
+     * Returns the languageDirPath-variable.
+     * @return a String.
+     */
+    public String getLanguageDirPath() {
+<span class="nc" id="L501">        return languageDirPath;</span>
+    }
+
+    /**
+     * Sets the languageDirPath-variable.
+     * @param languageDirPath a String.
+     */
+    public void setLanguageDirPath(String languageDirPath) {
+<span class="nc" id="L509">        this.languageDirPath = languageDirPath;</span>
+<span class="nc" id="L510">    }</span>
+
+    /**
+     * Returns the languageDirFiles-List.
+     * @return a List&lt;String&gt;.
+     */
+    public List&lt;String&gt; getLanguageDirFiles() {
+<span class="nc" id="L517">        return languageDirFiles;</span>
+    }
+
+    /**
+     * Sets the languageDirFiles-List.
+     * @param languageDirFiles a List&lt;String&gt;.
+     */
+    public void setLanguageDirFiles(List&lt;String&gt; languageDirFiles) {
+<span class="nc" id="L525">        this.languageDirFiles = languageDirFiles;</span>
+<span class="nc" id="L526">    }</span>
+
+
+    /**
+     * The main() method is ignored in correctly deployed JavaFX application.
+     * main() serves only as fallback in case the application can not be
+     * launched through deployment artifacts, e.g., in IDEs with limited FX
+     * support. NetBeans ignores main().
+     *
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+<span class="nc" id="L538">        launch(args);</span>
+<span class="nc" id="L539">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>LoginTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">LoginTest.java</span></div><h1>LoginTest.java</h1><pre class="source lang-java linenums">package model;
+
+import org.junit.jupiter.api.Test;
+
+import com.ryhma10.tilastoohjelma.model.*;
+
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+
+<span class="fc" id="L13">public class LoginTest {</span>
+	
+<span class="fc" id="L15">	static ModelAccessObject modelDAO = new ModelAccessObject();</span>
+	private SoftwareProfile p5;
+<span class="fc" id="L17">	private Gamedata g5 = new Gamedata(55, &quot;testPlayer5&quot;, &quot;Elise&quot;, 6, 2, 7 , &quot;win&quot;, &quot;jungle&quot;,&quot;bronze&quot;);</span>
+<span class="fc" id="L18">	private Item i5 = new Item(&quot;Raptor Cloak&quot;,&quot;Void Staff&quot;,&quot;Oracle Lens&quot;,&quot;Sheen&quot;,&quot;Relic Shield&quot;,&quot;Zephyr&quot;, null);</span>
+<span class="fc" id="L19">	private Team t5 = new Team(&quot;Volibear&quot;, &quot;Veigar&quot;, &quot;Taric&quot;, &quot;Zed&quot;, &quot;Nasus&quot;, &quot;Pyke&quot;, &quot;Sona&quot;, &quot;Teemo&quot;, &quot;Olaf&quot;);</span>
+<span class="fc" id="L20">	private Additional a5 = new Additional(8, 7, &quot;gamemode&quot;, 16000, 160,&quot;date&quot;, 4, 5);</span>
+	
+	/**
+	 * Empties the data base before running the test
+	 */
+	@BeforeAll
+	static void addNeeded() {
+<span class="fc" id="L27">		modelDAO.deleteAdditonal();</span>
+<span class="fc" id="L28">		modelDAO.deleteTeam();</span>
+<span class="fc" id="L29">		modelDAO.deleteItem();</span>
+<span class="fc" id="L30">		modelDAO.deleteGamedata();</span>
+<span class="fc" id="L31">		modelDAO.deleteProfile();</span>
+<span class="fc" id="L32">	}</span>
+	
+	/**
+	 * Tester for adding profile to database
+	 * returns boolean
+	 */
+	@Test
+	public void testAddProfiletoDb() {
+<span class="fc" id="L40">		p5 = new SoftwareProfile(&quot;junit5&quot;, &quot;test5&quot;, null, null, null, null);</span>
+<span class="fc" id="L41">		assertEquals(true, modelDAO.addProfile(p5), &quot;Profile adding failed&quot;);</span>
+<span class="fc" id="L42">	}</span>
+    
+	/**
+	 * Tester for adding gamedata to data base
+	 * return boolean
+	 */
+	@Test
+	public void testAddGamedata() {
+<span class="fc" id="L50">		assertEquals(true, modelDAO.createGamedata(&quot;junit5&quot;, g5, i5, t5, a5), &quot;Gamedata 5 insert failed&quot;);</span>
+<span class="fc" id="L51">	}</span>
+	
+	/**
+	 * After testing empties the database
+	 */
+	@AfterAll
+	static void deleGames() {
+<span class="fc" id="L58">		modelDAO.deleteAdditonal();</span>
+<span class="fc" id="L59">		modelDAO.deleteTeam();</span>
+<span class="fc" id="L60">		modelDAO.deleteItem();</span>
+<span class="fc" id="L61">		modelDAO.deleteGamedata();</span>
+<span class="fc" id="L62">		modelDAO.deleteProfile();</span>
+<span class="fc" id="L63">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

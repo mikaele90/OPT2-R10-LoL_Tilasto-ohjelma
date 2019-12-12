@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>LoginController.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.view</a> &gt; <span class="el_source">LoginController.java</span></div><h1>LoginController.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.view;
+
+import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.model.ModelAccessObject;
+import com.ryhma10.tilastoohjelma.model.SoftwareProfile;
+import com.ryhma10.tilastoohjelma.view.utilities.AlertFactory;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
+
+public class LoginController {
+
+    private MainApp mainApp;
+    private MainController mainController;
+    private Stage loginStage;
+    private AlertFactory alertFactory;
+    private ResourceBundle textBundle;
+    private List&lt;CheckMenuItem&gt; languageList;
+
+    @FXML
+    private Label labelUseExistingProfile, labelNoProfileYet, labelProfileName, labelProfilePassword;
+    @FXML
+    private TextField profileNameField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private Button loginButton, createNewProfileButton;
+    @FXML
+    private ProgressIndicator progressIndicator;
+    @FXML
+    private Menu languageMenu, fileMenu, helpMenu;
+    @FXML
+    private MenuItem menuItemCreateNewProfile, menuItemExit, menuItemAbout;
+
+    /**
+     * Default constructor
+     */
+<span class="nc" id="L47">    public LoginController() {</span>
+        //Constructor
+<span class="nc" id="L49">    }</span>
+
+    /**
+     * Initializes the window
+     */
+    public void initialize() {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (progressIndicator.isVisible()) {</span>
+<span class="nc" id="L56">            progressIndicator.setVisible(false);</span>
+        }
+<span class="nc" id="L58">        profileNameField.setText(&quot;&quot;);</span>
+<span class="nc" id="L59">        passwordField.setText(&quot;&quot;);</span>
+<span class="nc" id="L60">        Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (languageList == null) {</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">                for (int i = 0; i &lt; mainApp.getLanguageDirLength(); i++) {</span>
+<span class="nc" id="L63">                    String langString = mainApp.getLanguageDirFiles().get(i);</span>
+<span class="nc" id="L64">                    Properties propertiesHelper = new Properties();</span>
+                    try {
+<span class="nc" id="L66">                        propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + &quot;/&quot; + langString));</span>
+<span class="nc" id="L67">                    } catch (IOException e) {</span>
+<span class="nc" id="L68">                        e.printStackTrace();</span>
+                    }
+<span class="nc" id="L70">                    CheckMenuItem checkMenuItemHelper = new CheckMenuItem(textBundle.getString(propertiesHelper.getProperty(&quot;localeINFO&quot;)));</span>
+<span class="nc" id="L71">                    checkMenuItemHelper.setId(propertiesHelper.getProperty(&quot;localeINFO&quot;));</span>
+<span class="nc" id="L72">                    checkMenuItemHelper.setOnAction(this::handleChangeLanguage);</span>
+<span class="nc" id="L73">                    languageMenu.getItems().add(checkMenuItemHelper);</span>
+                }
+<span class="nc" id="L75">                languageList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                for (MenuItem menuItem : languageMenu.getItems()) {</span>
+<span class="nc" id="L77">                    languageList.add((CheckMenuItem)menuItem);</span>
+                }
+            }
+<span class="nc" id="L80">            setSelectedLanguageMenuItem();</span>
+<span class="nc" id="L81">            alertFactory = new AlertFactory(textBundle);</span>
+<span class="nc" id="L82">        });</span>
+<span class="nc" id="L83">    }</span>
+
+    /**
+     * Setter for the MainApp.
+     * @param mainApp The MainApp.
+     */
+    public void setMainApp(MainApp mainApp) {
+<span class="nc" id="L90">        this.mainApp = mainApp;</span>
+<span class="nc" id="L91">    }</span>
+
+    /**
+     * Setter for the loginStage-variable.
+     * @param loginStage A Stage.
+     */
+    public void setLoginStage(Stage loginStage) {
+<span class="nc" id="L98">        this.loginStage = loginStage;</span>
+<span class="nc" id="L99">    }</span>
+
+    /**
+     * Detects if Enter-key is pressed.
+     * @param keyEvent Any KeyEvent.
+     * @throws IOException On exception.
+     */
+    @FXML
+    public void onEnter(KeyEvent keyEvent) throws IOException {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if(keyEvent.getCode().equals(KeyCode.ENTER)) {</span>
+<span class="nc" id="L109">            System.out.println(&quot;Enter pressed&quot;);</span>
+<span class="nc" id="L110">            handleLogin(new ActionEvent());</span>
+        }
+<span class="nc" id="L112">    }</span>
+
+    /**
+     * Shows an Alert as defined by AlertFactory.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     */
+    @FXML
+    public void handleAboutApplication(ActionEvent actionEvent) {
+<span class="nc" id="L120">        Alert aboutAlert = alertFactory.createAlert(&quot;About application&quot;);</span>
+<span class="nc" id="L121">        aboutAlert.showAndWait();</span>
+<span class="nc" id="L122">    }</span>
+
+    /**
+     * Shows the createNewUser-window.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     * @throws IOException On failed load of CreateNewUser.fxml.
+     */
+    @FXML
+    public void handleCreateNewProfile(ActionEvent actionEvent) throws IOException {
+<span class="nc" id="L131">        mainApp.showCreateNewUserWindow();</span>
+<span class="nc" id="L132">    }</span>
+
+    /**
+     * Exits the application.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     */
+    @FXML
+    public void handleExit(ActionEvent actionEvent) {
+<span class="nc" id="L140">        System.exit(0);</span>
+<span class="nc" id="L141">    }</span>
+
+    /**
+     * Attempts to login a SoftwareProfile into the application. On success, opens the main-window.
+     * Loads a ResourceBundle based on the SoftwareProfile's defaultLanguage.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     * @throws IOException On failed load of Main.fxml.
+     */
+    @FXML
+    public void handleLogin(ActionEvent actionEvent) throws IOException {
+<span class="nc bnc" id="L151" title="All 4 branches missed.">        if(profileNameField.getText().length() &gt; 0 &amp;&amp; passwordField.getText().length() &gt; 3) {</span>
+<span class="nc" id="L152">            loginButton.setText(textBundle.getString(&quot;button.loggingIn&quot;));</span>
+<span class="nc" id="L153">            new Thread(() -&gt; {</span>
+<span class="nc" id="L154">                progressIndicator.setVisible(true);</span>
+<span class="nc" id="L155">                ModelAccessObject modelAccessObject1 = new ModelAccessObject();</span>
+<span class="nc" id="L156">                String resultStringFromMethod = modelAccessObject1.loginProfile(profileNameField.getText(), passwordField.getText());</span>
+<span class="nc" id="L157">                Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L158" title="All 13 branches missed.">                    switch (resultStringFromMethod) {</span>
+                        case &quot;Login successful&quot;:
+<span class="nc" id="L160">                            System.out.println(resultStringFromMethod);</span>
+<span class="nc" id="L161">                            ModelAccessObject modelAccessObject2 = new ModelAccessObject();</span>
+<span class="nc" id="L162">                            SoftwareProfile currentProfile = modelAccessObject2.setLoggedInProfile(profileNameField.getText(), passwordField.getText());</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">                            if (currentProfile != null) {</span>
+<span class="nc" id="L164">                                System.out.println(currentProfile.getProfileName());</span>
+<span class="nc" id="L165">                                mainApp.setProfile(currentProfile);</span>
+<span class="nc" id="L166">                                loginStage.close();</span>
+                                try {
+<span class="nc" id="L168">                                    mainApp.showMainWindow(currentProfile);</span>
+<span class="nc" id="L169">                                } catch (IOException e) {</span>
+<span class="nc" id="L170">                                    System.out.println(&quot;Something went wrong during the login (showMainWindow).&quot;);</span>
+<span class="nc" id="L171">                                    e.printStackTrace();</span>
+                                }
+<span class="nc" id="L173">                            }</span>
+                            else {
+<span class="nc" id="L175">                                System.out.println(&quot;Something went wrong during the login (setLoggedInProfile).&quot;);</span>
+                            }
+<span class="nc" id="L177">                            break;</span>
+                        case &quot;Profile not found&quot;:
+                        case &quot;Too many records found&quot;:
+                        case &quot;Database connection error&quot;:
+<span class="nc" id="L181">                            System.out.println(resultStringFromMethod);</span>
+<span class="nc" id="L182">                            Alert errorAlert = alertFactory.createAlert(resultStringFromMethod);</span>
+<span class="nc" id="L183">                            errorAlert.show();</span>
+                            break;
+                    }
+<span class="nc" id="L186">                    progressIndicator.setVisible(false);</span>
+<span class="nc" id="L187">                    loginButton.setText(textBundle.getString(&quot;button.login&quot;));</span>
+<span class="nc" id="L188">                });</span>
+<span class="nc" id="L189">            }).start();</span>
+<span class="nc" id="L190">        }</span>
+        else {
+<span class="nc" id="L192">            Alert userInputErrorAlert = alertFactory.createAlert(&quot;Login:UserInputError&quot;);</span>
+<span class="nc" id="L193">            userInputErrorAlert.showAndWait();</span>
+        }
+
+<span class="nc" id="L196">    }</span>
+
+    /**
+     * Change the language of the defaultconfig.properties file and updates the UI. Only affects windows pre-login.
+     * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
+     */
+    public void handleChangeLanguage(ActionEvent actionEvent) {
+<span class="nc" id="L203">        CheckMenuItem clickedItem = (CheckMenuItem)actionEvent.getTarget();</span>
+<span class="nc bnc" id="L204" title="All 4 branches missed.">        if ((!mainApp.getDefaultProperties().getProperty(&quot;languageINFO&quot;).equals(clickedItem.getId().substring(0,2))) &amp;&amp; (!mainApp.getDefaultProperties().getProperty(&quot;countryINFO&quot;).equals(clickedItem.getId().substring(3,5)))) {</span>
+<span class="nc" id="L205">            mainApp.getDefaultProperties().setProperty(&quot;languageINFO&quot;, clickedItem.getId().substring(0,2));</span>
+<span class="nc" id="L206">            mainApp.getDefaultProperties().setProperty(&quot;countryINFO&quot;, clickedItem.getId().substring(3,5));</span>
+            try {
+<span class="nc" id="L208">                mainApp.getDefaultProperties().store(new FileOutputStream(mainApp.getApplicationDefaultConfigFilePath()), null);</span>
+<span class="nc" id="L209">            } catch (IOException e) {</span>
+<span class="nc" id="L210">                e.printStackTrace();</span>
+            }
+<span class="nc" id="L212">            mainApp.init();</span>
+            try {
+<span class="nc" id="L214">                mainApp.start(mainApp.getPrimaryStage());</span>
+<span class="nc" id="L215">            } catch (Exception e) {</span>
+<span class="nc" id="L216">                e.printStackTrace();</span>
+            }
+<span class="nc" id="L218">            Platform.runLater(() -&gt; {</span>
+                try {
+<span class="nc" id="L220">                    mainApp.showLoginWindow(mainApp.getTextBundle());</span>
+<span class="nc" id="L221">                } catch (IOException e) {</span>
+<span class="nc" id="L222">                    e.printStackTrace();</span>
+                }
+<span class="nc" id="L224">            });</span>
+        }
+<span class="nc" id="L226">        setSelectedLanguageMenuItem();</span>
+<span class="nc" id="L227">    }</span>
+
+    /**
+     * Sets the check-mark in the language-menu.
+     */
+    private void setSelectedLanguageMenuItem() {
+<span class="nc bnc" id="L233" title="All 2 branches missed.">        for (CheckMenuItem language : languageList) {</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">            if (language.getId().equals(textBundle.getString(&quot;localeINFO&quot;))) {</span>
+<span class="nc" id="L235">                language.setSelected(true);</span>
+<span class="nc" id="L236">            }</span>
+            else {
+<span class="nc" id="L238">                language.setSelected(false);</span>
+            }
+        }
+<span class="nc" id="L241">    }</span>
+
+    /**
+     * Getter for the ResourceBundle in the textBundle-variable.
+     * @return The ResourceBundle.
+     */
+    public ResourceBundle getTextBundle() {
+<span class="nc" id="L248">        return textBundle;</span>
+    }
+
+    /**
+     * Setter for the textBundle-variable.
+     * @param textBundle A ResourceBundle.
+     */
+    public void setTextBundle(ResourceBundle textBundle) {
+<span class="nc" id="L256">        this.textBundle = textBundle;</span>
+<span class="nc" id="L257">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

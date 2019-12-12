@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>FeedBackController.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.view</a> &gt; <span class="el_source">FeedBackController.java</span></div><h1>FeedBackController.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.view;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import com.ryhma10.tilastoohjelma.MainApp;
+import com.ryhma10.tilastoohjelma.model.FeedBack;
+import com.ryhma10.tilastoohjelma.model.Gamedata;
+
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
+import javafx.scene.control.TextField;
+import java.sql.SQLException;
+
+/**
+ * A class for controlling the information between feedback stage and the model
+ * @author Janari
+ *
+ */
+public class FeedBackController {
+	
+	
+	 private MainApp mainApp;
+	 private Stage feedBackStage;
+	 FeedBack fb;
+	 private MainController mainController;
+	private ResourceBundle textBundle;
+	 
+	@FXML
+	private TextArea kdatext;
+	@FXML
+	private TextArea wardtext;
+	@FXML
+	private TextArea cstext;
+	@FXML
+	private TextArea scoretext;
+	
+<span class="nc" id="L47">	public FeedBackController() {</span>
+		
+<span class="nc" id="L49">	}</span>
+	
+	/**
+	 * Method for initializing the Feedback window when the used opens it, it goes through all possible results for the feedback before initializing
+	 */
+	public void initialize() {
+<span class="nc" id="L55">		Platform.runLater(() -&gt; {</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">			if(fb.getKDAevaluation().equals(&quot;poor KDA&quot;)) {</span>
+<span class="nc" id="L57">				kdatext.setText(textBundle.getString(&quot;textArea.kdaFeedback.poor&quot;));</span>
+<span class="nc" id="L58">			}</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">			else if(fb.getKDAevaluation().equals(&quot;Average KDA&quot;)) {</span>
+<span class="nc" id="L60">				kdatext.setText(textBundle.getString(&quot;textArea.kdaFeedback.average&quot;));</span>
+<span class="nc" id="L61">			}</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">			else if(fb.getKDAevaluation().equals(&quot;Good KDA&quot;)) {</span>
+<span class="nc" id="L63">				kdatext.setText(textBundle.getString(&quot;textArea.kdaFeedback.good&quot;));</span>
+<span class="nc" id="L64">			}</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">			else if(fb.getKDAevaluation().equals(&quot;Insane KDA&quot;)) {</span>
+<span class="nc" id="L66">				kdatext.setText(textBundle.getString(&quot;textArea.kdaFeedback.insane&quot;));</span>
+			}
+<span class="nc bnc" id="L68" title="All 2 branches missed.">			if(fb.getWardEvaluation().equals(&quot;poor&quot;)) {</span>
+<span class="nc" id="L69">				wardtext.setText(textBundle.getString(&quot;textArea.wardFeedback.poor&quot;));</span>
+<span class="nc" id="L70">			}</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">			else if(fb.getWardEvaluation().equals(&quot;average&quot;)) {</span>
+<span class="nc" id="L72">				wardtext.setText(textBundle.getString(&quot;textArea.wardFeedback.average&quot;));</span>
+<span class="nc" id="L73">			}</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">			else if(fb.getWardEvaluation().equals(&quot;good&quot;)) {</span>
+<span class="nc" id="L75">				wardtext.setText(textBundle.getString(&quot;textArea.wardFeedback.good&quot;));</span>
+<span class="nc" id="L76">			}</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">			else if(fb.getWardEvaluation().equals(&quot;Too many&quot;)) {</span>
+<span class="nc" id="L78">				wardtext.setText(textBundle.getString(&quot;textArea.wardFeedback.toomany&quot;));</span>
+			}
+<span class="nc bnc" id="L80" title="All 2 branches missed.">			if(fb.getCSevaluation().equals(&quot;poor&quot;)) {</span>
+<span class="nc" id="L81">				cstext.setText(textBundle.getString(&quot;textArea.csFeedback.poor&quot;));</span>
+<span class="nc" id="L82">			}</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">			else if(fb.getCSevaluation().equals(&quot;good&quot;)) {</span>
+<span class="nc" id="L84">				cstext.setText(textBundle.getString(&quot;textArea.csFeedback.good&quot;));</span>
+<span class="nc" id="L85">			}</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">			else if(fb.getCSevaluation().equals(&quot;excellent&quot;)) {</span>
+<span class="nc" id="L87">				cstext.setText(textBundle.getString(&quot;textArea.csFeedback.excellent&quot;));</span>
+			}
+<span class="nc bnc" id="L89" title="All 4 branches missed.">			if(fb.getCSevaluation().equals(&quot;poor&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;poor&quot;)) {</span>
+<span class="nc" id="L90">				scoretext.setText(textBundle.getString(&quot;textArea.score.0&quot;));</span>
+<span class="nc" id="L91">			}</span>
+<span class="nc bnc" id="L92" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;good&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;poor&quot;)) {</span>
+<span class="nc" id="L93">				scoretext.setText(textBundle.getString(&quot;textArea.score.1&quot;));</span>
+<span class="nc" id="L94">			}</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;excellent&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;poor&quot;)) {</span>
+<span class="nc" id="L96">				scoretext.setText(textBundle.getString(&quot;textArea.score.2&quot;));</span>
+<span class="nc" id="L97">			}</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;poor&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;average&quot;)) {</span>
+<span class="nc" id="L99">				scoretext.setText(textBundle.getString(&quot;textArea.score.3&quot;));</span>
+<span class="nc" id="L100">			}</span>
+<span class="nc bnc" id="L101" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;poor&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;good&quot;)) {</span>
+<span class="nc" id="L102">				scoretext.setText(textBundle.getString(&quot;textArea.score.4&quot;));</span>
+<span class="nc" id="L103">			}</span>
+<span class="nc bnc" id="L104" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;poor&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;Too many&quot;)) {</span>
+<span class="nc" id="L105">				scoretext.setText(textBundle.getString(&quot;textArea.score.5&quot;));</span>
+<span class="nc" id="L106">			}</span>
+<span class="nc bnc" id="L107" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;good&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;average&quot;)) {</span>
+<span class="nc" id="L108">				scoretext.setText(textBundle.getString(&quot;textArea.score.6&quot;));</span>
+<span class="nc" id="L109">			}</span>
+<span class="nc bnc" id="L110" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;good&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;good&quot;)) {</span>
+<span class="nc" id="L111">				scoretext.setText(textBundle.getString(&quot;textArea.score.7&quot;));</span>
+<span class="nc" id="L112">			}</span>
+<span class="nc bnc" id="L113" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;poor&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;Too many&quot;)) {</span>
+<span class="nc" id="L114">				scoretext.setText(textBundle.getString(&quot;textArea.score.8&quot;));</span>
+<span class="nc" id="L115">			}</span>
+<span class="nc bnc" id="L116" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;excellent&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;average&quot;)) {</span>
+<span class="nc" id="L117">				scoretext.setText(textBundle.getString(&quot;textArea.score.9&quot;));</span>
+<span class="nc" id="L118">			}</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;excellent&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;good&quot;)) {</span>
+<span class="nc" id="L120">				scoretext.setText(textBundle.getString(&quot;textArea.score.10&quot;));</span>
+<span class="nc" id="L121">			}</span>
+<span class="nc bnc" id="L122" title="All 4 branches missed.">			else if(fb.getCSevaluation().equals(&quot;excellent&quot;) &amp;&amp; fb.getWardEvaluation().equals(&quot;Too many&quot;)) {</span>
+<span class="nc" id="L123">				scoretext.setText(textBundle.getString(&quot;textArea.score.11&quot;));</span>
+			}
+<span class="nc" id="L125">			this.mainController = mainApp.getMainController();</span>
+<span class="nc" id="L126">		});</span>
+<span class="nc" id="L127">	}</span>
+	
+	/**
+	 * Method for setting the main application
+	 * @param mainApp defines the MainApp object used
+	 */
+	public void setMainApp(MainApp mainApp) {
+<span class="nc" id="L134">        this.mainApp = mainApp;</span>
+<span class="nc" id="L135">    }</span>
+    
+	/**
+	 * Method for setting the Feedback stage
+	 * @param feedBackStage defined the feedBackStage object used
+	 */
+    public void setFeedBackStage(Stage feedBackStage) {
+<span class="nc" id="L142">        this.feedBackStage = feedBackStage;</span>
+<span class="nc" id="L143">    }</span>
+    
+    /**
+     * Method for when the &quot;Back&quot; button is pressed
+     * @throws IOException
+     */
+    @FXML
+    private void handleBack() {
+<span class="nc" id="L151">	    feedBackStage.close();</span>
+<span class="nc" id="L152">    }</span>
+    
+    /**
+     * Method for when the &quot;Profile&quot; button is pressed
+     * @throws IOException
+     */
+    @FXML
+    private void handleProfile() throws IOException {
+<span class="nc" id="L160">	    mainApp.showProfileWindow();</span>
+<span class="nc" id="L161">    }</span>
+    
+    /**
+     * Method for setting FeedBack object in this class
+     * @param fb defined the FeedBack object
+     */
+	public void setFb(FeedBack fb) {
+<span class="nc" id="L168">		this.fb = fb;</span>
+<span class="nc" id="L169">	}</span>
+
+	/**
+	 * Setter for the textBundle-variable.
+	 * @param textBundle A ResourceBundle.
+	 */
+	public void setTextBundle(ResourceBundle textBundle) {
+<span class="nc" id="L176">		this.textBundle = textBundle;</span>
+<span class="nc" id="L177">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

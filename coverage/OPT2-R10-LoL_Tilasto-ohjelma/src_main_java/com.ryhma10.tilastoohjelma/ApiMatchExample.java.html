@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ApiMatchExample.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma</a> &gt; <span class="el_source">ApiMatchExample.java</span></div><h1>ApiMatchExample.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma;
+
+import com.ryhma10.tilastoohjelma.api.ApiKey;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.merakianalytics.orianna.Orianna;
+import com.merakianalytics.orianna.types.common.Queue;
+import com.merakianalytics.orianna.types.common.Region;
+import com.merakianalytics.orianna.types.core.match.Match;
+import com.merakianalytics.orianna.types.core.match.MatchHistory;
+import com.merakianalytics.orianna.types.core.match.Participant;
+import com.merakianalytics.orianna.types.core.staticdata.Item;
+import com.merakianalytics.orianna.types.core.summoner.Summoner;
+import com.merakianalytics.orianna.types.core.summoner.Summoners;
+
+<span class="nc" id="L17">public class ApiMatchExample {</span>
+
+public static void main(String[] args) throws InterruptedException {
+	
+		
+		
+<span class="nc" id="L23">		ApiKey key = new ApiKey();</span>
+		
+<span class="nc" id="L25">        Orianna.setRiotAPIKey(key.getKey());</span>
+        //Orianna.setDefaultPlatform(Platform.NORTH_AMERICA);
+
+<span class="nc" id="L28">        List&lt;Summoner&gt; summoners = Summoners.named(&quot;Daddy Chrollo&quot;).withRegion(Region.EUROPE_WEST).get();</span>
+        //System.out.println(summoners.get(0).getName());
+<span class="nc" id="L30">        final String playerName = summoners.get(0).getName();</span>
+        
+        /*
+        Match match = Match.withId(id).withRegion(Region.EUROPE_NORTH_EAST).get();
+        System.out.println(match.getDuration());
+        System.out.println(match.getBlueTeam().getParticipants().get(4));
+        List&lt;Match&gt; matches = Matches.withIds(2718292415L, 2718244702L).withRegion(Region.EUROPE_NORTH_EAST).get();
+		*/
+
+<span class="nc" id="L39">        MatchHistory history = MatchHistory.forSummoner(summoners.get(0)).get();</span>
+<span class="nc" id="L40">        ArrayList&lt;Long&gt; historyArrayList = new ArrayList&lt;Long&gt;();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        for (int i = 0; i &lt; 1; i++) {</span>
+<span class="nc" id="L42">            Long matchId = (history.get(i).getId());</span>
+            //System.out.println(matchId.toString()); //matchId
+<span class="nc" id="L44">            historyArrayList.add(matchId);</span>
+        }
+        //System.out.println(historyArrayList);
+        Match currentMatch;
+        
+<span class="nc" id="L49">        System.out.println(playerName);</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        for (Long m : historyArrayList) {</span>
+<span class="nc" id="L51">            currentMatch = Match.withId(m).withRegion(Region.EUROPE_WEST).get();</span>
+<span class="nc" id="L52">            int j = 0;</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            for (final Participant player : currentMatch.getParticipants()) {</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">            	if (currentMatch.getParticipants().get(j).getSummoner().getName().equals(playerName)) {</span>
+<span class="nc" id="L55">            		System.out.println(&quot;Rank: &quot;+player.getSummoner().getLeaguePosition(Queue.RANKED_SOLO).getTier()+&quot; &quot;+player.getSummoner().getLeaguePosition(Queue.RANKED_TFT).getDivision());</span>
+<span class="nc" id="L56">            		System.out.println(&quot;Match ID: &quot;+currentMatch.getId());</span>
+<span class="nc" id="L57">            		System.out.println(&quot;Match date: &quot;+currentMatch.getCreationTime().toDate().toString());</span>
+<span class="nc" id="L58">            		System.out.println(&quot;Game mode: &quot;+currentMatch.getMode());</span>
+<span class="nc" id="L59">            		System.out.println(&quot;Game duration: &quot;+currentMatch.getDuration().getStandardSeconds()+&quot; sec&quot;);</span>
+<span class="nc" id="L60">            		System.out.println(&quot;Champion: &quot;+player.getChampion().getName());</span>
+<span class="nc" id="L61">            		System.out.println(&quot;Kills: &quot;+player.getStats().getKills());</span>
+<span class="nc" id="L62">                	System.out.println(&quot;Deaths: &quot;+player.getStats().getDeaths());</span>
+<span class="nc" id="L63">                	System.out.println(&quot;Assists: &quot;+player.getStats().getAssists());</span>
+<span class="nc" id="L64">                	int k = 0;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                	for(final Item items : currentMatch.getParticipants().get(j).getItems()) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                		if(k == 0) {</span>
+<span class="nc" id="L67">                			System.out.println(&quot;Items: - &quot;+items.getName());</span>
+<span class="nc" id="L68">                		} else {</span>
+<span class="nc" id="L69">                			System.out.println(&quot;       - &quot;+items.getName());</span>
+                		}
+<span class="nc" id="L71">                		k++;</span>
+                	}
+<span class="nc" id="L73">                	System.out.println(&quot;Gold earned: &quot;+player.getStats().getGoldEarned()+&quot;g&quot;);</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                	if (player.getTeam().isWinner() == false) {</span>
+<span class="nc" id="L75">                		System.out.println(&quot;Result: Loss&quot;);</span>
+<span class="nc" id="L76">                	} else {</span>
+<span class="nc" id="L77">                		System.out.println(&quot;Result: Win&quot;);</span>
+                	}
+<span class="nc" id="L79">                	System.out.println(&quot;- - - - -&quot;);</span>
+            	}
+<span class="nc" id="L81">            	j++;</span>
+            }
+<span class="nc" id="L83">            Thread.sleep(3000);</span>
+        }
+        
+        
+        
+        
+        /*
+        for (Long m : historyArrayList) {
+            currentMatch = Match.withId(m).withRegion(Region.EUROPE_NORTH_EAST).get();
+            //System.out.println(currentMatch);
+            for (final Participant player : currentMatch.getParticipants()) {
+            	if (currentMatch.getParticipants().get(0).getSummoner().getName().equals(playerName)) {
+            		System.out.println(playerName);
+            		System.out.println(&quot;Champion: &quot;+player.getChampion().getName());
+            		System.out.println(&quot;Kills: &quot;+player.getStats().getKills());
+                	System.out.println(&quot;Deaths: &quot;+player.getStats().getDeaths());
+                	System.out.println(&quot;Assists: &quot;+player.getStats().getAssists());
+                	System.out.println(&quot;- - - - -&quot;);
+            	}
+            	
+            }
+            Thread.sleep(1500);
+        }*/
+        
+        
+        //List&lt;MatchHistory&gt; histories = MatchHistories.forSummoners(summoners).get();
+
+        /*MatchHistory recentHistory = MatchHistory.forSummoner(summoners.get(0)).fromRecentMatches().get();
+        List&lt;MatchHistory&gt; recentHistories = MatchHistories.forSummoners(summoners).fromRecentMatches().get();
+
+        Timeline timeline = Timeline.withId(2718292415L).withRegion(Region.NORTH_AMERICA).get();
+        List&lt;Timeline&gt; timelines = Timelines.withIds(2718292415L, 2718244702L).withRegion(Region.NORTH_AMERICA).get();*/
+<span class="nc" id="L115">    }</span>
+}
+	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

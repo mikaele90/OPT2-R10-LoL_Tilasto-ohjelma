@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Item.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.model</a> &gt; <span class="el_source">Item.java</span></div><h1>Item.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.model;
+
+
+import javax.persistence.*;
+
+@Entity
+@Table(name=&quot;item&quot;)
+
+public class Item {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name=&quot;itemid&quot;)
+	private int itemid;
+	
+	@Column(name=&quot;slot1&quot;)
+	private String slot1;
+	
+	@Column(name=&quot;slot2&quot;)
+	private String slot2;
+	
+	@Column(name=&quot;slot3&quot;)
+	private String slot3;
+	
+	@Column(name=&quot;slot4&quot;)
+	private String slot4;
+	
+	@Column(name=&quot;slot5&quot;)
+	private String slot5;
+	
+	@Column(name=&quot;slot6&quot;)
+	private String slot6;
+	
+	@Column(name=&quot;slot7&quot;)
+	private String slot7;
+	
+	@OneToOne
+	@JoinColumn(name=&quot;game_id&quot;, referencedColumnName=&quot;gameid&quot;, nullable=false)
+	private Gamedata gamedata;
+	
+	/**
+	 * Empty constructor
+	 */
+<span class="fc" id="L44">	public Item() {</span>
+<span class="fc" id="L45">	}</span>
+	
+	/**
+	 * Constructor for the all items
+	 * @param slot1 Item slot1
+	 * @param slot2 Item slot2
+	 * @param slot3 Item slot3
+	 * @param slot4 Item slot4
+	 * @param slot5 Item slot5
+	 * @param slot6 Item slot6
+	 * @param slot7 Trinket slot
+	 */
+<span class="fc" id="L57">	public Item(String slot1, String slot2, String slot3, String slot4,</span>
+			String slot5, String slot6, String slot7) {
+
+<span class="fc" id="L60">		this.slot1 = slot1;</span>
+<span class="fc" id="L61">		this.slot2 = slot2;</span>
+<span class="fc" id="L62">		this.slot3 = slot3;</span>
+<span class="fc" id="L63">		this.slot4 = slot4;</span>
+<span class="fc" id="L64">		this.slot5 = slot5;</span>
+<span class="fc" id="L65">		this.slot6 = slot6;</span>
+<span class="fc" id="L66">		this.slot7 = slot7;</span>
+<span class="fc" id="L67">	}</span>
+	
+	/**
+	 * Getter for the item slot1
+	 * @return item from slot1
+	 */
+	public String getSlot1() {
+<span class="fc" id="L74">		return slot1;</span>
+	}
+
+		
+	/**
+	 * Setter for the item slot1
+	 * @param slot1
+	 */
+	public void setSlot1(String slot1) {
+<span class="nc" id="L83">		this.slot1 = slot1;</span>
+<span class="nc" id="L84">	}</span>
+	
+	/**
+	 * Getter for the item slot2
+	 * @return item from slot2
+	 */
+	public String getSlot2() {
+<span class="fc" id="L91">		return slot2;</span>
+	}
+	
+	/**
+	 * Setter for the item slot2
+	 * @param slot2
+	 */
+	public void setSlot2(String slot2) {
+<span class="nc" id="L99">		this.slot2 = slot2;</span>
+<span class="nc" id="L100">	}</span>
+	
+	/**
+	 * Getter for the item slot3
+	 * @return item from slot3
+	 */
+	public String getSlot3() {
+<span class="fc" id="L107">		return slot3;</span>
+	}
+	
+	/**
+	 * Setter for the item slot3
+	 * @param slot3
+	 */
+	public void setSlot3(String slot3) {
+<span class="nc" id="L115">		this.slot3 = slot3;</span>
+<span class="nc" id="L116">	}</span>
+	
+	/**
+	 * Getter for the item slot4
+	 * @return item from slot4
+	 */
+	public String getSlot4() {
+<span class="fc" id="L123">		return slot4;</span>
+	}
+	
+	/**
+	 * Setter for the item slot4
+	 * @param slot4
+	 */
+	public void setSlot4(String slot4) {
+<span class="nc" id="L131">		this.slot4 = slot4;</span>
+<span class="nc" id="L132">	}</span>
+	
+	/**
+	 * Getter for the item slot5
+	 * @return item from slot5
+	 */
+	public String getSlot5() {
+<span class="fc" id="L139">		return slot5;</span>
+	}
+	
+	/**
+	 * Setter for the item slot5
+	 * @param slot5
+	 */
+	public void setSlot5(String slot5) {
+<span class="nc" id="L147">		this.slot5 = slot5;</span>
+<span class="nc" id="L148">	}</span>
+	
+	/**
+	 * Getter for the item slot6
+	 * @return item from slot6
+	 */
+	public String getSlot6() {
+<span class="fc" id="L155">		return slot6;</span>
+	}
+	
+	/**
+	 * Setter for the item slot6
+	 * @param slot6
+	 */
+	public void setSlot6(String slot6) {
+<span class="nc" id="L163">		this.slot6 = slot6;</span>
+<span class="nc" id="L164">	}</span>
+	
+	/**
+	 * Getter for the trinket item
+	 * @return trinket from slot7
+	 */
+	public String getSlot7() {
+<span class="fc" id="L171">		return slot7;</span>
+	}
+	
+	/**
+	 * Setter for the trinket item
+	 * @param slot7
+	 */
+	public void setSlot7(String slot7) {
+<span class="nc" id="L179">		this.slot7 = slot7;</span>
+<span class="nc" id="L180">	}</span>
+	
+	/**
+	 * Getter for the Gmaedata object
+	 * @return Gamedata gamedata
+	 */
+	public Gamedata getGamedata() {
+<span class="nc" id="L187">		return gamedata;</span>
+	}
+	
+	/**
+	 * Setter for the Gamedata object
+	 * @param gamedata
+	 */
+	public void setGamedata(Gamedata gamedata) {
+<span class="fc" id="L195">		this.gamedata = gamedata;</span>
+<span class="fc" id="L196">	}</span>
+	
+	/**
+	 * Getter for itemId
+	 * @return
+	 */
+	public int getItemid() {
+<span class="nc" id="L203">		return itemid;</span>
+	}
+	
+	/**
+	 * setter for the ItemId
+	 * @param itemid
+	 */
+	public void setItemid(int itemid) {
+<span class="nc" id="L211">		this.itemid = itemid;</span>
+<span class="nc" id="L212">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ModelTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">model</a> &gt; <span class="el_source">ModelTest.java</span></div><h1>ModelTest.java</h1><pre class="source lang-java linenums">package model;
+
+import com.ryhma10.tilastoohjelma.model.*;
+
+import org.junit.Assert;
+import org.junit.jupiter.api.*;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+
+<span class="fc" id="L14">public class ModelTest{</span>
+
+
+<span class="fc" id="L17">	static ModelAccessObject modelDAO = new ModelAccessObject();</span>
+<span class="fc" id="L18">	private static SoftwareProfile p1 = new SoftwareProfile(&quot;junit1&quot;, &quot;test1&quot;, null, null, null, null);</span>
+<span class="fc" id="L19">	private static SoftwareProfile p2 = new SoftwareProfile(&quot;junit2&quot;, &quot;test2&quot;, null, null, null, null);</span>
+<span class="fc" id="L20">	private static Gamedata g1 = new Gamedata(11, &quot;testPlayer1&quot;, &quot;Elise&quot;, 6, 2, 7 , &quot;win&quot;, &quot;jungle&quot;,&quot;bronze&quot;);</span>
+<span class="fc" id="L21">	private static Gamedata g2 = new Gamedata (12, &quot;testPlayer2&quot;, &quot;Lux&quot;, 3, 5, 10 , &quot;win&quot;, &quot;support&quot;,&quot;bronze&quot;);</span>
+<span class="fc" id="L22">	private static Gamedata g3 = new Gamedata(13, &quot;testPlayer1&quot;, &quot;Nami&quot;, 5, 3, 8 , &quot;lose&quot;, &quot;carry&quot;,&quot;bronze&quot;);</span>
+<span class="fc" id="L23">	private static Item i1 = new Item(&quot;Raptor Cloak&quot;,&quot;Void Staff&quot;,&quot;Oracle Lens&quot;,&quot;Sheen&quot;,&quot;Relic Shield&quot;,&quot;Zephyr&quot;, null);</span>
+<span class="fc" id="L24">	private static Item i2 = new Item(&quot;Wit's End&quot;,&quot;Vampiric Scepter&quot;,&quot;Tiamat&quot;,&quot;Statikk Shiv&quot;,&quot;Thornmail&quot;,&quot;Trinity Force&quot;, null);</span>
+<span class="fc" id="L25">	private static Item i3 = new Item(&quot;Phage&quot;,&quot;Ravenous Hydra&quot;,&quot;Rod of Ages&quot;,&quot;Phantom Dancer&quot;,&quot;Pickaxe&quot;,&quot;Umbral Glaive&quot;, null);</span>
+<span class="fc" id="L26">	private static Team t1 = new Team(&quot;Grave&quot;, &quot;Heimerdinger&quot;, &quot;Fizz&quot;, &quot;Neeko&quot;, &quot;Fiora&quot;, &quot;Morgana&quot;, &quot;Sona&quot;, &quot;Teemo&quot;, &quot;Olaf&quot;);</span>
+<span class="fc" id="L27">	private static Team t2 = new Team(&quot;Volibear&quot;, &quot;Veigar&quot;, &quot;Taric&quot;, &quot;Zed&quot;, &quot;Nasus&quot;, &quot;Pyke&quot;, &quot;Sona&quot;, &quot;Teemo&quot;, &quot;Olaf&quot;);</span>
+<span class="fc" id="L28">	private static Team t3 = new Team(&quot;Twisted Fate&quot;, &quot;Ziggs&quot;, &quot;Vi&quot;, &quot;Rammus&quot;, &quot;Lulu&quot;, &quot;Kled&quot;, &quot;Azir&quot;, &quot;Jinx&quot;, &quot;Quinn&quot;);</span>
+<span class="fc" id="L29">	private static Additional a1 = new Additional(8, 7, &quot;gamemode&quot;, 16000, 160,&quot;date&quot;, 4, 5);</span>
+<span class="fc" id="L30">	private static Additional a2= new Additional(16, 45,&quot;gamemode&quot;, 14000, 120,&quot;date&quot;, 16, 10);</span>
+<span class="fc" id="L31">	private static Additional a3 = new Additional(8, 7, &quot;gamemode&quot;, 10000, 180,&quot;date&quot;, 7, 3);</span>
+	
+	/**
+	 * Empties database and then adds two profile and three gamedatas to database
+	 */
+	@BeforeAll
+	static void addNeeded() {
+<span class="fc" id="L38">		modelDAO.deleteAdditonal();</span>
+<span class="fc" id="L39">		modelDAO.deleteTeam();</span>
+<span class="fc" id="L40">		modelDAO.deleteItem();</span>
+<span class="fc" id="L41">		modelDAO.deleteGamedata();</span>
+<span class="fc" id="L42">		modelDAO.deleteProfile();</span>
+<span class="fc" id="L43">		modelDAO.addProfile(p1);</span>
+<span class="fc" id="L44">		modelDAO.addProfile(p2);</span>
+<span class="fc" id="L45">		modelDAO.createGamedata(&quot;junit1&quot;, g1, i1, t1, a1);</span>
+<span class="fc" id="L46">		modelDAO.createGamedata(&quot;junit2&quot;, g2, i2, t2, a2);</span>
+<span class="fc" id="L47">		modelDAO.createGamedata(&quot;junit1&quot;, g3, i3, t3, a3);</span>
+<span class="fc" id="L48">	}</span>
+
+	
+	/**
+	 * Test reading profiledata from database
+	 * returns profiledata
+	 */
+	@Test
+	public void testReadProfile() {
+<span class="fc" id="L57">		SoftwareProfile testProfile = modelDAO.readProfile(&quot;junit2&quot;);</span>
+<span class="fc" id="L58">		assertEquals(&quot;junit2&quot;, testProfile.getProfileName(), &quot;wrong name&quot;);</span>
+<span class="fc" id="L59">		assertEquals(&quot;test2&quot;, testProfile.getProfilePassword(), &quot;wrong password&quot;);</span>
+<span class="fc" id="L60">	}</span>
+
+	/**
+	 * Test gpm calcultaor
+	 * return number in double format
+	 */
+	@Test
+	public void testCountGpm() {
+<span class="fc" id="L68">		double gold = 23000;</span>
+<span class="fc" id="L69">		double time = 120;</span>
+<span class="fc" id="L70">		assertEquals(192, modelDAO.gpmCalculus(time, gold), &quot;Calculus is wrong&quot;);</span>
+
+<span class="fc" id="L72">	}</span>
+	
+	/**
+	 * Tests reading one line from Additional table
+	 * return Additional object and test check all the values
+	 */
+	@Test
+	public void testReadAdditionalData() {
+<span class="fc" id="L80">		Additional additionalResult = modelDAO.readAdditionalData(13);</span>
+<span class="fc" id="L81">		assertEquals(8, additionalResult.getDamagedealt(), &quot;Wrong result at damage dealt&quot;);</span>
+<span class="fc" id="L82">		assertEquals(7, additionalResult.getDamagetaken(), &quot;Wrong result at damage taken&quot;);</span>
+<span class="fc" id="L83">		assertEquals(&quot;gamemode&quot;, additionalResult.getGamemode(), &quot;Wrong result at gamemode&quot;);</span>
+<span class="fc" id="L84">		assertEquals(10000, additionalResult.getGold(), &quot;Wrong result at gold&quot;);</span>
+<span class="fc" id="L85">		assertEquals(180, additionalResult.getDuration(), &quot;Wrong result at duration&quot;);</span>
+<span class="fc" id="L86">		assertEquals(&quot;date&quot;, additionalResult.getDate(), &quot;Wrong result&quot;);</span>
+<span class="fc" id="L87">		assertEquals(7, additionalResult.getWardsScore(), &quot;Wrong result&quot;);</span>
+<span class="fc" id="L88">		assertEquals(3, additionalResult.getCreepScore(), &quot;Wrong result&quot;);</span>
+		
+<span class="fc" id="L90">	}</span>
+	
+	/**
+	 * Tests reading one line from Team table
+	 * return Team object and test check all the values
+	 */
+	@Test
+	public void testReadTeam() {
+<span class="fc" id="L98">		Team teamResult = modelDAO.readTeamComposition(12);</span>
+<span class="fc" id="L99">		assertEquals(&quot;Volibear&quot;, teamResult.getChampion1(), &quot;Wrong result at cahmpion1&quot;);</span>
+<span class="fc" id="L100">		assertEquals(&quot;Veigar&quot;, teamResult.getChampion2(), &quot;Wrong result at cahmpion2&quot;);</span>
+<span class="fc" id="L101">		assertEquals(&quot;Taric&quot;, teamResult.getChampion3(), &quot;Wrong result at cahmpion3&quot;);</span>
+<span class="fc" id="L102">		assertEquals(&quot;Zed&quot;, teamResult.getChampion4(), &quot;Wrong result at cahmpion4&quot;);</span>
+<span class="fc" id="L103">		assertEquals(&quot;Nasus&quot;, teamResult.getEnemyChampion1(), &quot;Wrong result at enemy cahmpion1&quot;);</span>
+<span class="fc" id="L104">		assertEquals(&quot;Pyke&quot;, teamResult.getEnemyChampion2(), &quot;Wrong result at enemy cahmpion2&quot;);</span>
+<span class="fc" id="L105">		assertEquals(&quot;Sona&quot;, teamResult.getEnemyChampion3(), &quot;Wrong result at enemy cahmpion3&quot;);</span>
+<span class="fc" id="L106">		assertEquals(&quot;Teemo&quot;, teamResult.getEnemyChampion4(), &quot;Wrong result at enemy cahmpion4&quot;);</span>
+<span class="fc" id="L107">		assertEquals(&quot;Olaf&quot;, teamResult.getEnemyChampion5(), &quot;Wrong result at enemy cahmpion5&quot;);</span>
+		
+<span class="fc" id="L109">	}</span>
+	
+	/**
+	 * Tests reading one line from Gamedata table
+	 * return gamedata object and test check all the values
+	 */
+	@Test void testOneGameReading() {
+<span class="fc" id="L116">		Gamedata testGamedata = modelDAO.readOneGame(11);</span>
+<span class="fc" id="L117">		assertEquals(&quot;testPlayer1&quot;, testGamedata.getIngameName(), &quot;Ingame name is wrong&quot;);</span>
+<span class="fc" id="L118">		assertEquals(&quot;Elise&quot;, testGamedata.getChampion(), &quot;Champion is wrong&quot;);</span>
+<span class="fc" id="L119">		assertEquals(6, testGamedata.getKills(), &quot;Kills are wrong&quot;);</span>
+<span class="fc" id="L120">		assertEquals(2, testGamedata.getDeaths(), &quot;Deaths are wrong&quot;);</span>
+<span class="fc" id="L121">		assertEquals(7, testGamedata.getAssist(), &quot;Assists are wrong&quot;);</span>
+<span class="fc" id="L122">		assertEquals(&quot;jungle&quot;, testGamedata.getPosition(), &quot;Position is wrong&quot;);</span>
+<span class="fc" id="L123">		assertEquals(&quot;bronze&quot;, testGamedata.getRank(), &quot;Rank is wrong&quot;);</span>
+<span class="fc" id="L124">		assertEquals(11, testGamedata.getRiotid(),&quot;RiotID is wrong&quot;);</span>
+<span class="fc" id="L125">		assertEquals(&quot;win&quot;, testGamedata.getWinlose(), &quot;Result is wrong&quot;);</span>
+<span class="fc" id="L126">		assertEquals(&quot;Raptor Cloak&quot;, testGamedata.getItem().getSlot1());</span>
+<span class="fc" id="L127">		assertEquals(&quot;Void Staff&quot;, testGamedata.getItem().getSlot2());</span>
+<span class="fc" id="L128">		assertEquals(&quot;Oracle Lens&quot;, testGamedata.getItem().getSlot3());</span>
+<span class="fc" id="L129">		assertEquals(&quot;Sheen&quot;, testGamedata.getItem().getSlot4());</span>
+<span class="fc" id="L130">		assertEquals(&quot;Relic Shield&quot;, testGamedata.getItem().getSlot5());</span>
+<span class="fc" id="L131">		assertEquals(&quot;Zephyr&quot;, testGamedata.getItem().getSlot6());</span>
+<span class="fc" id="L132">		assertEquals(null, testGamedata.getItem().getSlot7());</span>
+<span class="fc" id="L133">		assertEquals(&quot;junit1&quot;, testGamedata.getSoftwareProfile().getProfileName(), &quot;Profiles name is wrong&quot;);</span>
+<span class="fc" id="L134">		assertEquals(&quot;test1&quot;, testGamedata.getSoftwareProfile().getProfilePassword(), &quot;Profiles password is wrong&quot;);</span>
+<span class="fc" id="L135">		assertEquals(null, testGamedata.getSoftwareProfile().getRiotAPIKey(), &quot;Profiles API key is wrong&quot;);</span>
+<span class="fc" id="L136">		assertEquals(null, testGamedata.getSoftwareProfile().getDefaultRiotAccount(), &quot;Profiles Riot account is wrong&quot;);</span>
+<span class="fc" id="L137">		assertEquals(null, testGamedata.getSoftwareProfile().getDefaultRegion(), &quot;Profiles region is wrong&quot;);</span>
+<span class="fc" id="L138">		assertEquals(null, testGamedata.getSoftwareProfile().getDefaultLanguage(), &quot;Profiles language is wrong&quot;);</span>
+<span class="fc" id="L139">	}</span>
+	
+	/**
+	 * Test if a game is in the database
+	 * returns boolean
+	 */
+	@Test void testCheckGameTrue() {
+<span class="fc" id="L146">		boolean checkGameTrue = modelDAO.checkGame(13);</span>
+<span class="fc" id="L147">		assertEquals(true, checkGameTrue, &quot;True Checker give false answer&quot;);</span>
+		
+<span class="fc" id="L149">	}</span>
+	
+	/**
+	 * * Test if a game is in the database
+	 * returns boolean
+	 */
+	@Test void testCheckGameFalse() {
+<span class="fc" id="L156">		boolean checkGameFalse = modelDAO.checkGame(0);</span>
+<span class="fc" id="L157">		assertEquals(false, checkGameFalse, &quot;False checker give false answer&quot;);</span>
+		
+<span class="fc" id="L159">	}</span>
+	
+	/**
+	 * Tests reading all games from database
+	 * return list of Gamedata, tester checks only champion data of each object
+	 */
+	@Test void testReadGames() {
+<span class="fc" id="L166">		List&lt;Gamedata&gt; games = modelDAO.readGames();</span>
+<span class="fc" id="L167">		Gamedata game1 = games.get(0);</span>
+<span class="fc" id="L168">		Gamedata game2 = games.get(1);</span>
+<span class="fc" id="L169">		Gamedata game3 = games.get(2);</span>
+<span class="fc" id="L170">		assertEquals(&quot;Elise&quot;, game1.getChampion(), &quot;False answer about game1&quot;);</span>
+<span class="fc" id="L171">		assertEquals(&quot;Lux&quot;, game2.getChampion(), &quot;False answer about game2&quot;);</span>
+<span class="fc" id="L172">		assertEquals(&quot;Nami&quot;, game3.getChampion(), &quot;False answer about game3&quot;);</span>
+<span class="fc" id="L173">	}</span>
+	
+	/**
+	 * Tests reading all the games from database which belongs to one account
+	 * return List of gamdata objects and tester check one value of each object
+	 */
+	@Test void testReadSpecificProfileGames() {
+<span class="fc" id="L180">		List&lt;Gamedata&gt; games2 = modelDAO.readSpecificProfilesGames(&quot;junit1&quot;);</span>
+<span class="fc" id="L181">		Gamedata gamee1 = games2.get(0);</span>
+<span class="fc" id="L182">		Gamedata gamee2 = games2.get(1);</span>
+<span class="fc" id="L183">		assertEquals(&quot;Elise&quot;, gamee1.getChampion(), &quot;False answer about game1&quot;);</span>
+<span class="fc" id="L184">		assertEquals(&quot;Nami&quot;, gamee2.getChampion(), &quot;False answer about game2&quot;);</span>
+<span class="fc" id="L185">	}</span>
+	
+	/**
+	 * Tests reading all items from database
+	 * return is list of Item objects, checks only one data of each list object
+	 */
+	@Test void testReadItems() {
+<span class="fc" id="L192">		List&lt;Item&gt; items = modelDAO.readItems();</span>
+<span class="fc" id="L193">		Item item1 = items.get(0);</span>
+<span class="fc" id="L194">		Item item2 = items.get(1);</span>
+<span class="fc" id="L195">		Item item3 = items.get(2);</span>
+<span class="fc" id="L196">		assertEquals(&quot;Raptor Cloak&quot;, item1.getSlot1(), &quot;False answer in item1&quot;);</span>
+<span class="fc" id="L197">		assertEquals(&quot;Wit's End&quot;, item2.getSlot1(), &quot;False answer in item2&quot;);</span>
+<span class="fc" id="L198">		assertEquals(&quot;Phage&quot;, item3.getSlot1(), &quot;False answer in item3&quot;);</span>
+<span class="fc" id="L199">	}</span>
+	
+	/**
+	 * After testing empties the database
+	 */
+	@AfterAll
+	static void deleGames() {
+<span class="fc" id="L206">		modelDAO.deleteAdditonal();</span>
+<span class="fc" id="L207">		modelDAO.deleteTeam();</span>
+<span class="fc" id="L208">		modelDAO.deleteItem();</span>
+<span class="fc" id="L209">		modelDAO.deleteGamedata();</span>
+<span class="fc" id="L210">		modelDAO.deleteProfile();</span>
+<span class="fc" id="L211">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>

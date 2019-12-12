@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fi"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Additional.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">model (12.12.2019 15:32:39)</a> &gt; <a href="../../index.html" class="el_group">OPT2-R10-LoL_Tilasto-ohjelma</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.ryhma10.tilastoohjelma.model</a> &gt; <span class="el_source">Additional.java</span></div><h1>Additional.java</h1><pre class="source lang-java linenums">package com.ryhma10.tilastoohjelma.model;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name=&quot;additional&quot;)
+
+public class Additional {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name=&quot;additionalid&quot;)
+	private int additionalid;
+	
+	@Column(name=&quot;damagedealt&quot;)
+	private long damagedealt;
+	
+	@Column(name=&quot;damagetaken&quot;)
+	private long damagetaken;
+	
+	@Column(name=&quot;gamemode&quot;)
+	private String gamemode;
+	
+	@Column(name=&quot;gold&quot;)
+	private long gold;
+	
+	@Column(name=&quot;duration&quot;)
+	private long duration;
+	
+	@Column(name=&quot;date&quot;)
+	private String date;
+	
+	@Column(name=&quot;wardsScore&quot;)
+	private long wardsScore;
+	
+	@Column(name=&quot;creepScore&quot;)
+	private long creepScore;
+	
+	@OneToOne
+	@JoinColumn(name=&quot;game_id&quot;, referencedColumnName=&quot;gameid&quot;, nullable=false)
+	private Gamedata gamedata;
+	
+	/**
+	 * Empty constructor
+	 */
+<span class="fc" id="L46">	public Additional() {</span>
+		
+<span class="fc" id="L48">	}</span>
+	
+	/**
+	 * Constructor to all the additional data from a single game. Used in Analytical tools
+	 * @param damagedealt Long format parameter for the dealt damage during the game
+	 * @param damagetaken Long format parameter for the taken damage during the game
+	 * @param gamemode String format parameter for the gamemode
+	 * @param gold Long format parameter for the earned gold in game
+	 * @param duration Long format parameter for the game duration
+	 * @param date String format parameter for the date when the game was played
+	 * @param wardsScore Long format parameter for the ward score during the game
+	 * @param creepScore Long format parameter for the creep score during the game
+	 */
+<span class="fc" id="L61">	public Additional(long damagedealt, long damagetaken, String gamemode, long gold, long duration,</span>
+			String date, long wardsScore, long creepScore) {
+<span class="fc" id="L63">		this.damagedealt = damagedealt;</span>
+<span class="fc" id="L64">		this.damagetaken = damagetaken;</span>
+<span class="fc" id="L65">		this.gamemode = gamemode;</span>
+<span class="fc" id="L66">		this.gold = gold;</span>
+<span class="fc" id="L67">		this.duration = duration;</span>
+<span class="fc" id="L68">		this.date = date;</span>
+<span class="fc" id="L69">		this.wardsScore = wardsScore;</span>
+<span class="fc" id="L70">		this.creepScore = creepScore;</span>
+	
+<span class="fc" id="L72">	}</span>
+	
+	/**
+	 * Getter for the Additional id
+	 * @return additionalId
+	 */
+	public int getAdditionalid() {
+<span class="nc" id="L79">		return additionalid;</span>
+	}
+	
+	/**
+	 * Setter for Id to Additional table
+	 * @param additionalid
+	 */
+	public void setAdditionalid(int additionalid) {
+<span class="nc" id="L87">		this.additionalid = additionalid;</span>
+<span class="nc" id="L88">	}</span>
+	
+	/**
+	 * Getter for the dealt damage
+	 * @return damagedealt
+	 */
+	public double getDamagedealt() {
+<span class="fc" id="L95">		return damagedealt;</span>
+	}
+	
+	/**
+	 * Setter for the dealt damage
+	 * @param damagedealt
+	 */
+	public void setDamagedealt(long damagedealt) {
+<span class="nc" id="L103">		this.damagedealt = damagedealt;</span>
+<span class="nc" id="L104">	}</span>
+	
+	/**
+	 * Getter for the damage taken
+	 * @return damagetaken
+	 */
+	public double getDamagetaken() {
+<span class="fc" id="L111">		return damagetaken;</span>
+	}
+	
+	/**
+	 * Setter for the damege taken
+	 * @param damagetaken
+	 */
+	public void setDamagetaken(long damagetaken) {
+<span class="nc" id="L119">		this.damagetaken = damagetaken;</span>
+<span class="nc" id="L120">	}</span>
+	
+	/**
+	 * Getter for the gamemode
+	 * @return gamemode
+	 */
+	public String getGamemode() {
+<span class="fc" id="L127">		return gamemode;</span>
+	}
+	
+	/**
+	 * Setter for the gamemode
+	 * @param gamemode
+	 */
+	public void setGamemode(String gamemode) {
+<span class="nc" id="L135">		this.gamemode = gamemode;</span>
+<span class="nc" id="L136">	}</span>
+	
+	/**
+	 * Getter for the gold
+	 * @return gold
+	 */
+	public long getGold() {
+<span class="fc" id="L143">		return gold;</span>
+	}
+	
+	/**
+	 * Setter for the earned gold
+	 * @param gold
+	 */
+	public void setGold(long gold) {
+<span class="nc" id="L151">		this.gold = gold;</span>
+<span class="nc" id="L152">	}</span>
+	
+	/**
+	 * Getter for the match duration
+	 * @return duration
+	 */
+	public double getDuration() {
+<span class="fc" id="L159">		return duration;</span>
+	}
+	
+	/**
+	 * Setter for the match duration
+	 * @param duration
+	 */
+	public void setDuration(long duration) {
+<span class="nc" id="L167">		this.duration = duration;</span>
+<span class="nc" id="L168">	}</span>
+	
+	/**
+	 * Getter for the date
+	 * @return date
+	 */
+	public String getDate() {
+<span class="fc" id="L175">		return date;</span>
+	}
+	
+	/**
+	 * Setter for the date
+	 * @param date
+	 */
+	public void setDate(String date) {
+<span class="nc" id="L183">		this.date = date;</span>
+<span class="nc" id="L184">	}</span>
+	
+	/**
+	 * Getter for the Ward score
+	 * @return wardScore
+	 */
+	public long getWardsScore() {
+<span class="fc" id="L191">		return wardsScore;</span>
+	}
+	
+	/**
+	 * Setter for the Ward score
+	 * @param wards
+	 */
+	public void setWardsScore(long wards) {
+<span class="nc" id="L199">		this.wardsScore = wards;</span>
+<span class="nc" id="L200">	}</span>
+	
+	/**
+	 * Getter for the Creep Score
+	 * @return creepScore
+	 */
+	public long getCreepScore() {
+<span class="fc" id="L207">		return creepScore;</span>
+	}
+	
+	/**
+	 * Setter for the Creepscore
+	 * @param creepScore
+	 */
+	public void setCreepScore(long creepScore) {
+<span class="nc" id="L215">		this.creepScore = creepScore;</span>
+<span class="nc" id="L216">	}</span>
+	
+	/**
+	 * Getter for the Gamedata object
+	 * @return Gamedata gamedata
+	 */
+	public Gamedata getGamedata() {
+<span class="nc" id="L223">		return gamedata;</span>
+	}
+	
+	/**
+	 * Setter for the Gamedata
+	 * @param gamedata
+	 */
+	public void setGamedata(Gamedata gamedata) {
+<span class="fc" id="L231">		this.gamedata = gamedata;</span>
+<span class="fc" id="L232">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.1.201803210924</span>model (12.12.2019 15:32:39)</div></body></html>
