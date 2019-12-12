@@ -1,5 +1,10 @@
 package com.ryhma10.tilastoohjelma.model;
 
+/**
+ * A class for analysis of in game data
+ * @author Janari
+ *
+ */
 public class FeedBack {
 	
 	//Esitellään tarvittavat muuttujat.

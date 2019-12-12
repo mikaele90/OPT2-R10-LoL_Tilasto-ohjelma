@@ -19,6 +19,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * a class for handling data between the input window and the model
+ * @author Janari
+ *
+ */
 public class InputController  {
 
 	private Gamedata match;

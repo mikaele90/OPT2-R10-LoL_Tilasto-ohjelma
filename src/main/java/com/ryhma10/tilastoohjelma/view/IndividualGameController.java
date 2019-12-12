@@ -12,6 +12,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+/**
+ * A class for the communication between individual game stage and the model
+ * @author Janari
+ *
+ */
 public class IndividualGameController {
 	Gamedata gd;
 	FeedBack fb;

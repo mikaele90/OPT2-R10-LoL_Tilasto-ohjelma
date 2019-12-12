@@ -21,6 +21,11 @@ import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import java.sql.SQLException;
 
+/**
+ * A class for controlling the information between feedback stage and the model
+ * @author Janari
+ *
+ */
 public class FeedBackController {
 	
 	
