@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 public class LoginController {
@@ -63,7 +64,8 @@ public class LoginController {
                     String langString = mainApp.getLanguageDirFiles().get(i);
                     Properties propertiesHelper = new Properties();
                     try {
-                        propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + "/" + langString));
+                        InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream("languages/" + langString);
+                        propertiesHelper.load(in);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -106,7 +108,7 @@ public class LoginController {
     @FXML
     public void onEnter(KeyEvent keyEvent) throws IOException {
         if(keyEvent.getCode().equals(KeyCode.ENTER)) {
-            System.out.println("Enter pressed");
+            System.out.println("Detected: Enter pressed");
             handleLogin(new ActionEvent());
         }
     }
@@ -178,9 +180,11 @@ public class LoginController {
                         case "Profile not found":
                         case "Too many records found":
                         case "Database connection error":
-                            System.out.println(resultStringFromMethod);
-                            Alert errorAlert = alertFactory.createAlert(resultStringFromMethod);
-                            errorAlert.show();
+                            Platform.runLater(() -> {
+                                System.out.println(resultStringFromMethod);
+                                Alert errorAlert = alertFactory.createAlert(resultStringFromMethod);
+                                errorAlert.show();
+                            });
                             break;
                     }
                     progressIndicator.setVisible(false);
@@ -196,34 +200,56 @@ public class LoginController {
     }
 
     /**
-     * Change the language of the defaultconfig.properties file and updates the UI. Only affects windows pre-login.
+     * Change the language of the defaultconfig.properties file (unless running from a JAR) and updates the UI. Only affects windows pre-login.
      * @param actionEvent Interacting with the corresponding button, as defined in Login.fxml.
      */
     public void handleChangeLanguage(ActionEvent actionEvent) {
         CheckMenuItem clickedItem = (CheckMenuItem)actionEvent.getTarget();
-        if ((!mainApp.getDefaultProperties().getProperty("languageINFO").equals(clickedItem.getId().substring(0,2))) && (!mainApp.getDefaultProperties().getProperty("countryINFO").equals(clickedItem.getId().substring(3,5)))) {
-            mainApp.getDefaultProperties().setProperty("languageINFO", clickedItem.getId().substring(0,2));
-            mainApp.getDefaultProperties().setProperty("countryINFO", clickedItem.getId().substring(3,5));
-            try {
-                mainApp.getDefaultProperties().store(new FileOutputStream(mainApp.getApplicationDefaultConfigFilePath()), null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            mainApp.init();
-            try {
-                mainApp.start(mainApp.getPrimaryStage());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Platform.runLater(() -> {
+        if (!mainApp.isJAR()) {
+            if ((!mainApp.getDefaultProperties().getProperty("languageINFO").equals(clickedItem.getId().substring(0,2))) && (!mainApp.getDefaultProperties().getProperty("countryINFO").equals(clickedItem.getId().substring(3,5)))) {
+                mainApp.getDefaultProperties().setProperty("languageINFO", clickedItem.getId().substring(0,2));
+                mainApp.getDefaultProperties().setProperty("countryINFO", clickedItem.getId().substring(3,5));
                 try {
-                    mainApp.showLoginWindow(mainApp.getTextBundle());
+                    mainApp.getDefaultProperties().store(new FileOutputStream(mainApp.getApplicationDefaultConfigFilePath()), null);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            });
+                mainApp.init();
+                try {
+                    mainApp.start(mainApp.getPrimaryStage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(() -> {
+                    try {
+                        mainApp.showLoginWindow(mainApp.getTextBundle());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+            setSelectedLanguageMenuItem();
         }
-        setSelectedLanguageMenuItem();
+        else {
+            if ((!mainApp.getDefaultProperties().getProperty("languageINFO").equals(clickedItem.getId().substring(0,2))) && (!mainApp.getDefaultProperties().getProperty("countryINFO").equals(clickedItem.getId().substring(3,5)))) {
+                mainApp.getDefaultProperties().setProperty("languageINFO", clickedItem.getId().substring(0,2));
+                mainApp.getDefaultProperties().setProperty("countryINFO", clickedItem.getId().substring(3,5));
+                mainApp.init();
+                try {
+                    mainApp.start(mainApp.getPrimaryStage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Platform.runLater(() -> {
+                    try {
+                        mainApp.showLoginWindow(mainApp.getTextBundle());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+            setSelectedLanguageMenuItem();
+        }
     }
 
     /**

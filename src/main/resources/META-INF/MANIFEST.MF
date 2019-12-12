@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.ryhma10.tilastoohjelma.MainApp
+Class-Path: Winstreak.jar
+

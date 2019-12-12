@@ -14,7 +14,12 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.security.CodeSource;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 
 public class MainApp extends Application {
@@ -40,7 +45,8 @@ public class MainApp extends Application {
     private String currentLanguage;
     private String currentCountry;
     private int languageDirLength;
-    private List<String> languageDirFiles;
+    private List<String> languageDirFiles = null;
+    private boolean isJAR = false;
 
     private String loginWindowTitle;
     private String createNewUserWindowTitle;
@@ -68,32 +74,64 @@ public class MainApp extends Application {
      * Init for MainApp. Loads language-files among other things.
      */
     public void init() {
-        this.applicationDefaultConfigFilePath = "src/main/resources/defaultconfig.properties";
-        this.languageDirPath = "src/main/resources/languages";
-        this.defaultProperties = new Properties();
+        //Check if running from JAR-file
+        String checkIfJarString = MainApp.class.getResource("MainApp.class").toString();
+        if (checkIfJarString.startsWith("jar")) {
+            isJAR = true;
+        }
+        System.out.println("isJAR = " + isJAR);
+        if (isJAR) {
+            applicationDefaultConfigFilePath = "/defaultconfig.properties";
+            languageDirPath = "/languages";
+        }
+        else {
+            applicationDefaultConfigFilePath = "src/main/resources/defaultconfig.properties";
+            languageDirPath = "src/main/resources/languages";
+        }
         try {
-            this.defaultProperties.load(new FileInputStream(applicationDefaultConfigFilePath));
-            this.currentLanguage = defaultProperties.getProperty("languageINFO");
-            this.currentCountry = defaultProperties.getProperty("countryINFO");
-            this.currentLocale = new Locale(currentLanguage, currentCountry);
+            if (isJAR && defaultProperties != null) {
+                System.out.println("defaultProperties already set.");
+            }
+            else if (isJAR && defaultProperties == null) {
+                defaultProperties = new Properties();
+                defaultProperties.load(MainApp.class.getResourceAsStream(applicationDefaultConfigFilePath));
+            }
+            else {
+                defaultProperties = new Properties();
+                defaultProperties.load(new FileInputStream(applicationDefaultConfigFilePath));
+            }
+            currentLanguage = defaultProperties.getProperty("languageINFO");
+            currentCountry = defaultProperties.getProperty("countryINFO");
+            currentLocale = new Locale(currentLanguage, currentCountry);
             System.out.println("Current Locale (mainApp):" + currentLocale.toString());
         } catch (Exception e) {
-            System.out.println("Default properties: file not found");
+            System.out.println("Default properties: File not found, exiting...");
             e.printStackTrace();
             System.exit(-1);
         }
+
         try {
-            this.textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
-            this.languageDirLength = checkLangDirLength();
-            this.languageDirFiles = Arrays.asList(Objects.requireNonNull(new File(languageDirPath).list()));
-            //Set window titles using defaultconfig
-            this.loginWindowTitle = textBundle.getString("windowTitle.login");
-            this.createNewUserWindowTitle = textBundle.getString("windowTitle.createNewUser");
-            this.mainWindowTitle = textBundle.getString("windowTitle.main");
-            this.settingsWindowTitle = textBundle.getString("windowTitle.settings");
-            this.inputWindowTitle = textBundle.getString("windowTitle.input");
+            textBundle = ResourceBundle.getBundle("languages.TextResources", currentLocale);
+            languageDirLength = checkLangDirLength();
+            if (!isJAR) {
+                try {
+                    languageDirFiles = Arrays.asList(Objects.requireNonNull(new File(languageDirPath).list()));
+                } catch (NullPointerException npe) {
+                    npe.printStackTrace();
+                }
+            }
+            else {
+                System.out.println("Skipping languageDirFiles assignment, due to JAR-file...");
+            }
+            System.out.println(languageDirFiles.toString());
+            //Set window titles using defaultconfig.properties
+            loginWindowTitle = textBundle.getString("windowTitle.login");
+            createNewUserWindowTitle = textBundle.getString("windowTitle.createNewUser");
+            mainWindowTitle = textBundle.getString("windowTitle.main");
+            settingsWindowTitle = textBundle.getString("windowTitle.settings");
+            inputWindowTitle = textBundle.getString("windowTitle.input");
         }catch (Exception e) {
-            System.out.println("TextBundle: file not found");
+            System.out.println("TextBundle: File not found, exiting...");
             e.printStackTrace();
             System.exit(-1);
         }
@@ -152,10 +190,13 @@ public class MainApp extends Application {
     public void showMainWindow(SoftwareProfile profile) throws IOException {
         if (profile.getDefaultLanguage() != null) {
             currentLocale = Locale.forLanguageTag(profile.getDefaultLanguage().replace("_", "-"));
-            currentLanguage = currentLocale.getLanguage();
-            currentCountry = currentLocale.getCountry();
-            textBundle = ResourceBundle.getBundle("languages/TextResources", currentLocale);
         }
+        else {
+            currentLocale = Locale.forLanguageTag("en-US");
+        }
+        currentLanguage = currentLocale.getLanguage();
+        currentCountry = currentLocale.getCountry();
+        textBundle = ResourceBundle.getBundle("languages.TextResources", currentLocale);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Main.fxml"), textBundle);
         mainWindow = (AnchorPane)loader.load();
 
@@ -308,9 +349,10 @@ public class MainApp extends Application {
         for (int i = 0; i < getLanguageDirLength(); i++) {
             String langString = getLanguageDirFiles().get(i);
             try {
-                propertiesHelper.load(new FileInputStream(getLanguageDirPath() + "/" + langString));
-            } catch (IOException e) {
-                e.printStackTrace();
+                InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream("languages/" + langString);
+                propertiesHelper.load(inputStream);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
             }
             languageArrayList.add(textBundle.getString(propertiesHelper.getProperty("localeINFO")));
         }
@@ -322,7 +364,39 @@ public class MainApp extends Application {
      * @return the number of files.
      */
     public int checkLangDirLength() {
-        return (Objects.requireNonNull(new File(languageDirPath).listFiles())).length;
+        int dirLength = 0;
+        if (!isJAR) {
+            dirLength = (Objects.requireNonNull(new File(languageDirPath).listFiles())).length;
+            System.out.println("Not JAR; dirLength: " + dirLength);
+        }
+        else {
+            CodeSource codeSource = MainApp.class.getProtectionDomain().getCodeSource();
+            System.out.println("JAR checkLangDirLength codeSource: " + codeSource.getLocation().toString());
+            List<String> list = new ArrayList<String>();
+            List<String> list2 = new ArrayList<String>();
+            URL jar = codeSource.getLocation();
+            try {
+                ZipInputStream zip = new ZipInputStream(jar.openStream());
+                ZipEntry ze;
+                while((ze = zip.getNextEntry()) != null) {
+                    String entryName = ze.getName();
+                    int counter = 0;
+                    if(entryName.startsWith("languages/TextResources")) {
+                        list.add(entryName);
+                        String modEntry = entryName.replaceFirst("languages/", "");
+                        list2.add(modEntry);
+                    }
+                }
+                String[] languagesPathArray = list.toArray(new String[0]);
+                languageDirFiles = list2;
+                dirLength = languagesPathArray.length;
+                System.out.println("JAR languageDirFiles: " + languageDirFiles.toString());
+                System.out.println("JAR langDirLength: " + dirLength);
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+        return dirLength;
     }
 
     /**
@@ -523,6 +597,14 @@ public class MainApp extends Application {
      */
     public void setLanguageDirFiles(List<String> languageDirFiles) {
         this.languageDirFiles = languageDirFiles;
+    }
+
+    /**
+     * Returns true if app is running from a JAR-file.
+     * @return boolean, true or false.
+     */
+    public boolean isJAR() {
+        return isJAR;
     }
 
 

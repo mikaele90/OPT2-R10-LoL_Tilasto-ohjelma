@@ -302,7 +302,12 @@ public class SettingsController {
         String langString = mainApp.getLanguageDirFiles().get(langIndex);
         Properties propertiesHelper = new Properties();
         try {
-            propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + "/" + langString));
+            if (!mainApp.isJAR()) {
+                propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + "/" + langString));
+            }
+            else {
+                propertiesHelper.load(ClassLoader.getSystemClassLoader().getResourceAsStream("languages/" + langString));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

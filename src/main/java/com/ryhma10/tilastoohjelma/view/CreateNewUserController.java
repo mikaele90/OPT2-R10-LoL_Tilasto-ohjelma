@@ -220,16 +220,22 @@ public class CreateNewUserController {
      */
     private String getSelectedLanguage(int langIndex) {
         String selectedLanguage;
-        selectedLanguage = languageChoiceBox.getSelectionModel().getSelectedItem().toString();
         String langString = mainApp.getLanguageDirFiles().get(langIndex);
+        System.out.println("CreateNewUser langString: " + langString);
         Properties propertiesHelper = new Properties();
         try {
-            propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + "/" + langString));
+            if (!mainApp.isJAR()) {
+                propertiesHelper.load(new FileInputStream(mainApp.getLanguageDirPath() + "/" + langString));
+            }
+            else {
+                propertiesHelper.load(ClassLoader.getSystemClassLoader().getResourceAsStream("languages/" + langString));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         selectedLanguage = propertiesHelper.getProperty("localeINFO");
         System.out.println(selectedLanguage);
+
         return selectedLanguage;
     }
 
