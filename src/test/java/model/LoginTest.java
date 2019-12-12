@@ -18,7 +18,7 @@ public class LoginTest {
 	private Item i5 = new Item("Raptor Cloak","Void Staff","Oracle Lens","Sheen","Relic Shield","Zephyr", null);
 	private Team t5 = new Team("Volibear", "Veigar", "Taric", "Zed", "Nasus", "Pyke", "Sona", "Teemo", "Olaf");
 	private Additional a5 = new Additional(8, 7, "gamemode", 16000, 160,"date", 4, 5);
-	
+	 
 	/**
 	 * Empties the data base before running the test
 	 */
