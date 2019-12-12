@@ -336,10 +336,10 @@ public class FeedBack {
 		if(dmgpermin < 600) {
 			dmgevaluation = "poor";
 		}
-		else if (dmgpermin > 600 && dmgpermin < 800) {
+		else if (dmgpermin >= 600 && dmgpermin < 800) {
 			dmgevaluation = "average";
 		}
-		else if(dmgpermin > 800 && dmgpermin <1000) {
+		else if(dmgpermin >= 800 && dmgpermin <=1000) {
 			dmgevaluation = "good";
 		}
 		else {
