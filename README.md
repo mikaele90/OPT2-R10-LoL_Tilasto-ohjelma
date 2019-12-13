@@ -5,20 +5,16 @@ Ryhmä 10
 
 Instructions:
 
-Step 1: start the software
+Step 1: Start the software
 
-Step 2: press create profile button
+Step 2: Create new profile
 
-Step 3: fill username and password fields
+Step 3: Go to Edit -> Settings, insert valid Riot API key and set the region the same as your League of Legends account's region and click Save
 
-Step 4: log in
+Step 4: Click Add games, enter your Summoner name and choose how many matches to fetch
 
-Step 5: open settings and insert riot api key into riot api key field
+Step 5: Double click on a match to see your stats
 
-Step 6: press ok
-
-Step 7: click on the matches generated in the main window to get feedback
-
-Step 8: log out and drink beer
+Step 6: Click on Feedback to get analysis of your performance in the match
 
 
